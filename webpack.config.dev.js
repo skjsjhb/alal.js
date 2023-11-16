@@ -36,7 +36,6 @@ const MainDev = {
     },
     plugins: [
         new BuildInfoPlugin("MainBuild.json", Version),
-        new ContextReplacementPlugin(/keyv/),
         new CopyWebpackPlugin({
             patterns: [
                 {
@@ -126,8 +125,7 @@ const RendererDev = {
         extensions: [".tsx", ".ts", ".js"]
     },
     plugins: [
-        new BuildInfoPlugin("RendererBuild.json", Version),
-        new ContextReplacementPlugin(/keyv/)
+        new BuildInfoPlugin("RendererBuild.json", Version)
     ],
 
     devtool: "eval-source-map",

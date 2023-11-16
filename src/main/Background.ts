@@ -66,20 +66,6 @@ export function registerBackgroundListeners(): void {
     ipcMain.on("openDevTools", () => {
         getMainWindow()?.webContents.openDevTools();
     });
-    ipcMain.on("askInject", (e) => {
-        if (process.env.ALICORN_REACT_DEVTOOLS) {
-            const mw = getMainWindow();
-            if (mw) {
-                const allow = dialog.showMessageBoxSync(mw, {
-                    type: "warning",
-                    buttons: ["No, reject it", "It's fine, just continue"],
-                    message:
-                        "ALICORN_REACT_DEVTOOLS has been set and external scripts will be injected, which should only happen during the development.\nIf you are NOT DEVELOPNING Alicorn, this might be an XSS attack.\n\nContinue and accept external scripts to inject?"
-                });
-                e.returnValue = allow === 1;
-            }
-        }
-    });
     ipcMain.handle("selectDir", async () => {
         const r = await dialog.showOpenDialog({
             properties: ["openDirectory", "createDirectory", "promptToCreate"]

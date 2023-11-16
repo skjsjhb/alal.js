@@ -1,0 +1,10 @@
+{
+  "windows-x64-legacy": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin8-binaries/jdk8u392-b08/OpenJDK8U-jre_x64_windows_hotspot_8u392b08.zip",
+  "windows-x64-latest": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin21-binaries/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_windows_hotspot_21.0.1_12.zip",
+  "macos-x64-legacy": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin8-binaries/jdk8u392-b08/OpenJDK8U-jdk_x64_mac_hotspot_8u392b08.tar.gz",
+  "macos-x64-latest": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin21-binaries/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_mac_hotspot_21.0.1_12.tar.gz",
+  "macos-arm-latest": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin21-binaries/jdk-21.0.1%2B12/OpenJDK21U-jre_aarch64_mac_hotspot_21.0.1_12.tar.gz",
+  "linux-x64-legacy": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin8-binaries/jdk8u392-b08/OpenJDK8U-jre_x64_linux_hotspot_8u392b08.tar.gz",
+  "linux-x64-latest": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin21-binaries/jdk-21.0.1%2B12/OpenJDK21U-jre_x64_linux_hotspot_21.0.1_12.tar.gz",
+  "linux-arm-latest": "https://mirrors.ustc.edu.cn/adoptium/releases/temurin21-binaries/jdk-21.0.1%2B12/OpenJDK21U-jre_aarch64_linux_hotspot_21.0.1_12.tar.gz"
+}

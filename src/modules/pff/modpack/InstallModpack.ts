@@ -16,7 +16,7 @@ import { generateForgeInstallerName, getForgeInstaller, getMojangByForge, remove
 import { downloadProfile, getProfileURLById } from "../get/MojangCore";
 import { performForgeInstall } from "../install/ForgeInstall";
 import { fetchSelectedMod, setPffFlag } from "../virtual/PffWrapper";
-import { AbstractModResolver, CurseforgeModResolver, ModLoaderType, ModrinthModResolver } from "../virtual/Resolver";
+import { AbstractModResolver, ModLoaderType, ModrinthModResolver } from "../virtual/Resolver";
 import { ModpackModel, SimpleFile, transformManifest5 } from "./CFModpackModel";
 import {
     CommonModpackModel,
@@ -226,13 +226,8 @@ async function installSingleMod(
     modLoader: ModLoaderType
 ): Promise<void> {
     let mr: AbstractModResolver;
-    if (typeof aid === "number" || typeof fid === "number") {
-        aid = aid.toString();
-        fid = fid.toString();
-        mr = new CurseforgeModResolver(""); // From xmdhs
-    } else {
-        mr = new ModrinthModResolver("");
-    }
+// TODO update to warn curseforge
+    mr = new ModrinthModResolver("");
     await mr.setSelected(String(aid), String(fid));
     await mr.resolveMod();
     await fetchSelectedMod(mr, gameVersion, modLoader, container);

@@ -1,7 +1,5 @@
 import fs, { readFile } from "fs-extra";
-import leven from "js-levenshtein";
 import path from "path";
-import mdiff from "mdiff";
 import sha from "sha";
 import CryptoJS from "crypto-js";
 
@@ -59,12 +57,6 @@ addHandler("Sha1File", (target) => {
             }
         });
     });
-});
-
-addHandler("StrDiff", (str1, str2) => {
-    const ed = leven(str1, str2);
-    const lcs = mdiff(str1, str2).getLcs()?.length || 0;
-    return ed * 2 - lcs * 8 + 30 + str2.length;
 });
 
 async function getContainerSize(dir, symlink) {

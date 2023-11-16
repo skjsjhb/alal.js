@@ -6,7 +6,7 @@ import { isFileExist } from "../commons/FileUtil";
 import { getActualDataPath } from "../config/DataSupport";
 import { DownloadMeta } from "../download/AbstractDownloader";
 import { wrappedDownloadFile } from "../download/DownloadWrapper";
-import { getLatestJREURL } from "./GetJDK";
+import { getLatestJREURL } from "./GetJRE";
 import { resetJavaList } from "./JavaInfo";
 
 export async function setBuiltInJava(): Promise<void> {
@@ -42,7 +42,7 @@ async function installBuiltInJDK(old = false): Promise<void> {
     const JAVA_DIR = getActualDataPath(
         path.join("java", old ? "legacy" : "modern")
     );
-    const u = await getLatestJREURL(old);
+    const u = getLatestJREURL(old);
     if (u.length <= 0) {
         throw "No matching Java!";
     }

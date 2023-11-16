@@ -17,10 +17,9 @@ import {
 import copy from "copy-to-clipboard";
 import React, { useEffect, useRef, useState } from "react";
 import { getNumber } from "../../modules/config/ConfigSupport";
-import { ExtraAddonInfo, moreAddonInfoBySlug } from "../../modules/pff/curseforge/Get";
+import { ExtraAddonInfo } from "../../modules/pff/virtual/Types";
 import { ModMeta } from "../../modules/pff/virtual/ModDefine";
 import { getResolvers } from "../../modules/pff/virtual/PffWrapper";
-import { CursePlusPlusModResolver } from "../../modules/pff/virtual/Resolver";
 import { jumpTo, triggerSetPage } from "../GoTo";
 import { submitInfo, submitSucc, submitWarn } from "../Message";
 import { ALICORN_DEFAULT_THEME_LIGHT, isBgDark } from "../Renderer";
@@ -85,9 +84,6 @@ export function PffVisual(): JSX.Element {
                                                             const rsvs = getResolvers(slug);
                                                             const rets = await Promise.allSettled(
                                                                 rsvs.map((r) => {
-                                                                    if (r instanceof CursePlusPlusModResolver) {
-                                                                        return []; // This is too slow and lacks features.
-                                                                    }
                                                                     return r.searchMods(
                                                                         getNumber("pff.page-size", 20)
                                                                     );
@@ -106,25 +102,8 @@ export function PffVisual(): JSX.Element {
                                                         })();
                                                     }
                                                     if (mode === "Modpack") {
-                                                        void (async () => {
-                                                            try {
-                                                                const r = await moreAddonInfoBySlug(
-                                                                    slug,
-                                                                    "https://addons-ecs.forgesvc.net",
-                                                                    "",
-                                                                    getNumber("pff.page-size"),
-                                                                    getNumber("download.pff.timeout"),
-                                                                    false
-                                                                );
-                                                                if (mounted.current) {
-                                                                    setModpackSearchResults(r);
-                                                                }
-                                                            } catch {
-                                                            }
-                                                            if (mounted.current) {
-                                                                setSearching(false);
-                                                            }
-                                                        })();
+                                                        // TODO not implemented
+                                                        // TODO update for modrinth
                                                     }
                                                 }}
                                             >

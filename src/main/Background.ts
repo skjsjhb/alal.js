@@ -1,10 +1,9 @@
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, safeStorage, screen, shell } from "electron";
-import isReachable from "is-reachable";
 import os from "os";
 import path from "path";
-import { getNumber, loadConfig } from "../modules/config/ConfigSupport";
-import { bindCurseListeners, closeCurseWindow } from "../modules/pff/curseforge/CurseController";
+import { loadConfig } from "../modules/config/ConfigSupport";
 import { getMainWindow, getMainWindowUATrimmed } from "./Bootstrap";
+import nodeFetch from "node-fetch";
 
 const LOGIN_START =
     "https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_type=code&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf";
@@ -18,7 +17,6 @@ const ERROR_DESCRIPTION = /(?<=&error_description=)[^&]+/gi;
 const LOGOUT_OK_HEAD = "https://login.live.com/oauth20_desktop.srf";
 
 export function registerBackgroundListeners(): void {
-    bindCurseListeners();
     ipcMain.on("reload", () => {
         getMainWindow()?.webContents.removeAllListeners();
         app.relaunch();
@@ -40,10 +38,6 @@ export function registerBackgroundListeners(): void {
         }
         try {
             loginWindow?.destroy();
-        } catch {
-        }
-        try {
-            closeCurseWindow();
         } catch {
         }
 
@@ -300,11 +294,19 @@ export function registerBackgroundListeners(): void {
     ipcMain.handle(
         "isReachable",
         async (_e, address: string, timeout?: number) => {
-            return await isReachable(address, {
-                timeout: timeout
-                    ? timeout
-                    : getNumber("starlight.join-server.timeout", 2000)
-            });
+            return Promise.race([
+                new Promise((res) => {
+                    setTimeout(() => {
+                        res(false);
+                    }, timeout || 2000);
+                }),
+                new Promise((res) => {
+                    nodeFetch(address).then((r) => {
+                        res(r.ok);
+                    }).catch(() => {
+                    });
+                })
+            ]);
         }
     );
     ipcMain.on("toggleWindow", () => {

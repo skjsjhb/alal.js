@@ -106,6 +106,22 @@ const RendererDev = {
             }
         ]
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                reactVendor: {
+                    test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+                    name: 'vendor-react',
+                    chunks: 'all'
+                },
+                muiVendor: {
+                    test: /[\\/]node_modules[\\/](@mui[\\/].*)[\\/]/,
+                    name: 'vendor-mui',
+                    chunks: 'all'
+                }
+            }
+        }
+    },
     resolve: {
         extensions: [".tsx", ".ts", ".js"]
     },
@@ -113,6 +129,7 @@ const RendererDev = {
         new BuildInfoPlugin("RendererBuild.json", Version),
         new ContextReplacementPlugin(/keyv/)
     ],
+
     devtool: "eval-source-map",
     mode: "development",
     target: "electron-renderer",

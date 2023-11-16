@@ -54,7 +54,7 @@ const useAccStyles = makeStyles((theme: AlicornTheme) => ({
     }
 }));
 
-export function CrashReportDisplay(): JSX.Element {
+export function CrashReportDisplay(): React.ReactElement {
     // @ts-ignore
     const failureInfo = window[LAST_FAILURE_INFO_KEY] as MCFailureInfo;
     // @ts-ignore
@@ -183,7 +183,7 @@ export function CrashReportDisplay(): JSX.Element {
     );
 }
 
-function BaseInfoDisplay(props: { info: MCFailureInfo }): JSX.Element {
+function BaseInfoDisplay(props: { info: MCFailureInfo }): React.ReactElement {
     const classes = useAccStyles();
     return (
         <Accordion color={"primary"} sx={{backgroundColor: "primary.main"}}>
@@ -241,7 +241,7 @@ function BaseInfoDisplay(props: { info: MCFailureInfo }): JSX.Element {
     );
 }
 
-function LaunchTrackCount(props: { tracker: LaunchTracker }): JSX.Element {
+function LaunchTrackCount(props: { tracker: LaunchTracker }): React.ReactElement {
     const classes = useAccStyles();
     return (
         <Accordion color={"primary"} sx={{backgroundColor: "primary.main"}}>
@@ -282,7 +282,7 @@ function LaunchTrackCount(props: { tracker: LaunchTracker }): JSX.Element {
     );
 }
 
-function ModList(props: { tracker: LaunchTracker }): JSX.Element {
+function ModList(props: { tracker: LaunchTracker }): React.ReactElement {
     const classes = useAccStyles();
     return props.tracker.mods().total > 0 ? (
         <Accordion color={"primary"} sx={{backgroundColor: "primary.main"}}>
@@ -323,7 +323,7 @@ function Analyze(props: {
     analyze: CrashReportMap;
     title: string;
     isFull: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useAccStyles();
     const analyzeList = Array.from(props.analyze.keys());
     let total = 0;
@@ -465,7 +465,7 @@ const ERR_LN_REGEX = /(error|fatal|caused by)/i;
 const WARN_LN_REGEX = /warn/i;
 const LOGS_BUFFER_SIZE = 100;
 
-function LogsDisplay(props: { logs: string[]; title: string }): JSX.Element {
+function LogsDisplay(props: { logs: string[]; title: string }): React.ReactElement {
     const classes = useAccStyles();
     const cLogs = props.logs.join("\n").split("\n");
     const [cIndex, setcIndex] = useState(0); // Reversed, form the last line, offset up, 0: -100 ~ end, 1: -101 ~ -1
@@ -563,7 +563,7 @@ function BBCodeDisplay(props: {
     tracker: LaunchTracker;
     logs: string[];
     logsReport?: CrashReportMap;
-}): JSX.Element {
+}): React.ReactElement {
     const code = generateCrashAnalytics(
         props.crashAnalytics,
         props.originCrashReport,

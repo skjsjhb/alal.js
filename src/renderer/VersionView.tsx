@@ -8,7 +8,7 @@ import { tr } from "./Translator";
 
 const modeList = ["Copyright", "Privacy", "Credit"];
 
-export function VersionView(): JSX.Element {
+export function VersionView(): React.ReactElement {
     const [ecVersion, setEcVersion] = useState(
         tr("VersionView.Electron.Fetching")
     );

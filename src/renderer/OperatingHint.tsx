@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { ALICORN_DEFAULT_THEME_DARK, ALICORN_DEFAULT_THEME_LIGHT, isBgDark } from "./Renderer";
 import { randsl, tr } from "./Translator";
 
-export function OperatingHint(props: { open: boolean }): JSX.Element {
+export function OperatingHint(props: { open: boolean }): React.ReactElement {
     const [saying, setSaying] = useState<string>(
         randsl("ReadyToLaunch.WaitingText")
     );
@@ -42,7 +42,7 @@ export function OperatingHint(props: { open: boolean }): JSX.Element {
 export function OperatingHintCustom(props: {
     open: boolean;
     msg: string;
-}): JSX.Element {
+}): React.ReactElement {
     const [saying, setSaying] = useState<string>(
         randsl("ReadyToLaunch.WaitingText")
     );
@@ -71,7 +71,7 @@ export function FailedHint(props: {
     open: boolean;
     closeFunc: () => unknown;
     reason: string;
-}): JSX.Element {
+}): React.ReactElement {
     const reason = tr("Operating.FailedInfo", `Reason=${props.reason}`);
     return (
         <Dialog open={props.open} onClose={props.closeFunc}>
@@ -120,7 +120,7 @@ export function YNDialog(props: {
     yes: string;
     no: string;
     open?: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     const [open, setOpen] = useState<boolean>(true);
     return (
         <ThemeProvider
@@ -171,7 +171,7 @@ export function YNDialog2(props: {
     no: string;
     open: boolean;
     noProp?: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     return (
         <ThemeProvider
             theme={

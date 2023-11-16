@@ -4,7 +4,7 @@ import pkg from "../../package.json";
 import { useTextStyles } from "./Stylex";
 import { tr } from "./Translator";
 
-export function TheEndingOfTheEnd(): JSX.Element {
+export function TheEndingOfTheEnd(): React.ReactElement {
     const classes = useTextStyles();
     return (
         <>

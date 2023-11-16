@@ -74,7 +74,7 @@ export function setContainerListDirty(): void {
     window.dispatchEvent(new CustomEvent("setContainerListDirty"));
 }
 
-export function ContainerManager(): JSX.Element {
+export function ContainerManager(): React.ReactElement {
     // eslint-disable-next-line prefer-const
     let {modpack, togo} = useParams<{ modpack?: string; togo?: string }>();
     modpack = modpack ? decodeURIComponent(modpack) : undefined;
@@ -183,7 +183,7 @@ export function ContainerManager(): JSX.Element {
 function SingleContainerDisplay(props: {
     container: MinecraftContainer;
     isMounted: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useCardStyles();
     const mounted = useRef<boolean>(false);
     const [deleteAskOpen, setOpen] = useState(false);
@@ -612,7 +612,7 @@ function AddNewContainer(props: {
     refresh: () => unknown;
     modpack?: string;
     autoStart?: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     const [selectedDir, setSelected] = useState(
         props.modpack
             ? !isURL(props.modpack)

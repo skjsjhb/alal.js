@@ -7,7 +7,7 @@ import { randsl, tr } from "./Translator";
 let STATISTICS_MAP: Map<string, number> = new Map();
 const ALL_STATS = ["Click", "Launch", "Crash", "Keyboard"];
 
-export function Statistics(): JSX.Element {
+export function Statistics(): React.ReactElement {
     const classes = useTextStyles();
     return (
         <>

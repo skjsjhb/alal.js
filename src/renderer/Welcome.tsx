@@ -31,7 +31,7 @@ const mainBoxSX = {
     justifyContent: "center"
 };
 
-export function Welcome(): JSX.Element {
+export function Welcome(): React.ReactElement {
     const classes = useTextStyles();
     const [_refreshBit, setRefresh] = useState(false);
     const [lastGameAvailable, setLastGameAvailable] = useState(false);
@@ -204,10 +204,10 @@ const shortSX = {marginLeft: "0.3125rem"};
 function RoundBtn(props: {
     disabled: boolean;
     onClick: () => unknown;
-    icon: JSX.Element;
+    icon: React.ReactElement;
     short: string;
     highlight?: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     return (
         <Box sx={btnSX}>
             <Fab
@@ -248,7 +248,7 @@ const wikiLeftSX = {fontSize: "x-large", marginRight: "0.75rem"};
 
 const wikiSepSX = {fontSize: "xxx-large"};
 
-export function SpecialKnowledge(): JSX.Element {
+export function SpecialKnowledge(): React.ReactElement {
     const [currentItem, setCurrentItem] = useState<string>(
         randsl("Welcome.Knowledges")
     );

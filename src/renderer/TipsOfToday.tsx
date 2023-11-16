@@ -14,7 +14,7 @@ import { getBoolean, set } from "../modules/config/ConfigSupport";
 import { ALICORN_DEFAULT_THEME_DARK, ALICORN_DEFAULT_THEME_LIGHT, isBgDark } from "./Renderer";
 import { getTip, tr } from "./Translator";
 
-export function TipsOfToday(_props: object): JSX.Element {
+export function TipsOfToday(_props: object): React.ReactElement {
     const [tip, setTip] = useState(getTip());
     const [open, setOpen] = useState(getBoolean("features.tips-of-today"));
     useEffect(() => {

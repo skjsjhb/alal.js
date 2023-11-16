@@ -36,7 +36,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Container hidden={value !== index}>
@@ -46,7 +46,7 @@ function TabPanel(props: {
     );
 }
 
-export function CarouselBoutique(): JSX.Element {
+export function CarouselBoutique(): React.ReactElement {
     const [currentTab, setCurrentTab] = useState(0);
     return (
         <ThemeProvider
@@ -76,7 +76,7 @@ export function CarouselBoutique(): JSX.Element {
     );
 }
 
-function CarouselBoutiqueLocalSkin(): JSX.Element {
+function CarouselBoutiqueLocalSkin(): React.ReactElement {
     const [names, setNames] = useState<string[]>([]);
     const [selectedFile, setSelectedFile] = useState("");
     const [playerName, setPlayerName] = useState("");
@@ -293,7 +293,7 @@ function CarouselBoutiqueLocalSkin(): JSX.Element {
     );
 }
 
-function CarouselBoutiqueSkinUploader(): JSX.Element {
+function CarouselBoutiqueSkinUploader(): React.ReactElement {
     const [skinUrl, setSkinUrl] = useState("");
     const [isRunning, setRunning] = useState(false);
     const [isSlim, setIsSlim] = useState(false);

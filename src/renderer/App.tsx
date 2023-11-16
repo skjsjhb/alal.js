@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme: AlicornTheme) => ({
     }
 }));
 
-export function App(): JSX.Element {
+export function App(): React.ReactElement {
     const classes = useStyles();
     const [page, setPage] = useState(getString("startup-page.name", "Tutor"));
     const [openErr, setErrOpen] = useState(false);
@@ -440,7 +440,7 @@ function bindMsgTips(
 }
 
 
-function MainPageRoutable(): JSX.Element {
+function MainPageRoutable(): React.ReactElement {
     return (
         <Container>
             <Routes>
@@ -492,7 +492,7 @@ function AppTopBar(props: {
     page: string;
     classes: ClassNameMap<string>;
     setOpenDrawer: (o: boolean) => void;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = props.classes;
     return (
         <AppBar enableColorOnDark>
@@ -714,7 +714,7 @@ async function exitApp(): Promise<void> {
     });
 }
 
-const PAGES_ICONS_MAP: Record<string, JSX.Element> = {
+const PAGES_ICONS_MAP: Record<string, React.ReactElement> = {
     LaunchPad: <FlightTakeoff/>,
     Welcome: <Home/>,
     InstallCore: <GetApp/>,
@@ -734,7 +734,7 @@ const BETAS = ["ServerList", "Boticorn", "Cadance", "DMCenter"];
 function PagesDrawer(props: {
     open: boolean;
     onClose: () => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     return (
         <Drawer
             anchor={"left"}
@@ -832,7 +832,7 @@ function moveWindow() {
     animationId = requestAnimationFrame(moveWindow);
 }
 
-function BetaTag(): JSX.Element {
+function BetaTag(): React.ReactElement {
     return (
         <>
             &nbsp;

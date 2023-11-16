@@ -13,7 +13,7 @@ export function SkinDisplay3D(props: {
     skin: string;
     width?: number;
     height?: number;
-}): JSX.Element {
+}): React.ReactElement {
     const myName = useRef(new Date().getTime());
     useEffect(() => {
         // @ts-ignore
@@ -54,7 +54,7 @@ export function SkinDisplay3D(props: {
     );
 }
 
-export function SkinDisplay2D(props: { skin: string }): JSX.Element {
+export function SkinDisplay2D(props: { skin: string }): React.ReactElement {
     return (
         <span
             style={{

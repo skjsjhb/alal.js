@@ -26,7 +26,7 @@ import { ALICORN_DEFAULT_THEME_LIGHT, isBgDark } from "../Renderer";
 import { useCardStyles, usePadStyles } from "../Stylex";
 import { tr } from "../Translator";
 
-export function PffVisual(): JSX.Element {
+export function PffVisual(): React.ReactElement {
     const [slug, setSlug] = useState("");
     const [modSearchResults, setModResults] = useState<ModMeta[]>([]);
     const [modpackSearchResults, setModpackSearchResults] = useState<
@@ -223,7 +223,7 @@ function SingleAddonDisplay(props: {
     multiSelect: boolean;
     isSelected: boolean;
     onSelect: (s: string) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useCardStyles();
     const a = props.info?.supportVersions || [];
     return (

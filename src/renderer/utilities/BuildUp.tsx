@@ -28,7 +28,7 @@ import { ALICORN_DEFAULT_THEME_LIGHT } from "../Renderer";
 import { useFormStyles } from "../Stylex";
 import { tr } from "../Translator";
 
-export function BuildUp(): JSX.Element {
+export function BuildUp(): React.ReactElement {
     const [rootContainer, setRootContainer] = useState("");
     const [currentTab, setCurrentTab] = useState(0);
     const [assets, setAssets] = useState<UnifiedAsset[]>([]);
@@ -93,7 +93,7 @@ export function BuildUp(): JSX.Element {
 function SelectContainer(props: {
     setAssets: (a: UnifiedAsset[]) => unknown;
     setContainer: (c: string) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const [slc, setSlc] = useState(getAllMounted()[0] || "");
     const [ast, setAST] = useState(0);
     const classes = useFormStyles();
@@ -159,7 +159,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Box hidden={value !== index}>{value === index ? <>{children}</> : ""}</Box>
@@ -175,7 +175,7 @@ interface ModpackMeta {
 
 function FillInfo(props: {
     setMeta: (m: ModpackMeta) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const [meta2, setMeta2] = useState<ModpackMeta>({
         name: "My Modpack",
         desc: "Off to see the world!",
@@ -258,7 +258,7 @@ function SelectAssets(props: {
     assets: UnifiedAsset[];
     container: string;
     meta: ModpackMeta;
-}): JSX.Element {
+}): React.ReactElement {
     const [container, setContainer] = useState(props.container);
     const [selectedAssets, setSelectedAssets] = useState<Set<UnifiedAsset>>(
         new Set()

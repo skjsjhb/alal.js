@@ -38,7 +38,7 @@ import { ALICORN_DEFAULT_THEME_DARK, ALICORN_DEFAULT_THEME_LIGHT, isBgDark } fro
 import { AlicornTheme, fullWidth, useFormStyles, useInputStyles } from "./Stylex";
 import { tr } from "./Translator";
 
-export function ServerList(): JSX.Element {
+export function ServerList(): React.ReactElement {
     const [servers, setServers] = useState(getServerList());
     const [serverAddOpen, setServerAddOpen] = useState(false);
     const [cores, setCores] = useState<string[]>([]);
@@ -120,7 +120,7 @@ function AddNewServer(props: {
     onClose: () => unknown;
     onNewServer: (s: string) => unknown;
     servers: string[];
-}): JSX.Element {
+}): React.ReactElement {
     const [enteredServer, setEnteredServer] = useState("");
     const classes = useInputStyles();
     return (
@@ -192,7 +192,7 @@ function AddNewServer(props: {
 function SingleServerDisplay(props: {
     address: string;
     cores: string[];
-}): JSX.Element {
+}): React.ReactElement {
     const [connective, setCanConnect] = useState<boolean | undefined>(undefined);
     const [isDeleted, setDeleted] = useState(false);
     const reachableLock = useRef<boolean>(false);
@@ -328,7 +328,7 @@ function getLastUsedCore(address: string): string {
 function GameCoreSelector(props: {
     address: string;
     cores: string[];
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useFormStyles();
     const fullWidthClasses = fullWidth();
     const [currentCore, setCurrentCore] = useState<string>(

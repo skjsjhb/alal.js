@@ -44,7 +44,7 @@ const CANNOT_LOAD_INFO: JavaInfo = {
     version: ""
 };
 
-export function JavaSelector(): JSX.Element {
+export function JavaSelector(): React.ReactElement {
     const classes = useFormStyles();
     const [isJavaInfoLoaded, setLoaded] = useState<boolean>(true);
     const mounted = useRef<boolean>(false);
@@ -251,7 +251,7 @@ export function JavaSelector(): JSX.Element {
     );
 }
 
-function JavaInfoDisplay(props: { jInfo?: JavaInfo }): JSX.Element {
+function JavaInfoDisplay(props: { jInfo?: JavaInfo }): React.ReactElement {
     const corruptBit =
         props.jInfo?.rootVersion === -1 || props.jInfo === undefined;
     return (
@@ -335,7 +335,7 @@ function JavaInfoDisplay(props: { jInfo?: JavaInfo }): JSX.Element {
     );
 }
 
-function JavaDownloader(): JSX.Element {
+function JavaDownloader(): React.ReactElement {
     const [isRunning, setRunning] = useState<boolean>(false);
     const mounted = useRef<boolean>(false);
     useEffect(() => {

@@ -44,16 +44,17 @@ import { tr } from "./Translator";
 
 const PFF_MSG_GATE = "message";
 
-export function PffFront(): JSX.Element {
+export function PffFront(): React.ReactElement {
     const emitter = useRef(new EventEmitter());
-    let {container, version, name, loader, autostart, root} = useParams<{
+    type ForcedParams = {
         container: string;
         version: string;
         name?: string;
         autostart?: string;
         loader: string;
         root: string;
-    }>();
+    };
+    let {container, version, name, loader, autostart, root} = useParams<ForcedParams>() as ForcedParams;
     container = decodeURIComponent(container);
     root = decodeURIComponent(root);
     version = decodeURIComponent(version);
@@ -461,7 +462,7 @@ function SinglePffModDisplay(props: {
     version: string;
     onUpdate: () => void;
     root: string;
-}): JSX.Element {
+}): React.ReactElement {
     const [showDesc, setShowDesc] = useState(false);
     const isCompatible =
         (props.meta.selectedArtifact.gameVersion.length === 0 ||
@@ -539,7 +540,7 @@ function SingleModDisplay(props: {
     m: ModInfo;
     loader: ModLoader;
     mcversion: string;
-}): JSX.Element {
+}): React.ReactElement {
     const modmcv = props.m.mcversion || "*";
     const compatible =
         (chkModLoader(props.m.loader, props.loader) ||
@@ -668,7 +669,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Box hidden={value !== index}>{value === index ? <>{children}</> : ""}</Box>

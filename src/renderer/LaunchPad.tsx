@@ -41,7 +41,7 @@ export interface SimplifiedCoreInfo {
     isolated: boolean;
 }
 
-export function LaunchPad(): JSX.Element {
+export function LaunchPad(): React.ReactElement {
     const classes = usePadStyles();
     let {server} = useParams<{ server?: string }>();
     server = server ? decodeURIComponent(server) : undefined;
@@ -61,7 +61,7 @@ function vcmp(v0: string, v1: string): number {
     return parseInt(v00) - parseInt(v01);
 }
 
-function CoresDisplay(props: { server?: string }): JSX.Element {
+function CoresDisplay(props: { server?: string }): React.ReactElement {
     const mountedBit = useRef<boolean>(false);
     const [cores, setCores] = useState<SimplifiedCoreInfo[]>([]);
     const [isLoading, setLoading] = useState(false);
@@ -270,7 +270,7 @@ function SingleCoreDisplay(props: {
     server?: string;
     loading: boolean;
     refresh: () => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useCardStyles();
     const hash = objectHash(props.profile);
     const used = getUsed(hash);
@@ -594,7 +594,7 @@ function getDescriptionFor(type: string): string {
     }
 }
 
-function CorruptedCoreWarning(): JSX.Element {
+function CorruptedCoreWarning(): React.ReactElement {
     return (
         <>
             <Typography

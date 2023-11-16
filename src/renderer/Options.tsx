@@ -101,7 +101,7 @@ enum ConfigType {
     SLIDE,
 }
 
-export function OptionsPage(): JSX.Element {
+export function OptionsPage(): React.ReactElement {
     const [tabValue, setTabValue] = useState(0);
     const classes = makeStyles((theme: AlicornTheme) => ({
         head: {
@@ -620,7 +620,7 @@ function InputItem(props: {
     sliderMax?: number;
     sliderMin?: number;
     sliderStep?: number;
-}): JSX.Element {
+}): React.ReactElement {
     const originVal = useRef(get(props.bindConfig, undefined));
     const callChange = () => {
         if (
@@ -878,7 +878,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Box hidden={value !== index}>

@@ -443,7 +443,7 @@ const BACKGROUND_URLS: Record<string, string> = {
     "": ""
 };
 
-function RendererBootstrap(): JSX.Element {
+function RendererBootstrap(): React.ReactElement {
     let url =
         getString("theme.background.custom") || getString("theme.background");
     if (url === "Disabled" || !url) {

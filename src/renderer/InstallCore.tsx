@@ -44,7 +44,7 @@ import { ALICORN_DEFAULT_THEME_DARK, ALICORN_DEFAULT_THEME_LIGHT, isBgDark } fro
 import { useFormStyles } from "./Stylex";
 import { tr } from "./Translator";
 
-export function InstallCore(): JSX.Element {
+export function InstallCore(): React.ReactElement {
     const classes = useFormStyles();
     const [foundCores, setCores] = useState<string[]>([]);
     const isLoaded = useRef<boolean>(false);
@@ -866,7 +866,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Container hidden={value !== index}>

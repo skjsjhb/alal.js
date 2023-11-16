@@ -44,7 +44,7 @@ import { tr } from "./Translator";
 // This is only for Yggdrasil accounts
 // MS Account and Local Account should not be saved
 
-export function YggdrasilAccountManager(): JSX.Element {
+export function YggdrasilAccountManager(): React.ReactElement {
     const classes = usePadStyles();
     const mountedBit = useRef(true);
     const accountsLoaded = useRef(false);
@@ -140,7 +140,7 @@ export function YggdrasilAccountManager(): JSX.Element {
                 }}
             />
             {(() => {
-                const components: JSX.Element[] = [];
+                const components: React.ReactElement[] = [];
                 for (const a of accounts) {
                     components.push(
                         <SingleAccountDisplay
@@ -170,7 +170,7 @@ function SingleAccountDisplay(props: {
     account: Account;
     updateAccount: (origin: Account, newAccount: Account) => unknown;
     deleteAccount: (origin: Account) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const accountCopy = copyAccount(props.account);
     const classes = useCardStyles();
     const [isOperating, setOperating] = useState(false);
@@ -349,7 +349,7 @@ export function YggdrasilForm(props: {
     open: boolean;
     account: Account | undefined;
     updateAccount: (a: Account) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useInputStyles();
     const [pwd, setPwd] = useState("");
     const [isRunning, isRunningUpdate] = useState(false);
@@ -430,7 +430,7 @@ function AddAccount(props: {
     onClose: () => unknown;
     handleNewAccount: (a: Account) => unknown;
     server?: string;
-}): JSX.Element {
+}): React.ReactElement {
     const [email, setEmail] = useState("");
     const [authHost, setAuthHost] = useState<string>(
         decodeURIComponent(props.server || "")
@@ -564,7 +564,7 @@ function AddAccountWrapper(props: {
     onClose: () => unknown;
     handleNewAccount: (a: Account) => unknown;
     server?: string;
-}): JSX.Element {
+}): React.ReactElement {
     const [isPwdOpen, isPwdOpenUpdate] = useState(false);
     const [isEmailOpen, isEmailOpenUpdate] = useState(true);
     const [tmpAccount, tmpAccountUpdate] = useState<Account>();

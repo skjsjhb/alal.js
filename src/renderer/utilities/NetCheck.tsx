@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTextStyles } from "../Stylex";
 import { tr } from "../Translator";
 
-export function NetCheck(): JSX.Element {
+export function NetCheck(): React.ReactElement {
     return (
         <>
             <TestReachable
@@ -38,7 +38,7 @@ export function NetCheck(): JSX.Element {
 
 const ICON_SIZE = "1.375rem";
 
-function TestReachable(props: { site: string; name: string }): JSX.Element {
+function TestReachable(props: { site: string; name: string }): React.ReactElement {
     const classes = useTextStyles();
     const [reachable, setReachable] = useState<boolean>();
     const mounted = useRef(false);

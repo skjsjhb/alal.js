@@ -11,7 +11,7 @@ const gridSX = {
     justifyContent: "center"
 };
 
-export function UpdateHint(): JSX.Element {
+export function UpdateHint(): React.ReactElement {
     return (
         <Container sx={{marginTop: "8rem"}}>
             <Grid container direction={"row"} sx={gridSX}>

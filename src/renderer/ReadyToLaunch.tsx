@@ -151,14 +151,15 @@ export const LAST_FAILURE_INFO_KEY = "ReadyToLaunch.LastFailureInfo";
 export const LAST_LOGS_KEY = "ReadyToLaunch.LastLogs";
 export const LAST_CRASH_KEY = "ReadyToLaunch.LastCrash";
 
-export function ReadyToLaunch(): JSX.Element {
+export function ReadyToLaunch(): React.ReactElement {
     const [coreProfile, setProfile] = useState(new GameProfile({}));
     const [profileLoadedBit, setLoaded] = useState(0);
-    let {id, container, server} = useParams<{
+    type ForcedParams = {
         id: string;
         container: string;
         server?: string;
-    }>();
+    };
+    let {id, container, server} = useParams<ForcedParams>() as ForcedParams;
     id = decodeURIComponent(id);
     container = decodeURIComponent(container);
     server = server ? decodeURIComponent(server) : undefined;
@@ -249,7 +250,7 @@ function LaunchStepIconRoot(props: {
     active?: boolean;
     children: React.ReactNode;
     loading: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     return (
         <Box
             sx={{
@@ -276,7 +277,7 @@ function LaunchStepIconRoot(props: {
     );
 }
 
-function LaunchStepIcon(props: StepIconProps): JSX.Element {
+function LaunchStepIcon(props: StepIconProps): React.ReactElement {
     const {active, completed} = props;
     const i = String(props.icon);
     return (
@@ -303,7 +304,7 @@ function Launching(props: {
     profile: GameProfile;
     container: MinecraftContainer;
     server?: string;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useStyles();
     const mountedBit = useRef<boolean>(true);
     const [warning, setWarning] = useState(false);
@@ -1076,7 +1077,7 @@ function AccountChoose(props: {
     onChose: (a: Account | null) => unknown;
     allAccounts: Set<Account>;
     profileHash: string;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useInputStyles();
     const btnClasses = makeStyles((theme: AlicornTheme) => ({
         btn: {
@@ -1444,7 +1445,7 @@ function MiniJavaSelector(props: {
     gameId: string;
     disabled: boolean;
     gameVersion: string;
-}): JSX.Element {
+}): React.ReactElement {
     const classes = useFormStyles();
     const mounted = useRef<boolean>(false);
     const [currentJava, setCurrentJava] = useState<string>(
@@ -1628,7 +1629,7 @@ function OpenWorldDialog(props: {
     baseVersion: string;
     port: number;
     onClose: () => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const [message, setMessage] = useState("Hi there!");
     const [expires, setExpires] = useState(1); // in hours
     const [count, setCount] = useState(5);
@@ -1829,7 +1830,7 @@ function OpenWorldDialog(props: {
     );
 }
 
-function WaitingText(): JSX.Element {
+function WaitingText(): React.ReactElement {
     const [hint, setHint] = useState(randsl("ReadyToLaunch.WaitingText"));
     useEffect(() => {
         const timer = setInterval(() => {
@@ -1863,7 +1864,7 @@ function getProfileRelatedID(hash: string): string {
 
 const CODE_REGEX = /(?<=\?code=)[^&]+/i;
 
-function AskURLDialog(): JSX.Element {
+function AskURLDialog(): React.ReactElement {
     const [url, setUrl] = useState("");
     const [open, setOpen] = useState(false);
     useEffect(() => {
@@ -1926,7 +1927,7 @@ function AskURLDialog(): JSX.Element {
     );
 }
 
-function SystemUsage(): JSX.Element {
+function SystemUsage(): React.ReactElement {
     const [mem, setMem] = useState(os.freemem());
     const [totalMem, setTotalMem] = useState(os.totalmem());
     const [loadAverage, setLoadAverage] = useState(os.loadavg()[0]);

@@ -20,7 +20,7 @@ const PASSWORD_KEY = "Utilities.CutieConnect.Password";
 const IP_KEY = "Utilities.CutieConnect.IP";
 const INTERNET = "internet";
 
-export function CutieConnet(): JSX.Element {
+export function CutieConnet(): React.ReactElement {
     const randip = generateRandIP();
     const [superNode, setSuperNode] = useState(
         localStorage.getItem(SUPERNODE_KEY) || ""
@@ -376,7 +376,7 @@ function TabPanel(props: {
     children?: React.ReactNode;
     index: string | number;
     value: string | number;
-}): JSX.Element {
+}): React.ReactElement {
     const {children, value, index} = props;
     return (
         <Box hidden={value !== index}>{value === index ? <>{children}</> : ""}</Box>

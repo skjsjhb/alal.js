@@ -10,7 +10,7 @@ function InstructionInside(props: {
     changeTarget: (s: string) => unknown;
     setCurPage: (s: number) => unknown;
     changePage: (s: string) => unknown;
-}): JSX.Element {
+}): React.ReactElement {
     const curPage = props.curPage;
     const target = props.target;
     const changeTarget = props.changeTarget;
@@ -127,7 +127,7 @@ function InstructionInside(props: {
     );
 }
 
-export function Instruction(): JSX.Element {
+export function Instruction(): React.ReactElement {
     return (
         <InstructionHighlight.Consumer>
             {({
@@ -166,8 +166,8 @@ const InstructionHighlight = createContext({
 });
 
 export function InstructionProvider(props: {
-    children: JSX.Element;
-}): JSX.Element {
+    children: React.ReactElement;
+}): React.ReactElement {
     const [target, setTarget] = useState("");
     const [page, setPage] = useState("");
     const [currentNum, setCurrentNum] = useState(0);
@@ -192,11 +192,11 @@ export function InstructionProvider(props: {
 }
 
 export function ShiftEle(props: {
-    children: JSX.Element | string;
+    children: React.ReactElement | string;
     name: string;
     bgcolor?: string;
     bgfill?: boolean;
-}): JSX.Element {
+}): React.ReactElement {
     return (
         <InstructionHighlight.Consumer>
             {({target}) => {

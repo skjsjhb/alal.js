@@ -25,7 +25,7 @@ const useAccStyles = makeStyles((theme: AlicornTheme) => ({
     }
 }));
 
-export function UtilitiesIndex(): JSX.Element {
+export function UtilitiesIndex(): React.ReactElement {
     const classes = useTextStyles();
     const sx = {color: isBgDark() ? "secondary.light" : undefined};
     return (
@@ -45,8 +45,8 @@ export function UtilitiesIndex(): JSX.Element {
 function SimpleUtil(props: {
     name: string;
     experimental?: boolean;
-    icon: JSX.Element;
-}): JSX.Element {
+    icon: React.ReactElement;
+}): React.ReactElement {
     const classes = useCardStyles();
     const accClasses = useAccStyles();
     const [isHover, setHover] = useState(false);

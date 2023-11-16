@@ -1,8 +1,6 @@
-# Alicorn Launcher Again (JS Edition)
+# ALAL (Alicorn Again Launcher)
 
 ## This Is a Fork
-
-The story has ended, really, but I'll light up everything again.
 
 This is a fork of a the original [Alicorn](https://github.com/Andy-K-Sparklight/Alicorn) repository. See the original README there. The name **ALAL** stands for **AL**icorn **A**gain **L**auncher. 
 
@@ -14,50 +12,30 @@ Many packages of the original author is not possible to update in a few commits,
 
 The fork is made to keep the software alive, not a follow-up or series. The updates are made out of good intentions, but still, with no warranty.
 
-## What To Update
+## Major Changes (Comparing To Alicorn)
 
-- **Add Tests**: The original repository contains no tests.
+We attempt to make ALAL a modern launcher with latest features integrated. Therefore we've made several changes to the dependencies and code. Naming some:
 
-- **Remove Unused Modules**: Many unused features should be discarded.
+- No longer supports Windows 7, 8 and 8.1, macOS 10.13, 10.14.
 
-- **Fix Bugs**: There are several bugs with the latest game. They should be fixed.
+- No longer supports 32-bit OS.
 
-- **Improve Download Speed**: Add an aria2 daemon as a faster download alternative.
+- Add support to aarch64 / arm64 architectures.
 
-- **Improve UI**: The UI needs to be clearer.
+- Improve UI.
 
-- **Support macOS**: We're restarting to macOS.
+- Improve performance.
 
-## Build
+- Improve mod resolution system.
 
-#### Build Executable
+## Build (WIP)
 
-To build Alicorn, you'll need:
+We're still testing for a faster and more reliable approach to build the app. This involves an update to the updators and several related assets. We'll update the documentation once we've completed the tests.
 
-- [Node.js](https://nodejs.org)
+## Copying
 
-- [Git](https://git-scm.com)
+Copyright (C) 2020 - 2022 Annie K Rarity Sparklight (ThatRarityEG). For Alicorn Launcher.
 
-- Clone the repository:
-  
-  ```shell
-  git clone https://github.com/Andy-K-Sparklight/Alicorn.git --depth=1
-  ```
+Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). For Alicorn Again Launcher.
 
-- Install dependencies:
-  
-  ```shell
-  yarn
-  ```
-
-- Run build:
-  
-  ```shell
-  yarn make
-  ```
-  
-  This will generate binaries and put them under `out`, including Windows x64, Windows ia32, GNU/Linux x64, GNU/Linux arm64 ~~and macOS x64~~. This will also generate corresponding archives.
-  
-  _The support for macOS has ended and no more platform dependent code will be commited. The modules present are still kept, but might not run correctly._
-  
-  You also need `wine` to complete the cross build progress on platforms other than Windows. Follow the instructions given by `electron-packager`.
+# 

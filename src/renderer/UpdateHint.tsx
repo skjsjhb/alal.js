@@ -16,34 +16,39 @@ export function UpdateHint(): JSX.Element {
         <Container sx={{marginTop: "8rem"}}>
             <Grid container direction={"row"} sx={gridSX}>
                 <Grid item sx={{marginRight: "5rem"}}>
-                    <Grid container direction={"row"} sx={gridSX}>
-                        <Grid item>
-                            <Typography sx={{fontSize: "6rem", color: "gray"}}>
-                                {localStorage.getItem(LAST_VERSION_KEY)}
-                            </Typography>
+                    <Grid container direction={"column"} sx={gridSX}>
+                        <Grid container direction={"row"} sx={gridSX}>
+                            <Grid item>
+                                <Typography sx={{fontSize: "6rem", color: "gray"}}>
+                                    {localStorage.getItem(LAST_VERSION_KEY)}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography
+                                    sx={{
+                                        fontSize: "5rem",
+                                        color: "secondary.main",
+                                        margin: "3rem"
+                                    }}
+                                >
+                                    {">>"}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography sx={{fontSize: "6rem", color: "primary.main"}}>
+                                    {pkg.updatorVersion}
+                                </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Typography
-                                sx={{
-                                    fontSize: "5rem",
-                                    color: "secondary.main",
-                                    margin: "3rem"
-                                }}
-                            >
-                                {">>"}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Typography sx={{fontSize: "6rem", color: "primary.main"}}>
-                                {pkg.updatorVersion}
-                            </Typography>
-                        </Grid>
+                        <Typography sx={{fontSize: "3rem", color: "primary.main", marginTop: "-3rem"}}>
+                            {pkg.appVersion}
+                        </Typography>
                     </Grid>
                 </Grid>
                 <Divider
                     orientation={"vertical"}
                     flexItem
-                    sx={{margin: "1rem", backgroundColor: "primary.main"}}
+                    sx={{marginTop: "1.5rem", backgroundColor: "primary.main"}}
                 />
                 <Grid item sx={{marginLeft: "5rem"}}>
                     <Typography sx={{fontSize: "large", color: "secondary.main"}}>

@@ -40,7 +40,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { ipcRenderer } from "electron";
 import React, { useEffect, useRef, useState } from "react";
-import { Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import pkg from "../../package.json";
 import { safeGet } from "../modules/commons/Null";
 import { getBoolean, getString, saveConfig } from "../modules/config/ConfigSupport";
@@ -176,9 +176,9 @@ export function App(): JSX.Element {
             }}
         >
             <AppTopBar page={page} setOpenDrawer={setOpenDrawer} classes={classes}/>
-            <Box className={classes.content + " yggdrasil_droppable"} id={"app_main"}>
+            <Box className={classes.content} id={"app_main"}>
                 <>
-                    <Routes/>
+                    <MainPageRoutable/>
                     <Instruction/>
                 </>
             </Box>
@@ -439,49 +439,50 @@ function bindMsgTips(
     };
 }
 
-// -------- Routes --------
 
-function Routes(): JSX.Element {
+function MainPageRoutable(): JSX.Element {
     return (
         <Container>
-            <Route path={"/LaunchPad/:server?"} component={LaunchPad}/>
-            <Route path={"/InstallCore"} component={InstallCore}/>
-            <Route
-                path={"/ReadyToLaunch/:container/:id/:server?"}
-                component={ReadyToLaunch}
-            />
-            <Route path={"/Version"} component={VersionView}/>
-            <Route
-                path={"/ContainerManager/:modpack?/:togo?"}
-                component={ContainerManager}
-            />
-            <Route
-                path={"/AccountManager/:adding?/:server?"}
-                component={YggdrasilAccountManager}
-            />
-            <Route path={"/JavaSelector"} component={JavaSelector}/>
-            <Route path={"/Options"} component={OptionsPage}/>
-            <Route path={"/CrashReportDisplay"} component={CrashReportDisplay}/>
-            <Route
-                path={
-                    "/PffFront/:container/:version/:loader/:root/:name?/:autostart?" // root: Ask Pff to Re-Assign mods root as this. Pass core id will be fine. Only for some ancient isolated cores. 0 to disable.
-                }
-                component={PffFront}
-            />
-            <Route path={"/Welcome"} component={Welcome}/>
-            <Route path={"/ServerList"} component={ServerList}/>
-            <Route path={"/UtilitiesIndex"} component={UtilitiesIndex}/>
-            <Route path={"/Utilities/NetCheck"} component={NetCheck}/>
-            <Route path={"/Utilities/CutieConnect"} component={CutieConnet}/>
-            <Route path={"/Utilities/BuildUp"} component={BuildUp}/>
-            <Route path={"/Utilities/PffVisual"} component={PffVisual}/>
-            <Route
-                path={"/Utilities/CarouselBoutique"}
-                component={CarouselBoutique}
-            />
-            <Route path={"/Statistics"} component={Statistics}/>
-            <Route path={"/TheEndingOfTheEnd"} component={TheEndingOfTheEnd}/>
-            <Route path={"/UpdateHint"} component={UpdateHint}/>
+            <Routes>
+                <Route path={"/LaunchPad/:server?"} element={<LaunchPad/>}/>
+                <Route path={"/InstallCore"} element={<InstallCore/>}/>
+                <Route
+                    path={"/ReadyToLaunch/:container/:id/:server?"}
+                    element={<ReadyToLaunch/>}
+                />
+                <Route path={"/Version"} element={<VersionView/>}/>
+                <Route
+                    path={"/ContainerManager/:modpack?/:togo?"}
+                    element={<ContainerManager/>}
+                />
+                <Route
+                    path={"/AccountManager/:adding?/:server?"}
+                    element={<YggdrasilAccountManager/>}
+                />
+                <Route path={"/JavaSelector"} element={<JavaSelector/>}/>
+                <Route path={"/Options"} element={<OptionsPage/>}/>
+                <Route path={"/CrashReportDisplay"} element={<CrashReportDisplay/>}/>
+                <Route
+                    path={
+                        "/PffFront/:container/:version/:loader/:root/:name?/:autostart?" // root: Ask Pff to Re-Assign mods root as this. Pass core id will be fine. Only for some ancient isolated cores. 0 to disable.
+                    }
+                    element={<PffFront/>}
+                />
+                <Route path={"/Welcome"} element={<Welcome/>}/>
+                <Route path={"/ServerList"} element={<ServerList/>}/>
+                <Route path={"/UtilitiesIndex"} element={<UtilitiesIndex/>}/>
+                <Route path={"/Utilities/NetCheck"} element={<NetCheck/>}/>
+                <Route path={"/Utilities/CutieConnect"} element={<CutieConnet/>}/>
+                <Route path={"/Utilities/BuildUp"} element={<BuildUp/>}/>
+                <Route path={"/Utilities/PffVisual"} element={<PffVisual/>}/>
+                <Route
+                    path={"/Utilities/CarouselBoutique"}
+                    element={<CarouselBoutique/>}
+                />
+                <Route path={"/Statistics"} element={<Statistics/>}/>
+                <Route path={"/TheEndingOfTheEnd"} element={<TheEndingOfTheEnd/>}/>
+                <Route path={"/UpdateHint"} element={<UpdateHint/>}/>
+            </Routes>
         </Container>
     );
 }

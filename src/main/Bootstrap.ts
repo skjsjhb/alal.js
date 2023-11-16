@@ -75,7 +75,7 @@ async function whenAppReady() {
         webPreferences: {
             webSecurity: false, // No more CORS!
             nodeIntegration: true, // Obviously
-            nodeIntegrationInWorker: true, // Worker needs mdiff
+            nodeIntegrationInWorker: true,
             contextIsolation: false, // Node
             sandbox: false, // Node
             spellcheck: false,

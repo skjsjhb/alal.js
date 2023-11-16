@@ -86,7 +86,7 @@ export function YggdrasilAccountManager(): JSX.Element {
     });
 
     return (
-        <Box className={classes.para + " yggdrasil_droppable"}>
+        <Box className={classes.para}>
             <Typography className={classes.smallText} color={"secondary"}>
                 {tr("AccountManager.Note")}
             </Typography>

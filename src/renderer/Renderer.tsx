@@ -492,7 +492,7 @@ function RendererBootstrap(): JSX.Element {
                         }}
                         color={"primary"}
                     >
-                        {"Alicorn JE " + pkg.appVersion + " #" + pkg.updatorVersion}
+                        {"Alicorn Again " + pkg.appVersion + " #" + pkg.updatorVersion}
                     </Typography>
                     <div
                         style={{

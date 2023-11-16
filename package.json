@@ -1,8 +1,8 @@
 {
   "private": true,
-  "appVersion": "Sunset",
+  "appVersion": "SakuraKumo",
   "version": "1.0.0",
-  "updatorVersion": 50,
+  "updatorVersion": 51,
   "scripts": {
     "lc": "yarn lcd",
     "df": "yarn dev-full",
@@ -57,7 +57,7 @@
     "react-devtools": "^4.24.7",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
-    "webpack": "^5.73.0",
+    "webpack": "^5.76.0",
     "webpack-cli": "^4.10.0",
     "yarn": "^1.22.19"
   },

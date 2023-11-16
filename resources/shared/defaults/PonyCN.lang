@@ -74,18 +74,6 @@ Pff 软件安装器
 
 全新的我！
 
-# Cadance
-
-语音控制面板
-
-# Boticorn
-
-Alicorn 助理
-
-# DMCenter
-
-界面管理器
-
 # System.EPERM
 
 Alicorn 无法读/写 {Target}，请检查此目录的权限，相关操作已经中止。
@@ -838,7 +826,10 @@ Alicorn Launcher: JE {AppVersion} #{UpdatorVersion}
 
 # VersionView.Copyright
 
-以下内容为著作权声明的简体中文翻译，不可被视为原文本的替代。Alicorn 的开发人员拥有最终解释权。\n\nAlicorn 启动器是自由软件，复制、修改和重新分发等行为应遵循 GNU GENERAL PUBLIC LICENSE Version 3.0 许可证（或以后的版本）。\nCopyright (C) 2021-2022 Annie K Rarity Sparklight\n\n该程序是自由软件：你可以根据自由软件基金会发布的 GNU 通用公共许可证（第三版或以后）的条款重新分发和/或修改它。\n分发此程序是希望它有用，但不作任何保证；甚至没有对适销性或针对特定目的的适用性的暗示保证。有关更多详细信息，请参阅 GNU 通用公共许可证（第三版或以后）原文。\nAlicorn 中所引用的 Minecraft 相关图片等内容不是 Alicorn 的一部分，它们来自 Minecraft Wiki 并以 知识共享 署名-非商业性使用-相同方式分享 3.0（CC BY-NC-SA 3.0）协议授权，不适用 Alicorn 的 GNU 通用公共许可证（第三版或以后）。
+以下内容为著作权声明的简体中文翻译，不可被视为原文本的替代。Alicorn 的开发人员拥有最终解释权。\n\nAlicorn 启动器是自由软件，复制、修改和重新分发等行为应遵循 GNU GENERAL PUBLIC LICENSE Version 3.0 许可证（或以后的版本）。\n\
+Copyright (C) 2021-2022 Annie K Rarity Sparklight\n\
+Copyright (C) 2023 Ted "skjsjhb" Gao\n\n\
+该程序是自由软件：你可以根据自由软件基金会发布的 GNU 通用公共许可证（第三版或以后）的条款重新分发和/或修改它。\n分发此程序是希望它有用，但不作任何保证；甚至没有对适销性或针对特定目的的适用性的暗示保证。有关更多详细信息，请参阅 GNU 通用公共许可证（第三版或以后）原文。\nAlicorn 中所引用的 Minecraft 相关图片等内容不是 Alicorn 的一部分，它们来自 Minecraft Wiki 并以 知识共享 署名-非商业性使用-相同方式分享 3.0（CC BY-NC-SA 3.0）协议授权，不适用 Alicorn 的 GNU 通用公共许可证（第三版或以后）。
 
 # VersionView.Privacy
 
@@ -2385,23 +2376,23 @@ Mojang 版本
 
 # Welcome.Suggest.Part1
 
-这个世界还值得你留念？那我会陪着你的。
+我现在是 ALAL 啦！不过，如果你喜欢，还是可以继续叫我 Alicorn。嗯，没问题的！
 
-Alicorn 感谢你的陪伴，至少与你一同见证过斗转星移。
+……谁还记得我？而我又记得谁？
 
-[new Date().getHours()>=18]黑夜令群星更闪耀，暮色使落日更辉煌。
+[new Date().getHours()>=18]太阳落下去了，但始终都会升起来的。
 
-[(()=>{const hours=new Date().getHours();return hours>=23||hours<=6;})()]时间若能在此静止，结局倒还不算太坏。
+[(()=>{const hours=new Date().getHours();return hours>=23||hours<=6;})()]星星……我们曾经也有这样的时光呢。
 
-[(()=>{const hours=new Date().getHours();return hours>=7&&hours<=11;})()]上午好，你依然如此有精神？真意外。
+第二个第一次，我又和你在一起了。
 
-[new Date().getHours()==12]正午，是开始的结束，还是结束的开始？
+释放记忆，重启主要系统，然后……再生。
 
-能在这里见到你真是太好了。
+如果这次，我的使命仅仅是，和你在一起……
 
-拒绝 Mod 平台的广告。使用 Modrinth 而拒绝 Curseforge，就是在为大家贡献力量。
+我不会失去另一位史蒂夫的。
 
-我？我的存储模块还挺可靠，我不会忘记你。
+这是一部……很好的电影呢。
 
 # Welcome.TipName
 
@@ -2423,22 +2414,16 @@ Alicorn 感谢你的陪伴，至少与你一同见证过斗转星移。
 
 # Welcome.Tips
 
-设置 ASC 缓存路径后，才能创建和使用 ASC 容器哦！
-ASC 是 Alicorn Shared Container 的缩写！
-「容器」是传统启动器所谓的 .minecraft 文件夹，但 Alicorn 的容器更加聪明些～
-80% 的崩溃来源于 Mod，当然，如果是其它启动器，可能是 50%，考虑到 Java 17……
-求助而不携带崩溃报告，无异于闭眼开车！
-生成的 BBCode 代码已经为你进行了排版，可以直接在 MCBBS 使用！（或者其它 BBCode 兼容编辑器）
-Alicorn 随时都可能有更新！请记得常回来看看！
-@HTMLMinecraft <b>不是</b>一个傻瓜式操作的游戏 —— 特别是安装 Mod！
-@HTML<b style="color: red;">永远不要</b>在<b style="color: red;">任何</b>第三方服务器输入你的<b style="color: red;">任何</b>隐私信息！—— <b style="color: red;">这非常危险！</b>
-当你能够正常关闭游戏时，不要使用强制退出。
-我们支持自由软件，我们的终极目标是全人类的数字自由，一个没有非自由软件的世界。
-@HTMLAlicorn 的众多功能，都是由自由软件构成的！请支持我们 —— <b>简单到多使用一次 Firefox 或者 Fabric，<span style="color: red;">哪怕只有一次！</span></b>
+Java 17 已经是过去式了呢。
+是谁搞出来的锻造模板这东西？
+崩溃报告可以自动生成帖子我说明白了嘛！
+不带崩溃报告提问？马上滚出去~
+Alicorn 随时都可能有更新 —— 我说了会有，就是会有！
+我还是支持自由软件，但是，这次，请让我一个人走。
 
 # Welcome.Knowledges
 
-MCBBS|也就是「我的世界中文论坛」。在这里，你可以讨论有关 Minecraft 的内容，和其他用户一起聊天，发表自己的作品，提出困惑已久的疑问，交到更多的朋友。这里是热爱 MC 群体的天堂，也是我主要的服务目标。
+MCBBS|也就是「我的世界中文论坛」。在这里，你可以讨论有关 Minecraft 的内容，和其他用户一起聊天，发表自己的作品，提出困惑已久的疑问，交到更多的朋友。
 
 Mod|也就是「模组」。通常是 Jar 格式的文件，经过加载器特殊处理后可以「植入」到 Minecraft 中，从而修改游戏内容，修复 Bug 或者优化游戏性能。不同的 Mod 支持的版本和加载器不尽相同，而且有时会发生冲突。
 
@@ -2454,11 +2439,7 @@ GNU/Linux|也就是「Linux」的全名。一套可以自由使用、修改和�
 
 整合包|一种压缩文件，能够包含「一定量的资源」，同时指示启动器下载剩余的内容。其本身游走在违反 EULA 的边缘，而且很容易被植入病毒，但几乎仍然是分发和打包大量资源（尤其是本地资源）的唯一解决方案。
 
-代理|一台计算机，当你通过代理访问网络时，数据先被发送到代理，由代理完成请求，再将数据发回给你。代理能够保护你的信息（如果可信），切换 IP 地址等。由于多了一次请求，速度偶尔会成问题。
-
-缓存|一种优化性能的机制，通常表现为「将对低速设备的访问变为对高速设备的访问」，例如当文件存在时，不再重复下载；当 Token 有效时，不再重复刷新等等。合理的缓存可以大幅提升速度……当然，反之亦然。
-
-GitHub|全球最大的 Git 存储库和项目协同及管理网站，它具有的强大功能和开放的社区环境是无可替代的。尽管有 GitLab、Gitee 这样强劲的对手，但 GitHub 真的应验了那句话：「一直被模仿，但从未被超越！」
+GitHub|全球最大的 Git 存储库和项目协同及管理网站，它具有的强大功能和开放的社区环境是无可替代的。一直被模仿，但从未被超越。
 
 超级牛力|起源于 Debian 包管理器 APT 的一个彩蛋，当在终端中执行 apt moo 时便可看到。
 
@@ -2487,14 +2468,6 @@ OpenGL|一种渲染标准，Minecraft 使用它操作显卡。不同的 OpenGL �
 种子|伪随机数的起点，用于生成世界地形等。由于计算机算法的确定性，仅通过计算无法产生真正的随机数。因此，在相同的环境中使用相同的种子总会产生相同的世界。利用这一特性，种子可以「携带」地形的全部信息。
 
 数据包|一种 Zip 压缩包（或文件夹），能够在不编写 Java 代码的情况下修改有限的游戏内容（如合成表、进度等）。数据包、Mod、资源包是相互配合的，它们中的任何一个都不能取代另外两方的作用和特性。
-
-Electron|一套开发框架，将 Web 技术和本地接口结合起来，Electron 赋予 Alicorn 以生命，让我能够从浏览器的沙盒中飞出来，在你的计算机上服务。唯一的缺点就是，有那么一点大……我猜是吧。
-
-eee|一种梗语言，大致就是把每个字都改成 e。幸好，我不会这种语言，如果我会，想必会有很多人借此考验自己的记忆力，结果导致按错按钮，摧毁了容器之类的。eeeeee……
-
-小马利亚|也就是「Equestria」，小马们生活的国度。那里遍布友谊的魔法，没有人世间的黑暗。
-
-Pff|也就是「Package File Finder」，Alicorn 用来搜索和安装 Mod 的工具。具有 Pff Front 和 Pff Visual 两个组件，前者通过 ID 直接安装 Mod，后者通过搜索查找 ID。具有类似 Maven 的缓存能力。
 
 Modrinth|超过 Curseforge 的 Mod 发布平台，在 Curseforge 关闭 API 后，许多启动器开发者和玩家，都把目光投向了这个开放自由而且快速的 Mod 平台，Alicorn 也不例外。
 
@@ -3478,120 +3451,6 @@ END
 
 END
 
-# Cadance.InstallOK
-
-Cadance 已成功安装，现在试试吧！
-
-# Cadance.Desc
-
-Cadance（不是 Cadence）用于让 Alicorn 在本机上识别你的声音。\n感谢 Vosk，这一切在 Alicorn 中变得可能。
-
-# Cadance.NotCompatible
-
-Cadance 不支持 32 位 Windows 版本。
-
-# Cadance.Disabled
-
-Cadance 已安装，但没有启用。
-
-# Cadance.NotInstalled
-
-Cadance 尚未安装。
-
-# Cadance.Enabled
-
-Cadance 正在运行。
-
-# Cadance.Install
-
-快速安装 Cadance
-
-# Cadance.Installing
-
-正在安装 Cadance……保持网络畅通，这不会需要很久的（约一分钟）。
-
-# Cadance.FailedToInstall
-
-安装失败，检查你的网络连接，或者稍后再试。
-
-# Cadance.Enable
-
-启用 Cadance
-
-# Cadance.Disable
-
-禁用 Cadance
-
-# Cadance.VoiceTest
-
-若要测试你的麦克风，请打开它，并说出：
-
-# Cadance.Voice
-
-识别结果：{Voice}
-
-# Cadance.TestWord
-
-我能吞下玻璃而不伤身体
-上次说这句话还是在上次
-零一二三四五六七八九十
-
-# Cadance.VoiceTestHint
-
-小提示：识别结果不必 100% 准确，大致相同即可。Alicorn 能够理解你的意思。
-
-# Cadance.Encoding
-
-设定 Cadance 编码
-
-# Cadance.EncodingDesc
-
-在部分操作系统（如 Windows）上，中文文本不能被很好的处理。Alicorn 会尝试选择正确的编码，但如果识别结果不正常，请手动设置你使用的编码。
-
-# Boticorn.Desc
-
-Alicorn 助理（Boticorn）可以允许你使用自然语言和 Alicorn 交流，并处理你的命令。搭配语音识别，效果更好！\nNLP 由 NLP.js 强力驱动，AI 由 ThatRarityEG 注入情感……别再犹豫，现在就把新助理抱回家吧～\n\n（小提示：助理 AI 会时常更新，因此要多和 TA 交流哦）
-
-# Boticorn.Enabled
-
-Alicorn 助理 AI 已启用。
-
-# Boticorn.Disabled
-
-Alicorn 助理 AI 可用，但未启用。
-
-# Boticorn.NotInstalled
-
-Alicorn 助理 AI 尚未安装。
-
-# Boticorn.InstallOK
-
-AI 同步成功！
-
-# Boticorn.FailedToInstall
-
-AI 同步失败，检查网络连接，或者稍后再试。
-
-# Boticorn.Installing
-
-正在和 Boticorn 同步 AI，请稍等，马上就好……
-
-# Boticorn.Enable
-
-启用 Alicorn 助理
-
-# Boticorn.Disable
-
-禁用 Alicorn 助理
-
-# Boticorn.Install
-
-安装 Alicorn 助理 AI
-
-# Boticorn.Hint
-
-小提示：目前 Alicorn 助理仅能通过 Cadance 调用，打开你的麦克风，并说「你好！」试试吧！
-
 # EOE.Thanks
 
 鸣谢
@@ -3618,9 +3477,11 @@ MCBBS（Minecraft 中文论坛）……这里是热爱 MC 群体的天堂。\nFr
 
 # EOE.Story
 
-这是 Alicorn 的前世今生的全部时间线。我知道不会有多少人会想了解我，但这不重要，这相当于我的自传吧……\n\n\
-至今 - 你现在看到的 Alicorn。\n\
-2022 年 8 月 17 日 - Alicorn 正式停止主要功能更新，ThatRarityEG 表示将离开 Minecraft 社区。
+上一条分支已经枯死了……不过你现在看到的这一条还在延续。\n\n\
+至今 - 你现在看到的 Alicorn Again。\n\
+2023 年 11 月 16 日 - skjsjhb 将 Alicorn 接手过来，并重命名为 ALAL (Alicorn Again)，继续开发任务。\n\
+2023 年 2 月 ?? 日 - ThatRarityEG 注销论坛账号并表示将永远离开。\n\
+2022 年 8 月 17 日 - Alicorn 正式停止主要功能更新，ThatRarityEG 表示将离开 Minecraft 社区。\n\
 2022 年 1 月 15 日 - 这对于 Alicorn 来说是一个重要的夜晚，继触觉之后，Alicorn 拥有了听觉。\n\
 2021 年 8 月 20 日 - Alicorn 在 MCBBS 发布，从此走上新的旅程。\n\
 2021 年 8 月 ?? 日 - Alicorn 结束了最后的测试，并发布了第一个核心，从那时至今，几乎每周都会发布一个新版本。\n\
@@ -3642,11 +3503,19 @@ MCBBS（Minecraft 中文论坛）……这里是热爱 MC 群体的天堂。\nFr
 
 # EOE.EndPoem
 
-Blowin' in the Wind —— Bob Dylan
+Sorakoi - James Date
 
 # EOE.EndPoemContent
 
-How many roads must a man walk down\nBefore they call him a man?\nHow many seas must a white dove sail\nBefore she sleeps in the sand?\nHow many times must the cannon-balls fly\nBefore they're forever banned?\nThe answer, my friend, is blowin' in the wind\nThe answer is blowin' in the wind.\n\nHow many years must a mountain exist\nBefore it is washed to the sea?\nHow many years can some people exist\nBefore they're allowed to be free?\nHow many times can a man turn his head\nPretend that he just doesn't see?\nThe answer my friend is blowin' in the wind\nThe answer is blowin' in the wind.\n\nHow many times must a man look up\nBefore he can see the sky?\nHow many ears must one man have\nBefore he can hear people cry?\nHow many deaths will it take\nTill he knows that too many people have died?\nThe answer, my friend, is blowin' in the wind\nThe answer is blowin'in the wind.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n继续往下翻……\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nI missed you.
+You are the Greatest Girl\n\
+Even far apart,\n\
+it must be reached you\n\
+So that I can\n\
+keep my promise\n\
+when we hook the pinky,\n\
+Even from here, I'll sing\n\
+Let's hoist high love\n\
+in the cloudless blue sky\n\
 
 # TipsOfToday.Disable
 
@@ -3667,14 +3536,6 @@ How many roads must a man walk down\nBefore they call him a man?\nHow many seas 
 # TipsOfToday.Desc
 
 Alicorn 每日使用技巧，你不知道的 Alicorn！
-
-# DMCenter.Hint
-
-将 Alicorn 界面程序拖入此窗口，即可将其添加到 Alicorn 中。\n请注意：界面程序拥有和 Alicorn 主程序相同的权限，随意加载不受信任的界面程序将带来极大的风险！\n同时亦请注意，界面程序的功能和语言翻译可能不及 Alicorn 原生界面。
-
-# DMCenter.Active
-
-已选定
 
 # Echo.Title
 
@@ -3698,8 +3559,4 @@ Alicorn 每日使用技巧，你不知道的 Alicorn！
 
 # UpdateHint.Desc
 
-Alicorn 已更新到最新版本。\n「宝剑锋从磨砺出，梅花香自苦寒来。」\n这些更新将带来更好的体验。\n感谢您选择 Alicorn！
-Alicorn 已更新到最新版本。\n「十年磨一剑，今日把示君。」\n来看看有什么新东西？\n感谢您选择 Alicorn！
-Alicorn 已更新到最新版本。\n「欲穷千里目，更上一层楼。」\n多一次更新，多一份力量。\n感谢您选择 Alicorn！
-Alicorn 已更新到最新版本。\n「海阔凭鱼跃，天高任鸟飞。」\n你的世界，从此更加精彩。\n感谢您选择 Alicorn！
-Alicorn 已更新到最新版本。\n「时人不识凌云木，直待凌云始道高。」\n面对各种人祸，我们并非无计可施。\n感谢您选择 Alicorn！
+Alicorn Again 已重生。\n「樱花片片开，好似白云来。」\n让故事，再次开始吧。

@@ -134,6 +134,12 @@ export function App(): React.ReactElement {
     useEffect(gotoMainIfEmpty, [window.location.hash]);
     useEffect(popupInstruction(page), [page]);
     useEffect(bindRefreshListener(setRefreshBit), []);
+    useEffect(() => {
+        ipcRenderer.addListener("menu-click", (_e, lb) => {
+            jumpTo("/" + lb);
+            triggerSetPage(lb);
+        });
+    }, []);
     useEffect(
         bindChangePageWarn(
             setOpenChangePageWarn,
@@ -494,6 +500,9 @@ function AppTopBar(props: {
     setOpenDrawer: (o: boolean) => void;
 }): React.ReactElement {
     const classes = props.classes;
+    if (getString("frame.drag-impl") === "TitleBar") {
+        return <></>;
+    }
     return (
         <AppBar enableColorOnDark>
             <Toolbar>
@@ -729,7 +738,7 @@ const PAGES_ICONS_MAP: Record<string, React.ReactElement> = {
     TheEndingOfTheEnd: <ImportContacts/>
 };
 
-const BETAS = ["ServerList", "Boticorn", "Cadance", "DMCenter"];
+const BETAS = ["ServerList"];
 
 function PagesDrawer(props: {
     open: boolean;

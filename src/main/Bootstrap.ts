@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen, Session } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, screen, Session } from "electron";
 import { btoa } from "js-base64";
 import path from "path";
 import { DOH_CONFIGURE } from "../modules/commons/Constants";
@@ -9,6 +9,7 @@ import {
     loadConfigSync,
     movOldConfigFolderSync
 } from "../modules/config/ConfigSupport";
+import os from "os";
 import { setBeacon } from "../modules/selfupdate/Beacon";
 import { registerBackgroundListeners } from "./Background";
 
@@ -88,7 +89,42 @@ async function whenAppReady() {
         backgroundColor: "#fff"
     });
     mainWindow.setAspectRatio(1.92);
-    mainWindow.setMenu(null);
+    if (getString("frame.drag-impl") === "TitleBar") {
+        const subMenus = [
+            "LaunchPad",
+            "Welcome",
+            "InstallCore",
+            "ContainerManager",
+            "JavaSelector",
+            "AccountManager",
+            "UtilitiesIndex",
+            "Statistics",
+            "Options",
+            "ServerList",
+            "Version",
+            "TheEndingOfTheEnd"
+        ].map((lb) => {
+            return {
+                label: lb,
+                // eslint-disable-next-line require-await
+                click: async () => {
+                    mainWindow?.webContents.send("menu-click", lb);
+                }
+            };
+        });
+
+        if (os.platform() == "darwin") {
+            const menu = Menu.buildFromTemplate([
+                {label: "Alicorn", submenu: [{role: "quit"}, ...subMenus]}
+            ]);
+            Menu.setApplicationMenu(menu);
+        } else {
+            const menu = Menu.buildFromTemplate(subMenus);
+            mainWindow.setMenu(menu);
+        }
+    } else {
+        mainWindow.setMenu(null);
+    }
     mainWindow.webContents.on("did-navigate-in-page", () => {
         mainWindow?.webContents.setZoomLevel(0);
     });

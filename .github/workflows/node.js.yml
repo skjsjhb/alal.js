@@ -21,7 +21,7 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn bundle
-      - run: yarn pack
+      - run: yarn make
 
   package-windows:
     runs-on: windows-latest
@@ -34,7 +34,7 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn bundle
-      - run: yarn pack
+      - run: yarn make
 
   package-macos:
     runs-on: macos-latest
@@ -47,4 +47,4 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn bundle
-      - run: yarn pack
+      - run: yarn make

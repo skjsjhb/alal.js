@@ -1,7 +1,10 @@
 {
   "private": true,
   "name": "alal",
-  "author": "Annie K Rarity Sparklight, Ted skjsjhb Gao",
+  "author": {
+    "name": "skjsjhb",
+    "email": "skjsjhb@outlook.com"
+  },
   "main": "main.js",
   "description": "Alicorn Again. Custom launcher for block games.",
   "appVersion": "SakuraKumo",
@@ -12,9 +15,9 @@
     "bundle-release": "yarn webpack --config webpack.config.release.js",
     "bundle-autotest": "yarn webpack --config webpack.config.autotest.js",
     "bundle": "yarn bundle-debug && yarn bundle-release && yarn bundle-autotest",
-    "make-autotest": "yarn electron-builder -c electron-builder.autotest.yml",
-    "make-release": "yarn electron-builder -c electron-builder.release.yml",
-    "make-debug": "yarn electron-builder -c electron-builder.debug.yml",
+    "make-autotest": "yarn electron-builder -c electron-builder.autotest.yml --publish=never",
+    "make-release": "yarn electron-builder -c electron-builder.release.yml --publish=never",
+    "make-debug": "yarn electron-builder -c electron-builder.debug.yml --publish=never",
     "make": "yarn make-debug && yarn make-release && yarn make-autotest",
     "launch-debug": "cd build/debug && npx electron .",
     "launch-release": "cd build/release && npx electron .",

@@ -15,7 +15,7 @@
     "make-autotest": "yarn electron-builder -c electron-builder.autotest.yml",
     "make-release": "yarn electron-builder -c electron-builder.release.yml",
     "make-debug": "yarn electron-builder -c electron-builder.debug.yml",
-    "make": "yarn pack-debug && yarn pack-release && yarn pack-autotest",
+    "make": "yarn make-debug && yarn make-release && yarn make-autotest",
     "launch-debug": "cd build/debug && npx electron .",
     "launch-release": "cd build/release && npx electron .",
     "launch-autotest": "cd build/autotest && npx electron .",

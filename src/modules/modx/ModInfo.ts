@@ -1,8 +1,6 @@
 import fs from "fs-extra";
 import StreamZip from "node-stream-zip";
 import toml from "toml";
-import { submitWarn } from "../../renderer/Message";
-import { tr } from "../../renderer/Translator";
 import { isNull, safeGet } from "../commons/Null";
 import { MinecraftContainer } from "../container/MinecraftContainer";
 
@@ -56,7 +54,6 @@ export async function loadModInfo(
         try {
             d = await fs.open(ret.fileName, "r"); // Control this manually
         } catch (e) {
-            submitWarn(tr("System.EPERM"));
             throw e;
         }
         const zip = new StreamZip.async({

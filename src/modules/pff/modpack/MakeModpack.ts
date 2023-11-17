@@ -3,8 +3,6 @@ import { copy, createWriteStream, ensureDir, outputFile, readdir, remove, stat }
 import path from "path";
 import { pipeline } from "stream";
 import { promisify } from "util";
-import { submitInfo } from "../../../renderer/Message";
-import { tr } from "../../../renderer/Translator";
 import { basicHash } from "../../commons/BasicHash";
 import { MinecraftContainer } from "../../container/MinecraftContainer";
 import { getHash } from "../../download/Validate";
@@ -91,7 +89,6 @@ export async function sealPackCommon(
     });
     await compressPack(MODPACK_WORK_DIR, container.rootDir, model.name);
     await remove(MODPACK_WORK_DIR);
-    submitInfo(tr("Utilities.BuildUp.Done"));
     setState("Build");
 }
 

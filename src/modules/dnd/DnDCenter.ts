@@ -2,9 +2,6 @@ import { tgz } from "compressing";
 import { copy, ensureDir } from "fs-extra";
 import path from "path";
 import React from "react";
-import { jumpTo, triggerSetPage } from "../../renderer/GoTo";
-import { submitInfo, submitSucc } from "../../renderer/Message";
-import { tr } from "../../renderer/Translator";
 import { getActualDataPath } from "../config/DataSupport";
 import { getAllMounted, getContainer } from "../container/ContainerUtil";
 import { MinecraftContainer } from "../container/MinecraftContainer";
@@ -16,7 +13,6 @@ export async function handleDnD(
 ): Promise<void> {
     const f = e.dataTransfer.files;
     if (f.length > 0) {
-        submitInfo(tr("System.DnDProcessing"));
         await handleFiles(f);
     }
 }
@@ -42,8 +38,6 @@ async function handleFiles(files: FileList): Promise<void> {
     }
     await Promise.allSettled(allp);
     if (modpack) {
-        jumpTo(`/ContainerManager/${encodeURIComponent(modpack)}`);
-        triggerSetPage("ContainerManager");
         return;
     }
     const opm: Promise<void>[] = [];
@@ -55,7 +49,6 @@ async function handleFiles(files: FileList): Promise<void> {
         }
     }
     await Promise.allSettled(opm);
-    submitSucc(tr("System.DnDOK"));
 }
 
 async function genDeployTask(

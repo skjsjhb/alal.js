@@ -1,4 +1,3 @@
-import { invokeWorker, schedulePromiseTask } from "../../renderer/Schedule";
 import { ALICORN_DATA_SUFFIX } from "../commons/Constants";
 import { buildMap, parseMap } from "../commons/MapUtil";
 import { loadData, saveData } from "../config/DataSupport";
@@ -37,7 +36,7 @@ export function getContainer(containerID: string): MinecraftContainer {
 export function registerContainer(container: MinecraftContainer): void {
     GlobalContainerDescriptorTable.set(container.id, container.rootDir);
     GlobalMountDescriptorTable.set(container.id, true);
-    void schedulePromiseTask(() => {
+    void requestIdleCallback(() => {
         return Promise.resolve(getContainer(container.id));
     });
 }
@@ -97,10 +96,6 @@ export async function saveGDT(): Promise<void> {
     syncGDTGMT();
     await saveData(GMT_NAME, buildMap(GlobalMountDescriptorTable));
     await saveData(GDT_NAME, buildMap(GlobalContainerDescriptorTable));
-}
-
-export function getDirSize(dir: string, symlink = false): Promise<number> {
-    return invokeWorker("DirSize", dir, symlink) as Promise<number>;
 }
 
 function syncGDTGMT(): void {

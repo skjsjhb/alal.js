@@ -1,5 +1,4 @@
 import CryptoJS from "crypto-js";
-import { invokeWorker } from "../../renderer/Schedule";
 
 export function basicHash(
     obj: string | number | Record<string, unknown>
@@ -16,11 +15,11 @@ export function uniqueHash(
 export async function abortableBasicHash(
     obj: string | number | Record<string, unknown>
 ): Promise<string> {
-    return String(await invokeWorker("SHA1", obj));
+    return "";
 }
 
 export async function abortableUniqueHash(
     obj: string | number | Record<string, unknown>
 ): Promise<string> {
-    return String(await invokeWorker("SHA256", obj));
+    return "";
 }

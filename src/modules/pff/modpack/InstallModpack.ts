@@ -1,14 +1,12 @@
 import { zip } from "compressing";
 import fs, { copy, readJSON } from "fs-extra";
 import path from "path";
-import { tr } from "../../../renderer/Translator";
 import { basicHash } from "../../commons/BasicHash";
 import { Pair } from "../../commons/Collections";
 import { FABRIC_META_ROOT } from "../../commons/Constants";
 import { isFileExist } from "../../commons/FileUtil";
 import { safeGet } from "../../commons/Null";
 import { MinecraftContainer } from "../../container/MinecraftContainer";
-import { addDoing } from "../../download/DownloadWrapper";
 import { getDefaultJavaHome, getJavaRunnable } from "../../java/JavaInfo";
 import { ProfileType } from "../../profile/WhatProfile";
 import { getFabricLikeProfile } from "../get/FabricLikeGet";
@@ -18,15 +16,8 @@ import { performForgeInstall } from "../install/ForgeInstall";
 import { fetchSelectedMod, setPffFlag } from "../virtual/PffWrapper";
 import { AbstractModResolver, ModLoaderType, ModrinthModResolver } from "../virtual/Resolver";
 import { ModpackModel, SimpleFile, transformManifest5 } from "./CFModpackModel";
-import {
-    CommonModpackModel,
-    deployAllGameProfiles,
-    deployAllModLoaders,
-    generateBaseVersion,
-    generateDefaultModLoader,
-    OverrideFile
-} from "./CommonModpackModel";
-import { mmc2common, MMCModpackMeta } from "./MMCSupport";
+import { CommonModpackModel, generateBaseVersion, generateDefaultModLoader, OverrideFile } from "./CommonModpackModel";
+import { MMCModpackMeta } from "./MMCSupport";
 
 export const MANIFEST_FILE = "manifest.json";
 export const MMC_PACK = "mmc-pack.json";
@@ -233,83 +224,3 @@ async function installSingleMod(
     await fetchSelectedMod(mr, gameVersion, modLoader, container);
 }
 
-export async function wrappedInstallModpack(
-    container: MinecraftContainer,
-    source: string
-): Promise<void> {
-    addDoing(tr("ContainerManager.ParsingModpack"));
-    let unpacked = false;
-    try {
-        const s = await fs.stat(source);
-        if (s.isDirectory()) {
-            unpacked = true;
-        }
-    } catch {
-    }
-    const o = await parseModpack(container, source, unpacked);
-    let model = o.getSecondValue();
-    if (!model) {
-        throw "Could not parse this modpack!";
-    }
-    addDoing(tr("ContainerManager.DeployingProfile"));
-    switch (o.getFirstValue()) {
-        case "CM": {
-            model = model as CommonModpackModel;
-            await deployAllGameProfiles(model, container);
-            addDoing(tr("ContainerManager.DeployingModLoader"));
-            await deployAllModLoaders(model, container);
-            addDoing(tr("ContainerManager.DeployingMods"));
-            await installMods(container, model);
-            addDoing(tr("ContainerManager.DeployingDeltas"));
-            await deployFileOverrides(
-                model.files,
-                model.overrideSourceDir,
-                container
-            );
-            addDoing(tr("ContainerManager.CleaningUp"));
-            if (!unpacked) {
-                await removeTempFiles(container, source);
-            }
-        }
-            break;
-
-        case "MMC": {
-            model = model as MMCModpackMeta;
-            const asCommon = mmc2common(model);
-            await deployAllGameProfiles(asCommon, container);
-            addDoing(tr("ContainerManager.DeployingModLoader"));
-            await deployAllModLoaders(asCommon, container);
-            addDoing(tr("ContainerManager.DeployingDeltas"));
-            const overrideSource = path.join(
-                container.getTempFileStorePath(basicHash(path.basename(source))),
-                asCommon.overrideSourceDir
-            );
-            await deployOverrides(overrideSource, container.rootDir);
-            addDoing(tr("ContainerManager.CleaningUp"));
-            if (!unpacked) {
-                await removeTempFiles(container, source);
-            }
-            break;
-        }
-        case "CF":
-        default:
-            model = model as ModpackModel;
-            await deployProfile(model.baseVersion, container);
-            if (model.modLoaders.length > 0) {
-                addDoing(tr("ContainerManager.DeployingModLoader"));
-                await deployModLoader(
-                    model.modLoaders[0].type || ProfileType.FORGE,
-                    model.modLoaders[0].version || "",
-                    container
-                );
-            }
-            addDoing(tr("ContainerManager.DeployingMods"));
-            await installMods(container, model);
-            addDoing(tr("ContainerManager.DeployingDeltas"));
-            await deployOverrides(model.overrideSourceDir, container.rootDir);
-            addDoing(tr("ContainerManager.CleaningUp"));
-            if (!unpacked) {
-                await removeTempFiles(container, source);
-            }
-    }
-}

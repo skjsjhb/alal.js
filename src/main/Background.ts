@@ -1,9 +1,9 @@
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, safeStorage, screen, shell } from "electron";
+import nodeFetch from "node-fetch";
 import os from "os";
 import path from "path";
 import { loadConfig } from "../modules/config/ConfigSupport";
 import { getMainWindow, getMainWindowUATrimmed } from "./Bootstrap";
-import nodeFetch from "node-fetch";
 
 const LOGIN_START =
     "https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_type=code&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf";
@@ -336,7 +336,7 @@ export function registerBackgroundListeners(): void {
 
     ipcMain.on("ReloadWindow", () => {
         void getMainWindow()?.loadFile(
-            path.resolve(app.getAppPath(), "Renderer.html")
+            path.resolve(app.getAppPath(), "renderer.html")
         );
     });
     ipcMain.on("encryptSync", (e, s: string) => {

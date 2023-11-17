@@ -1,5 +1,4 @@
 import { stat } from "fs-extra";
-import { invokeWorker } from "../../renderer/Schedule";
 import { getBoolean } from "../config/ConfigSupport";
 
 export async function validate(
@@ -18,7 +17,7 @@ export async function validate(
 }
 
 export async function getHash(f: string): Promise<string> {
-    return String(await invokeWorker("Sha1File", f));
+    return ""; // FIXME
 }
 
 async function sizeValidate(f: string, size: number): Promise<boolean> {

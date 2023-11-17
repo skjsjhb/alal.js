@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, Menu, screen, Session } from "electron";
 import { btoa } from "js-base64";
+import os from "os";
 import path from "path";
 import { DOH_CONFIGURE } from "../modules/commons/Constants";
 import {
@@ -9,7 +10,6 @@ import {
     loadConfigSync,
     movOldConfigFolderSync
 } from "../modules/config/ConfigSupport";
-import os from "os";
 import { setBeacon } from "../modules/selfupdate/Beacon";
 import { registerBackgroundListeners } from "./Background";
 
@@ -197,7 +197,7 @@ async function whenAppReady() {
         }
     );
     console.log("Preparing window!");
-    await mainWindow.loadFile(path.resolve(appPath, "Renderer.html"));
+    await mainWindow.loadFile(path.resolve(appPath, "renderer.html"));
     mainWindow?.webContents.setZoomLevel(0);
 }
 

@@ -3,8 +3,6 @@ import { readFile } from "fs-extra";
 import NBT from "mcnbt";
 import os from "os";
 import sudo from "sudo-prompt";
-import { submitInfo, submitWarn } from "../../renderer/Message";
-import { tr } from "../../renderer/Translator";
 import { uniqueHash } from "../commons/BasicHash";
 import { isFileExist } from "../commons/FileUtil";
 import { getActualDataPath, saveDefaultDataAs } from "../config/DataSupport";
@@ -169,7 +167,6 @@ export async function runEdge(
         localStorage.getItem(TAP_INSTALLED_BIT) !== "1" &&
         os.platform() === "win32"
     ) {
-        submitInfo(tr("Utilities.CutieConnect.InstallingTAP"));
         await new Promise<void>((res) => {
             setTimeout(() => {
                 res();
@@ -185,7 +182,6 @@ export async function runEdge(
             await waitUNIXEdgeBoot(community, psw, ip, supernode);
         }
     } catch (e) {
-        submitWarn(tr("Utilities.CutieConnect.EdgeFailure", `Reason=${e}`));
     }
 }
 

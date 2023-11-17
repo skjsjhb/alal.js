@@ -17,16 +17,29 @@ const DEFAULT_CONFIG_FILE = path.resolve(
 let cachedConfig = {};
 let defaultConfig = {};
 
+
+/**
+ * @deprecated
+ */
 export function set(key: string, value: unknown): void {
     // @ts-ignore
     cachedConfig[key] = value;
 }
+
+/**
+ * @deprecated
+ */
 
 export function get(key: string, def: unknown): unknown {
     // @ts-ignore
     const v = cachedConfig[key];
     return v === undefined ? def : v;
 }
+
+
+/**
+ * @deprecated
+ */
 
 function fixConfig(
     cur: Record<string, unknown>,
@@ -41,10 +54,18 @@ function fixConfig(
     }
 }
 
+
+/**
+ * @deprecated
+ */
+
 export function getBoolean(key: string, def = false): boolean {
     return !!get(key, def);
 }
 
+/**
+ * @deprecated
+ */
 export function getString(key: string, def = "", nonEmpty = false): string {
     const val = get(key, def);
     if (typeof val === "string") {
@@ -58,6 +79,10 @@ export function getString(key: string, def = "", nonEmpty = false): string {
     return String(val) || def;
 }
 
+
+/**
+ * @deprecated
+ */
 export function getNumber(key: string, def = 0): number {
     return parseNum(get(key, def), def);
 }

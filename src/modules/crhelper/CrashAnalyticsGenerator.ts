@@ -1,5 +1,4 @@
 import pkg from "../../../package.json";
-import { randsl } from "../../renderer/Translator";
 import { Box, CodeComponent, ComponentsGroup, Spoiler, StyleComponent } from "../bbcode/BBCode";
 import { LaunchTracker } from "../launch/LaunchTracker";
 import { CrashReportMap } from "./CrashLoader";
@@ -179,7 +178,6 @@ function makeFirstPage(): string {
     group.db(sc);
     sc.color = "#aaaaaa";
     sc.size = "2";
-    group.db(sc.make(randsl("CrashReportDisplay.Complain")));
     group.dbRaw("\n");
     sc.color = "#5d2391";
     sc.size = "2";

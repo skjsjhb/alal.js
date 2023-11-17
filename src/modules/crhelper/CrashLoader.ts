@@ -1,4 +1,3 @@
-import { schedulePromiseTask } from "../../renderer/Schedule";
 import { CMC_CRASH_LOADER } from "./CutieMCCrashLoader";
 
 // Not only for crash reports, but also logs
@@ -105,10 +104,7 @@ export async function analyzeCrashReport(
         const c = new CrashReportCursor(crashReport);
 
         while (c.getLine() !== undefined) {
-            await schedulePromiseTask(() => {
-                c.executeLine(loader);
-                return Promise.resolve();
-            });
+            c.executeLine(loader);
             c.next();
         }
 

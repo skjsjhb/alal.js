@@ -1,12 +1,9 @@
-import { once } from "events";
 import fs from "fs-extra";
 import path from "path";
-import { pipeline } from "stream/promises";
 import { getBoolean, getString } from "../config/ConfigSupport";
 import { AbstractDownloader, DownloadMeta, DownloadStatus } from "./AbstractDownloader";
-import { getPool } from "./Connections";
 import { getConfigOptn, getPffFlag } from "./DownloadWrapper";
-import { getFileWriteStream, getGuardStream, getTimeoutController } from "./RainbowFetch";
+import { getFileWriteStream, getTimeoutController } from "./RainbowFetch";
 import { getHash } from "./Validate";
 
 export class Serial extends AbstractDownloader {
@@ -38,7 +35,7 @@ export class Serial extends AbstractDownloader {
                     if (
                         fetchRequire ||
                         getPffFlag() === "1" ||
-                        getString("download.lib").toLowerCase() === "fetch" ||
+                        /*getString("download.lib").toLowerCase() === "fetch" ||*/
                         !["direct://", ""].includes(
                             getString("download.global-proxy").trim()
                         )
@@ -83,6 +80,8 @@ export class Serial extends AbstractDownloader {
                             throw "Body is empty!";
                         }
                     } else {
+                        throw "Marked for removal.";
+                        /*
                         const p = getPool(meta.url);
                         if (!p) {
                             throw "Invalid URL! " + meta.url;
@@ -114,7 +113,7 @@ export class Serial extends AbstractDownloader {
                             }
                             console.log(e);
                             throw e;
-                        }
+                        }*/
                     }
                     if (meta.sha1 === "" || getBoolean("download.skip-validate")) {
                         return DownloadStatus.RESOLVED;

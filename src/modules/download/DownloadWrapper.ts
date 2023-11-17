@@ -1,10 +1,7 @@
 import EventEmitter from "events";
-import { schedulePromiseTask } from "../../renderer/Schedule";
-import { tr } from "../../renderer/Translator";
 import { getModifiedDate, isFileExist } from "../commons/FileUtil";
 import { getNumber } from "../config/ConfigSupport";
 import { getAllContainers, getContainer } from "../container/ContainerUtil";
-import { fetchSharedFile, isSharedContainer, needsStandalone } from "../container/SharedFiles";
 import { deleteRecord, getLastValidateModified, updateRecord } from "../container/ValidateRecord";
 import { DownloadMeta, DownloadStatus } from "./AbstractDownloader";
 import { Concurrent } from "./Concurrent";
@@ -19,7 +16,7 @@ export function addDoing(s: string): void {
     console.log(s);
     DOINGX = s;
     for (const [_n, f] of DOING_X_SUBSCRIBES) {
-        void schedulePromiseTask(() => {
+        void requestIdleCallback(() => {
             return Promise.resolve(f(s));
         });
     }
@@ -27,7 +24,7 @@ export function addDoing(s: string): void {
 
 export function clearDoing(): void {
     for (const [_n, f] of DOING_X_SUBSCRIBES) {
-        void schedulePromiseTask(() => {
+        void requestIdleCallback(() => {
             return Promise.resolve(f(""));
         });
     }
@@ -82,9 +79,9 @@ export function initDownloadWrapper(): void {
     });
 }
 
-// Download one file
-// Mirror will be applied here
-// If file already exists, downloader will resolve if hash matches
+/**
+ * @deprecated
+ */
 export async function wrappedDownloadFile(
     meta: DownloadMeta,
     noAutoLn = false,
@@ -93,10 +90,9 @@ export async function wrappedDownloadFile(
     const ou = meta.url;
     // POST
     if (meta.url.trim().length === 0 || meta.savePath.trim().length === 0) {
-        addState(tr("ReadyToLaunch.Ignored", `Url=${ou}`));
         return DownloadStatus.RESOLVED;
     }
-    if (!noAutoLn && !needsStandalone(meta.savePath)) {
+    if (!noAutoLn) {
         const a = getAllContainers();
         let targetContainer = "";
         a.forEach((c) => {
@@ -104,15 +100,6 @@ export async function wrappedDownloadFile(
                 targetContainer = c;
             }
         });
-        if (
-            targetContainer.length > 0 &&
-            (await isSharedContainer(getContainer(targetContainer)))
-        ) {
-            if (await fetchSharedFile(meta)) {
-                // addState(tr("ReadyToLaunch.Validated", `Url=${ou}`)); Already in SharedFiles.ts
-                return DownloadStatus.RESOLVED;
-            }
-        }
     }
 
     if ((await _wrappedDownloadFile(meta, disableMirror)) === 1) {
@@ -204,7 +191,6 @@ function scheduleNextTask(): void {
         const tsk = PENDING_TASKS.pop();
         if (tsk !== undefined) {
             RUNNING_TASKS.add(tsk);
-            addState(tr("ReadyToLaunch.Getting", `Url=${tsk.url}`));
             downloadSingleFile(
                 tsk,
                 EMITTER,
@@ -231,7 +217,6 @@ function downloadSingleFile(
         .downloadFile(du)
         .then((s) => {
             if (s === 1) {
-                addState(tr("ReadyToLaunch.Got", `Url=${meta.url}`));
                 FAILED_COUNT_MAP.delete(meta);
                 emitter.emit(END_GATE, meta, DownloadStatus.RESOLVED);
                 return;
@@ -241,19 +226,16 @@ function downloadSingleFile(
                 if (failed <= 0) {
                     // The last fight! Only once.
                     // FAILED_COUNT_MAP.set(meta, getConfigOptn("tries-per-chunk", 3));
-                    addState(tr("ReadyToLaunch.Retry", `Url=${meta.url}`));
                     void Serial.getInstance()
                         .downloadFile(meta) // No Mirror
                         .then((s) => {
                             if (s === 1) {
                                 FAILED_COUNT_MAP.delete(meta);
-                                addState(tr("ReadyToLaunch.Got", `Url=${meta.url}`));
                                 emitter.emit(END_GATE, meta, DownloadStatus.RESOLVED);
                                 return;
                             } else {
                                 // Simply fatal, retry is meaningless
                                 FAILED_COUNT_MAP.delete(meta);
-                                addState(tr("ReadyToLaunch.Failed", `Url=${meta.url}`));
                                 emitter.emit(END_GATE, meta, DownloadStatus.FATAL);
                                 return;
                             }
@@ -267,13 +249,11 @@ function downloadSingleFile(
                         mChain.markBad();
                         mChain.next();
                     }
-                    addState(tr("ReadyToLaunch.Retry", `Url=${mChain.mirror()}`));
                     downloadSingleFile(meta, emitter, mChain);
                 }
             } else {
                 // Do not retry
                 FAILED_COUNT_MAP.delete(meta);
-                addState(tr("ReadyToLaunch.Failed", `Url=${meta.url}`));
                 emitter.emit(END_GATE, meta, DownloadStatus.FATAL);
                 return;
             }

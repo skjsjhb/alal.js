@@ -67,6 +67,7 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+.yarn
 
 # dotenv environment variables file
 .env
@@ -107,7 +108,9 @@ dist
 .vercel
 
 # Build output
-out
+/out
+/build
+/dist
 
 # VSCode
 .vscode/settings.json

@@ -4,8 +4,6 @@ import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pkg from "../../../package.json";
-import { submitInfo, submitSucc, submitWarn } from "../../renderer/Message";
-import { tr } from "../../renderer/Translator";
 import { getString } from "../config/ConfigSupport";
 import { getActualDataPath } from "../config/DataSupport";
 import { getBasePath } from "../config/PathSolve";
@@ -121,7 +119,6 @@ export async function checkUpdate(): Promise<void> {
                 console.log("Invalid build info! Skipped updating this time.");
                 return;
             }
-            submitInfo(tr("System.HasUpdate"));
             console.log("Downloading files...");
             if (!(await doUpdate(BASE, res_rend as BuildInfo))) {
                 console.log("Update failed, let's try again next time.");
@@ -144,7 +141,6 @@ export async function checkUpdate(): Promise<void> {
             await fs.ensureDir(path.dirname(LOCK_FILE));
             await fs.outputFile(LOCK_FILE, (res as BuildInfo).date, {mode: 0o777});
             console.log("Update completed.");
-            submitSucc(tr("System.UpdateOK"));
             IS_UPDATING = false;
             notifyAll();
             // await hintUpdate(u); We have a page to show update
@@ -242,7 +238,6 @@ async function switchFile(): Promise<boolean> {
 
 export async function updateFromSource(file: string): Promise<void> {
     try {
-        submitInfo(tr("System.HasUpdate"));
         const appPath = getBasePath();
         const resources = path.dirname(appPath);
         await fs.rename(appPath, path.join(resources, "app-local"));
@@ -261,9 +256,7 @@ export async function updateFromSource(file: string): Promise<void> {
             await fs.remove(path.join(resources, "app-local"));
             await fs.remove(unZipTarget);
         }
-        submitSucc(tr("System.UpdateOK"));
     } catch (e) {
         console.log(e);
-        submitWarn(tr("System.UpdateFailed"));
     }
 }

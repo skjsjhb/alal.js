@@ -1,5 +1,4 @@
 import { ipcRenderer } from "electron";
-import { tr } from "../../renderer/Translator";
 import { isNull, safeGet } from "../commons/Null";
 import { getString } from "../config/ConfigSupport";
 import { decrypt2, encrypt2 } from "../security/Encrypt";
@@ -192,12 +191,7 @@ async function browserGetCode(quiet = false): Promise<string> {
         getString("web.global-proxy"),
         quiet,
         LOGIN_WINDOW_KEY,
-        [
-            tr("ReadyToLaunch.IsLoginOK"),
-            tr("ReadyToLaunch.LoginInstruction"),
-            tr("ReadyToLaunch.ContinueLogin"),
-            tr("ReadyToLaunch.HelpMeLogin")
-        ]
+        []
     );
     if (r === "USER PROVIDE") {
         window.dispatchEvent(new CustomEvent("OpenAskUrlDialog"));

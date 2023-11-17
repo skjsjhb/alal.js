@@ -1,8 +1,6 @@
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
-import { submitWarn } from "../../renderer/Message";
-import { tr } from "../../renderer/Translator";
 import { basicHash } from "../commons/BasicHash";
 import { alterPath } from "../commons/FileUtil";
 import { getBoolean, getString } from "../config/ConfigSupport";
@@ -80,7 +78,6 @@ async function sealAndVerify(
     try {
         wStream = fs.createWriteStream(savePath, {mode: 0o777});
     } catch (e) {
-        submitWarn(tr("System.EPERM"));
         throw e;
     }
     for (const c of chunks) {

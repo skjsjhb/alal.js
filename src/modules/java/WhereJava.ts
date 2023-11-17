@@ -2,7 +2,6 @@ import childProcess from "child_process";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
-import { invokeWorker } from "../../renderer/Schedule";
 import { isFileExist } from "../commons/FileUtil";
 import { getBoolean, getNumber } from "../config/ConfigSupport";
 import { resetJavaList } from "./JavaInfo";
@@ -153,17 +152,4 @@ async function diveSearch(
     counter = 0,
     any = false
 ): Promise<void> {
-    const res = await invokeWorker(
-        "DiveSearch",
-        fileName,
-        rootDir,
-        depth,
-        counter,
-        any
-    );
-    if (res instanceof Array) {
-        res.forEach((s) => {
-            concatArray.push(s);
-        });
-    }
 }

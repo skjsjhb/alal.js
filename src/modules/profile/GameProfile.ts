@@ -1,4 +1,3 @@
-import { schedulePromiseTask } from "../../renderer/Schedule";
 import { ReleaseType } from "../commons/Constants";
 import { isNull, safeGet } from "../commons/Null";
 import { ArtifactMeta, AssetIndexArtifactMeta, LibraryMeta, OptionalArgument } from "./Meta";
@@ -107,21 +106,19 @@ export class GameProfile {
 }
 
 export async function copyProfile(input: GameProfile): Promise<GameProfile> {
-    return await schedulePromiseTask(() => {
-        const gp = new GameProfile({});
-        gp.libraries = input.libraries.concat();
-        gp.jvmArgs = input.jvmArgs.concat();
-        gp.id = input.id;
-        gp.type = input.type;
-        gp.logArg = input.logArg;
-        gp.releaseTime = new Date(input.releaseTime.toUTCString());
-        gp.baseVersion = input.baseVersion;
-        gp.assetIndex = input.assetIndex.clone();
-        gp.time = new Date(input.time.toUTCString());
-        gp.clientArtifact = input.clientArtifact.clone();
-        gp.gameArgs = input.gameArgs.concat();
-        gp.mainClass = input.mainClass;
-        gp.logFile = input.logFile.clone();
-        return Promise.resolve(gp);
-    });
+    const gp = new GameProfile({});
+    gp.libraries = input.libraries.concat();
+    gp.jvmArgs = input.jvmArgs.concat();
+    gp.id = input.id;
+    gp.type = input.type;
+    gp.logArg = input.logArg;
+    gp.releaseTime = new Date(input.releaseTime.toUTCString());
+    gp.baseVersion = input.baseVersion;
+    gp.assetIndex = input.assetIndex.clone();
+    gp.time = new Date(input.time.toUTCString());
+    gp.clientArtifact = input.clientArtifact.clone();
+    gp.gameArgs = input.gameArgs.concat();
+    gp.mainClass = input.mainClass;
+    gp.logFile = input.logFile.clone();
+    return Promise.resolve(gp);
 }

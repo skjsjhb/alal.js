@@ -1,11 +1,9 @@
 import fs from "fs-extra";
 import path from "path";
-import { randsl } from "../../renderer/Translator";
 import { isFileExist } from "../commons/FileUtil";
 import { getBasePath } from "../config/PathSolve";
-import { getAllContainers, getContainer, registerContainer, unregisterContainer } from "./ContainerUtil";
+import { getContainer, registerContainer, unregisterContainer } from "./ContainerUtil";
 import { MinecraftContainer } from "./MinecraftContainer";
-import { isSharedContainer, markASC } from "./SharedFiles";
 
 // Create a container at specified dir
 export async function createNewContainer(
@@ -32,12 +30,6 @@ export async function createNewContainer(
     if (!stat?.isDirectory()) {
         throw new Error("Invalid target! Target is not a directory.");
     } else {
-        if (isASC) {
-            try {
-                await markASC(d);
-            } catch {
-            }
-        }
         registerContainer(new MinecraftContainer(d, name));
     }
 }
@@ -52,13 +44,9 @@ export async function forkContainer(c: MinecraftContainer): Promise<void> {
     while (await isFileExist(pt)) {
         pt += "_fork";
     }
-    let nid = randsl("ContainerManager.ForkName", `Original=${c.id}`);
-    while (getAllContainers().includes(nid)) {
-        nid = randsl("ContainerManager.ForkName", `Original=${nid}`);
-    }
+
     await fs.ensureDir(pt);
     await fs.copy(c.rootDir, pt);
-    await createNewContainer(pt, nid, await isSharedContainer(c));
 }
 
 // Remove files, don't unlink

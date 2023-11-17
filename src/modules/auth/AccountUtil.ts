@@ -1,17 +1,15 @@
 import fs from "fs-extra";
 import path from "path";
-import { abortableBasicHash, abortableUniqueHash } from "../commons/BasicHash";
+import { abortableUniqueHash } from "../commons/BasicHash";
 import { Pair } from "../commons/Collections";
 import { ALICORN_ENCRYPTED_DATA_SUFFIX } from "../commons/Constants";
-import { isFileExist } from "../commons/FileUtil";
 import { getActualDataPath, loadData, saveData } from "../config/DataSupport";
 import { decrypt2, decryptByMachine, encrypt2 } from "../security/Encrypt";
-import { skinTypeFor } from "../skin/LocalYggdrasilServer";
 import { Account } from "./Account";
-import { AuthlibAccount, getSkinByUUID } from "./AuthlibAccount";
+import { AuthlibAccount } from "./AuthlibAccount";
 import { LocalAccount } from "./LocalAccount";
 import { MicrosoftAccount } from "./MicrosoftAccount";
-import { getMojangSkinByUUID, MojangAccount } from "./MojangAccount";
+import { MojangAccount } from "./MojangAccount";
 import { Nide8Account } from "./Nide8Account";
 
 // Account Prefix
@@ -255,71 +253,8 @@ const ACCOUNT_SKIN_MAP: Map<string, string> = new Map();
 const ACCOUNT_SKIN_DATA_MAP: Map<string, string> = new Map();
 
 export function querySkinFor(a: Account): Promise<string> {
-    if (a.lastUsedUUID.trim().length === 0) {
-        return Promise.resolve("");
-    }
-    const key = decideWhichAccountByCls(a) + a.getAccountIdentifier();
-
-    return new Promise<string>((res) => {
-        void (async () => {
-            try {
-                if (ACCOUNT_SKIN_DATA_MAP.has(key)) {
-                    res(ACCOUNT_SKIN_DATA_MAP.get(key) as string); // API level cache
-                    return;
-                }
-                let resolved = false;
-                const t = await loadCachedSkin(key);
-
-                if (t) {
-                    resolved = true;
-                    res(t); // First resolve
-                    ACCOUNT_SKIN_DATA_MAP.set(key, t);
-                }
-                let u = "";
-                if (ACCOUNT_SKIN_MAP.has(key)) {
-                    // Cache at profile level
-                    u = ACCOUNT_SKIN_MAP.get(key) as string;
-                } else if (a instanceof AuthlibAccount) {
-                    u = await getSkinByUUID(a as AuthlibAccount);
-                } else if (
-                    a instanceof MojangAccount ||
-                    a instanceof MicrosoftAccount
-                ) {
-                    u = await getMojangSkinByUUID(a);
-                } else if (a instanceof LocalAccount) {
-                    const s = await skinTypeFor(a as LocalAccount);
-                    if (s === "NONE") {
-                        res("");
-                        return;
-                    }
-                    const adef = getActualDataPath(
-                        path.join("skins", s.slice(0, 1) + "-" + "DEF")
-                    );
-                    const apar = getActualDataPath(
-                        path.join(
-                            "skins",
-                            s.slice(0, 1) + "-" + (await abortableBasicHash(a.lastUsedUUID))
-                        )
-                    );
-                    let au = "";
-                    if (await isFileExist(apar)) {
-                        au = "file://" + apar;
-                    } else if (await isFileExist(adef)) {
-                        au = "file://" + adef;
-                    }
-                    res(au);
-                    return; // No cache since Carousel Boutique often offer new clothes ;)
-                }
-                ACCOUNT_SKIN_MAP.set(key, u);
-                if (!resolved) {
-                    res(u);
-                }
-                void cacheSkin(key, u); // Non-blocking
-            } catch (e) {
-                console.log(e);
-            }
-        })();
-    });
+    // FIXME remake
+    return Promise.resolve("");
 }
 
 async function cacheSkin(key: string, u: string): Promise<void> {

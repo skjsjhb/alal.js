@@ -10,11 +10,12 @@ jobs:
   bundle:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: yarn
       - run: corepack enable
       - run: yarn
       - run: yarn bundle-release

@@ -10,38 +10,44 @@ jobs:
   package-unix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: yarn
       - run: corepack enable
-      - run: yarn
-      - run: yarn bundle-release
-      - run: yarn make-release -l
+      - name: Build
+        run: yarn && yarn bundle-release && yarn make-release -l
+      - name: List Files
+        run: ls ./dist/release
 
   package-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: yarn
       - run: corepack enable
-      - run: yarn
-      - run: yarn bundle-release
-      - run: yarn make-release -w
+      - name: Build
+        run: yarn && yarn bundle-release && yarn make-release -w
+      - name: List Files
+        run: ls ./dist/release
 
   package-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: yarn
       - run: corepack enable
-      - run: yarn
-      - run: yarn bundle-release
-      - run: yarn make-release -m
+      - name: Build
+        run: yarn && yarn bundle-release && yarn make-release -m
+      - name: List Files
+        run: ls ./dist/release

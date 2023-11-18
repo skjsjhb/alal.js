@@ -11,12 +11,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - run: corepack enable
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: yarn
-      - run: corepack enable
       - run: yarn
       - run: yarn bundle-autotest
       - run: yarn test

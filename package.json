@@ -1,12 +1,5 @@
 {
   "private": true,
-  "name": "alal",
-  "author": {
-    "name": "skjsjhb",
-    "email": "skjsjhb@outlook.com"
-  },
-  "main": "main.js",
-  "description": "Alicorn Again. Custom launcher for block games.",
   "appVersion": "SakuraKumo",
   "version": "1.0.0",
   "updatorVersion": 51,
@@ -22,6 +15,7 @@
     "launch-debug": "cd build/debug && npx electron .",
     "launch-release": "cd build/release && npx electron .",
     "launch-autotest": "cd build/autotest && npx electron .",
+    "test": "node tools/launchTest.js",
     "clean": "rimraf build dist"
   },
   "devDependencies": {

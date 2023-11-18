@@ -1,6 +1,10 @@
 {
-  "name": "Alicorn",
-  "author": "skjsjhb",
+  "name": "alal",
+  "author": {
+    "name": "skjsjhb",
+    "email": "skjsjhb@outlook.com"
+  },
   "main": "main.js",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "description": "Alicorn Again Launcher - Custom launcher for block game."
 }

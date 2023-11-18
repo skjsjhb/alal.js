@@ -1,12 +1,9 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# This is REALLY SLOW!
 
 name: Cross Packaging
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -20,8 +17,8 @@ jobs:
           node-version: "18"
       - run: corepack enable
       - run: yarn
-      - run: yarn bundle
-      - run: yarn make
+      - run: yarn bundle-release
+      - run: yarn make-release -l
 
   package-windows:
     runs-on: windows-latest
@@ -33,8 +30,8 @@ jobs:
           node-version: "18"
       - run: corepack enable
       - run: yarn
-      - run: yarn bundle
-      - run: yarn make
+      - run: yarn bundle-release
+      - run: yarn make-release -w
 
   package-macos:
     runs-on: macos-latest
@@ -46,5 +43,5 @@ jobs:
           node-version: "18"
       - run: corepack enable
       - run: yarn
-      - run: yarn bundle
-      - run: yarn make
+      - run: yarn bundle-release
+      - run: yarn make-release -m

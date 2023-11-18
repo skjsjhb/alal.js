@@ -1,10 +1,12 @@
 appId: "skjsjhb.alal"
-productName: "Alicorn Again Launcher"
-executableName: "ALAL"
+productName: "ALAL"
 copyright: 'Copyright (C) 2020-2022 Annie K Rarity Sparklight / Copyright (C) 2023 Ted skjsjhb Gao'
+publish: null
 asar: false
-files:
-  - from: "build/release"
+beforeBuild: tools/beforeBuild
+directories:
+  app: "build/release"
+  output: "dist/release"
 icon: "resources/build/icon.png"
 mac:
   target:
@@ -22,8 +24,6 @@ win:
 
 linux:
   target:
-    - target: "AppImage"
-      arch: [ "x64", "arm64" ]
     - target: "tar.xz"
       arch: [ "x64", "arm64" ]
     - target: "deb"

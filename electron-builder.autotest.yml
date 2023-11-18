@@ -1,22 +1,30 @@
 appId: "skjsjhb.alal"
-productName: "Alicorn Again Launcher (Autotest Build)"
-executableName: "ALAL"
+productName: "ALAL"
 copyright: 'Copyright (C) 2020-2022 Annie K Rarity Sparklight / Copyright (C) 2023 Ted skjsjhb Gao'
+publish: null
 asar: false
-files:
-  - from: "build/autotest"
+beforeBuild: tools/beforeBuild
+directories:
+  app: "build/autotest"
+  output: "dist/autotest"
 icon: "resources/build/icon.png"
 mac:
   target:
+    - target: "zip"
+      arch: [ "x64", "arm64" ]
     - target: "dir"
       arch: [ "x64", "arm64" ]
 
 win:
   target:
+    - target: "zip"
+      arch: [ "x64" ]
     - target: "dir"
       arch: [ "x64" ]
 
 linux:
   target:
+    - target: "zip"
+      arch: [ "x64", "arm64" ]
     - target: "dir"
       arch: [ "x64", "arm64" ]

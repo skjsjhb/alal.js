@@ -1329,56 +1329,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alal@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "alal@workspace:."
-  dependencies:
-    "@emotion/react": "npm:^11.11.1"
-    "@emotion/styled": "npm:^11.11.0"
-    "@mui/icons-material": "npm:^5.14.18"
-    "@mui/material": "npm:^5.14.18"
-    "@types/crypto-js": "npm:^4.2.1"
-    "@types/fs-extra": "npm:^11.0.4"
-    "@types/object-hash": "npm:^3.0.6"
-    "@types/react": "npm:^18.2.37"
-    "@types/react-dom": "npm:^18.2.15"
-    "@types/react-router-dom": "npm:^5.3.3"
-    "@types/semver": "npm:^7.5.5"
-    "@types/sha": "npm:^3.0.4"
-    "@types/throttle-debounce": "npm:^5.0.2"
-    "@types/tunnel": "npm:^0.0.6"
-    "@types/uuid": "npm:^9.0.7"
-    ajv: "npm:^8.12.0"
-    compressing: "npm:^1.10.0"
-    copy-to-clipboard: "npm:^3.3.3"
-    copy-webpack-plugin: "npm:^11.0.0"
-    crypto-js: "npm:^4.2.0"
-    electron: "npm:^27.1.0"
-    electron-builder: "npm:^24.6.4"
-    fs-extra: "npm:^11.1.1"
-    html-webpack-plugin: "npm:^5.5.3"
-    js-base64: "npm:^3.7.5"
-    mcnbt: "npm:^2.0.2"
-    node-fetch: "npm:^3.3.2"
-    node-machine-id: "npm:^1.1.12"
-    node-stream-zip: "npm:^1.15.0"
-    object-hash: "npm:^3.0.0"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-    react-router-dom: "npm:^6.19.0"
-    semver: "npm:^7.5.4"
-    sha: "npm:^3.0.0"
-    sudo-prompt: "npm:^9.2.1"
-    throttle-debounce: "npm:^5.0.0"
-    toml: "npm:^3.0.0"
-    ts-loader: "npm:^9.5.1"
-    typescript: "npm:^5.2.2"
-    uuid: "npm:^9.0.1"
-    webpack: "npm:^5.76.0"
-    webpack-cli: "npm:^5.1.4"
-  languageName: unknown
-  linkType: soft
-
 "ansi-regex@npm:^5.0.1":
   version: 5.0.1
   resolution: "ansi-regex@npm:5.0.1"
@@ -4533,6 +4483,56 @@ __metadata:
   checksum: 7d01d4c14513c461778dd673a8f9e53255221f8d04173aafeb8e11b23d8b659bb83f1c90cfe81af7f9c213b8084b404b918108fd792bda76678f555340cc64ec
   languageName: node
   linkType: hard
+
+"root-workspace-0b6124@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "root-workspace-0b6124@workspace:."
+  dependencies:
+    "@emotion/react": "npm:^11.11.1"
+    "@emotion/styled": "npm:^11.11.0"
+    "@mui/icons-material": "npm:^5.14.18"
+    "@mui/material": "npm:^5.14.18"
+    "@types/crypto-js": "npm:^4.2.1"
+    "@types/fs-extra": "npm:^11.0.4"
+    "@types/object-hash": "npm:^3.0.6"
+    "@types/react": "npm:^18.2.37"
+    "@types/react-dom": "npm:^18.2.15"
+    "@types/react-router-dom": "npm:^5.3.3"
+    "@types/semver": "npm:^7.5.5"
+    "@types/sha": "npm:^3.0.4"
+    "@types/throttle-debounce": "npm:^5.0.2"
+    "@types/tunnel": "npm:^0.0.6"
+    "@types/uuid": "npm:^9.0.7"
+    ajv: "npm:^8.12.0"
+    compressing: "npm:^1.10.0"
+    copy-to-clipboard: "npm:^3.3.3"
+    copy-webpack-plugin: "npm:^11.0.0"
+    crypto-js: "npm:^4.2.0"
+    electron: "npm:^27.1.0"
+    electron-builder: "npm:^24.6.4"
+    fs-extra: "npm:^11.1.1"
+    html-webpack-plugin: "npm:^5.5.3"
+    js-base64: "npm:^3.7.5"
+    mcnbt: "npm:^2.0.2"
+    node-fetch: "npm:^3.3.2"
+    node-machine-id: "npm:^1.1.12"
+    node-stream-zip: "npm:^1.15.0"
+    object-hash: "npm:^3.0.0"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    react-router-dom: "npm:^6.19.0"
+    semver: "npm:^7.5.4"
+    sha: "npm:^3.0.0"
+    sudo-prompt: "npm:^9.2.1"
+    throttle-debounce: "npm:^5.0.0"
+    toml: "npm:^3.0.0"
+    ts-loader: "npm:^9.5.1"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^9.0.1"
+    webpack: "npm:^5.76.0"
+    webpack-cli: "npm:^5.1.4"
+  languageName: unknown
+  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0

@@ -4,11 +4,11 @@
  * self-launching and self-testing. It's not designated for user interactions. Instead,
  * it runs a series of tests and generate a report of the tests.
  */
-const [mainDebug, rendererDebug] = require("./webpack.config.debug");
+const [main, renderer] = require("./webpack.config.debug");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
-mainDebug.plugins = [
+main.plugins = [
     new CopyWebpackPlugin({
         patterns: [
             {
@@ -19,10 +19,12 @@ mainDebug.plugins = [
     })
 ];
 
-mainDebug.entry.main = "./src/main/MainWithTests.ts";
-mainDebug.output.path = path.resolve(__dirname, "build/autotest");
+main.entry.main = "./src/main/MainWithTests.ts";
+main.devtool = false;
+main.output.path = path.resolve(__dirname, "build/autotest");
 
-rendererDebug.entry.renderer = "./src/renderer/MainWithTests.ts";
-rendererDebug.output.path = path.resolve(__dirname, "build/autotest");
+renderer.entry.renderer = "./src/renderer/MainWithTests.ts";
+renderer.devtool = false;
+renderer.output.path = path.resolve(__dirname, "build/autotest");
 
-module.exports = [mainDebug, rendererDebug];
+module.exports = [main, renderer];

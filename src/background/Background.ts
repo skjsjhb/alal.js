@@ -1,8 +1,8 @@
+import { loadConfig } from "@/modules/config/ConfigSupport";
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain, safeStorage, screen, shell } from "electron";
 import nodeFetch from "node-fetch";
 import os from "os";
 import path from "path";
-import { loadConfig } from "../modules/config/ConfigSupport";
 import { WindowManager } from "./WindowManager";
 
 const getMainWindow = WindowManager.getMainWindow;

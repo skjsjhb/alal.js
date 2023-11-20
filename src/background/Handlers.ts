@@ -1,5 +1,6 @@
+import { MicrosoftBrowserLogin } from "@/modules/reauth/MicrosoftBrowserLogin";
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { app, ipcMain } from "electron";
-import { ReOptions } from "../modules/redata/ReOptions";
 import { Signals } from "./Signals";
 
 /**
@@ -9,7 +10,8 @@ export namespace Handlers {
     const BINDINGS = {
         [Signals.GET_APP_PATH]: getAppPath,
         [Signals.RELOAD_OPTIONS]: reloadOptions,
-        [Signals.GET_LOCALE]: getLocale
+        [Signals.GET_LOCALE]: getLocale,
+        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow
     };
 
     /**

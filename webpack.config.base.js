@@ -22,7 +22,10 @@ const moduleResolution = {
         ]
     },
     resolve: {
-        extensions: [".ts", ".js", ".json", ".tsx"]
+        extensions: [".ts", ".js", ".json", ".tsx"],
+        alias: {
+            '@': path.resolve(__dirname, 'src')
+        }
     }
 };
 

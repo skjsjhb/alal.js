@@ -1,7 +1,7 @@
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { app, BrowserWindow, Event, ipcMain, screen } from "electron";
 import os from "os";
 import path from "path";
-import { ReOptions } from "../modules/redata/ReOptions";
 import { Signals } from "./Signals";
 
 /**
@@ -19,7 +19,7 @@ export namespace WindowManager {
     export async function initMainWindow() {
         // Creation
         console.log("Creating app main window.");
-        const [width, height] = preferWindowSize();
+        const [width, height] = getPreferredWindowSize();
         mainWindow = new BrowserWindow({
             width, height,
             webPreferences: {
@@ -38,8 +38,8 @@ export namespace WindowManager {
             show: false
         });
         mainWindow.setAspectRatio(1.92);
-        mainWindow.setMenu(null);
         mainWindow.setTitle("ALAL");
+        mainWindow.setMenu(null);
 
         // Minimum event listeners
         console.log("Binding main window event listeners.");
@@ -71,16 +71,18 @@ export namespace WindowManager {
         return mainWindow;
     }
 
-    function pushMainWindowResizeEvent() {
-        mainWindow.webContents.send(Signals.WINDOW_RESIZE, mainWindow.getSize());
-    }
-
-    // Calculates a suitable window size according to display size
-    function preferWindowSize() {
+    /**
+     * Calculates a suitable window size according to display size.
+     */
+    export function getPreferredWindowSize() {
         const size = screen.getPrimaryDisplay().workAreaSize;
         const height = Math.floor(size.height * 0.55);
         const width = Math.floor(height * 1.92);
         return [width, height];
+    }
+
+    function pushMainWindowResizeEvent() {
+        mainWindow.webContents.send(Signals.WINDOW_RESIZE, mainWindow.getSize());
     }
 
 
@@ -137,21 +139,16 @@ export namespace WindowManager {
 
     function unblockCORS(window: BrowserWindow) {
         console.log("Unblocking CORS for window " + window.getTitle());
-        window.webContents.session.webRequest.onBeforeSendHeaders(
-            (details, callback) => {
-                callback({requestHeaders: {Origin: '*', ...details.requestHeaders}});
-            }
-        );
 
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-            callback({
-                responseHeaders: {
-                    'Access-Control-Allow-Origin': ['*'],
-                    ...details.responseHeaders
+            // The session object can be shared, check for ID first
+            if (details.id == window.webContents.id) {
+                if (!details.responseHeaders) {
+                    details.responseHeaders = {};
                 }
-            });
+                details.responseHeaders["Access-Control-Allow-Origin"] = ['*'];
+            }
+            callback(details);
         });
     }
-
-
 }

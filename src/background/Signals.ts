@@ -12,4 +12,5 @@ export namespace Signals {
     export const GET_APP_PATH = "getAppPath";
     export const GET_LOCALE = "getLocale";
     export const WINDOW_RESIZE = "windowResize";
+    export const MICROSOFT_LOGIN = "msLogin";
 }

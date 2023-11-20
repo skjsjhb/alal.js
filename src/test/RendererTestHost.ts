@@ -1,5 +1,5 @@
+import { Locale } from "@/modules/i18n/Locale";
 import { ipcRenderer } from "electron";
-import { Locale } from "../modules/i18n/Locale";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
 import { TestTools } from "./TestTools";

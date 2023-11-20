@@ -1,8 +1,8 @@
-import { ipcRenderer } from "electron";
+import { Signals } from "@/background/Signals";
+import { app, ipcRenderer } from "electron";
 import { readdir, readFile, stat } from "fs-extra";
 import path from "path";
 import yaml from "yaml";
-import { Signals } from "../../background/Signals";
 import { Paths } from "../redata/Paths";
 import { ReOptions } from "../redata/ReOptions";
 import { Objects } from "../util/Objects";
@@ -19,9 +19,16 @@ export namespace Locale {
      * based on options or os.
      */
     export async function initLocale() {
-        console.log("Loading locales.");
+        console.log("Loading locale.");
         await loadLocaleFromDir(Paths.getResourcePath(localeDirname));
-        const userLocale = ReOptions.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
+        let userLocale;
+        if (ipcRenderer) {
+            // Remote
+            userLocale = ReOptions.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
+        } else {
+            // Background
+            userLocale = ReOptions.get().locale || app.getLocale();
+        }
         setActiveLocale(userLocale);
     }
 
@@ -96,5 +103,15 @@ export namespace Locale {
         }
         console.warn(`Translation key ${key} does not map to a valid value. Check lang files.`);
         return ""; // Invalid values are skipped
+    }
+
+    /**
+     * Generates a function which wraps {@link getTranslation}, using `rootKey` as prefix.
+     * @param rootKey Key prefix to attach.
+     */
+    export function getSection(rootKey: string): (k: string) => string {
+        return (k: string) => {
+            return getTranslation(rootKey + "." + k);
+        };
     }
 }

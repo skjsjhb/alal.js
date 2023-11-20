@@ -1,1 +1,8 @@
 name: "English (US)"
+
+ms-browser-login:
+  cancel-login:
+    title: "Wait a Minute!"
+    content: "Login hasn't completed yet. Still cancelling?"
+    b-yes: "I know what I'm doing!"
+    b-no: "Continue login"

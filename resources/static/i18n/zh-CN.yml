@@ -1,1 +1,8 @@
 name: "中文（中国）"
+
+ms-browser-login:
+  cancel-login:
+    title: "等一下！"
+    content: "登录还没有完成，取消登录吗？"
+    b-yes: "我知道我在做什么！"
+    b-no: "继续登录"

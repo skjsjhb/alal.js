@@ -4,14 +4,14 @@
  * The original Alicorn Renderer entry is bloat and over-integrated. This module replace it
  * with focus on a clean and fast initialization process.
  */
+import { Signals } from "@/background/Signals";
+import { Locale } from "@/modules/i18n/Locale";
+import { Paths } from "@/modules/redata/Paths";
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import pkg from "../../../package.json";
-import { Signals } from "../../background/Signals";
-import { Locale } from "../../modules/i18n/Locale";
-import { Paths } from "../../modules/redata/Paths";
-import { ReOptions } from "../../modules/redata/ReOptions";
 import { App } from "../screen/App";
 
 export namespace ReInit {

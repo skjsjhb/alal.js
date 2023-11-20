@@ -1,6 +1,6 @@
+import { Signals } from "@/background/Signals";
 import { ipcRenderer } from "electron";
 import { outputJSON, readJSON } from "fs-extra";
-import { Signals } from "../../background/Signals";
 import OptionsTemplate from "../../constra/options.json";
 import { Objects } from "../util/Objects";
 import { Paths } from "./Paths";

@@ -1,7 +1,8 @@
+import { Locale } from "@/modules/i18n/Locale";
+import { Paths } from "@/modules/redata/Paths";
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { app } from "electron";
 import os from "os";
-import { Paths } from "../modules/redata/Paths";
-import { ReOptions } from "../modules/redata/ReOptions";
 import { Handlers } from "./Handlers";
 import { WindowManager } from "./WindowManager";
 
@@ -10,7 +11,6 @@ import { WindowManager } from "./WindowManager";
  */
 export namespace BootLoader {
 
-    // Main function for bootloader
     export async function bootloaderMain() {
         console.log("This is ALAL bootloader. Newer bootloader brings better performance.");
         await prepareRun();
@@ -31,7 +31,6 @@ export namespace BootLoader {
     }
 
     function bindErrorHandlers() {
-        // TODO
     }
 
 
@@ -39,9 +38,12 @@ export namespace BootLoader {
         console.log("ALAL backend is initializing, just a moment, hang tight...");
         console.log("Creating backend bindings.");
         Handlers.createBindings();
+
         console.log("Loading config.");
         Paths.detectRootPath();
+        await Paths.retrieveAppPath();
         await ReOptions.load();
+        await Locale.initLocale();
     }
 
     function checkSingleInstance() {

@@ -1,5 +1,5 @@
-import { AuthlibAccount } from "./AuthlibAccount";
 import { AccountType } from "./AccountUtil";
+import { AuthlibAccount } from "./AuthlibAccount";
 
 export class Nide8Account extends AuthlibAccount {
     serverId: string;

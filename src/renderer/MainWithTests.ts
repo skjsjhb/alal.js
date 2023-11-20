@@ -1,9 +1,9 @@
 /**
  * Entry point of the new renderer for autotest bundles only.
  */
+import { runRendererTests } from "@/test/RendererTestHost";
+import { SignalTest } from "@/test/SignalTest";
 import { ipcRenderer } from "electron";
-import { runRendererTests } from "../test/RendererTestHost";
-import { SignalTest } from "../test/SignalTest";
 import { ReInit } from "./reinit/ReInit";
 
 async function main() {

@@ -1,7 +1,7 @@
-import { ipcRenderer } from "electron";
+import { Signals } from "@/background/Signals";
+import { app, ipcRenderer } from "electron";
 import os from "os";
 import path from "path";
-import { Signals } from "../../background/Signals";
 
 /**
  * Module for file path resolving and file management.
@@ -51,7 +51,11 @@ export namespace Paths {
      * This method is a wrapper of {@link app.getAppPath}. This can only be called on the remote.
      */
     export async function retrieveAppPath() {
-        appPath = await ipcRenderer.invoke(Signals.GET_APP_PATH);
+        if (ipcRenderer) {
+            appPath = await ipcRenderer.invoke(Signals.GET_APP_PATH);
+        } else {
+            appPath = app.getAppPath();
+        }
         console.log("Setting app path: " + appPath);
     }
 

@@ -1,5 +1,5 @@
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { ThemeOptions } from "@mui/material/styles";
-import { ReOptions } from "../../modules/redata/ReOptions";
 import SakuraKumoDark from "./SakuraKumoDark";
 import SakuraKumoLight from "./SakuraKumoLight";
 

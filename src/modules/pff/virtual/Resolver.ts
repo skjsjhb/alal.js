@@ -1,5 +1,4 @@
 import { getNumber } from "../../config/ConfigSupport";
-import { AddonInfo, File } from "./Types";
 import {
     findCompatibleArtifact,
     getModMetaBySlug,
@@ -9,6 +8,7 @@ import {
 } from "../modrinth/Get";
 import { addToLockfile, Lockfile2 } from "./Lockfile";
 import { ModArtifact, ModMeta } from "./ModDefine";
+import { AddonInfo, File } from "./Types";
 
 // One resolver is for one mod slug
 export interface ModResolver {

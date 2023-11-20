@@ -93,6 +93,7 @@ export namespace WindowManager {
             console.log("Closing main window.");
             mainWindow.removeListener("close", onUserCloseWindowReq); // Prevent infinite loop
             mainWindow.close();
+            app.removeAllListeners("before-quit");
             app.quit();
         }
     }

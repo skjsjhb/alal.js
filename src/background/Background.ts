@@ -3,7 +3,9 @@ import nodeFetch from "node-fetch";
 import os from "os";
 import path from "path";
 import { loadConfig } from "../modules/config/ConfigSupport";
-import { getMainWindow, getMainWindowUATrimmed } from "./Bootstrap";
+import { WindowManager } from "./WindowManager";
+
+const getMainWindow = WindowManager.getMainWindow;
 
 const LOGIN_START =
     "https://login.live.com/oauth20_authorize.srf?client_id=00000000402b5328&response_type=code&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf";
@@ -18,7 +20,7 @@ const LOGOUT_OK_HEAD = "https://login.live.com/oauth20_desktop.srf";
 
 export function registerBackgroundListeners(): void {
     ipcMain.on("reload", () => {
-        getMainWindow()?.webContents.removeAllListeners();
+        getMainWindow().webContents.removeAllListeners();
         app.relaunch();
         app.exit(); // Immediately
     });
@@ -162,7 +164,7 @@ export function registerBackgroundListeners(): void {
                             spellcheck: false
                         }
                     });
-                loginWindow.webContents.setUserAgent(getMainWindowUATrimmed());
+                //  loginWindow.webContents.setUserAgent(getMainWindowUATrimmed());
                 if (proxy.trim().length > 0) {
                     await loginWindow.webContents.session.setProxy({
                         proxyRules: proxy
@@ -386,7 +388,7 @@ export function registerBackgroundListeners(): void {
                                     spellcheck: false
                                 }
                             });
-                        logoutWindow.webContents.setUserAgent(getMainWindowUATrimmed());
+                        // logoutWindow.webContents.setUserAgent(getMainWindowUATrimmed());
                         if (proxy.trim().length > 0) {
                             await logoutWindow.webContents.session.setProxy({
                                 proxyRules: proxy

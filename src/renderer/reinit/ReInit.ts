@@ -8,7 +8,8 @@ import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import pkg from "../../../package.json";
-import { Signals } from "../../main/Signals";
+import { Signals } from "../../background/Signals";
+import { Locale } from "../../modules/i18n/Locale";
 import { Paths } from "../../modules/redata/Paths";
 import { ReOptions } from "../../modules/redata/ReOptions";
 import { App } from "../screen/App";
@@ -39,7 +40,7 @@ export namespace ReInit {
      */
     export async function closeWindow(soft = true) {
         await beforeClose();
-        ipcRenderer.send(soft ? Signals.CLOSE_WINDOW_SOFT : Signals.CLOSE_AND_QUIT);
+        ipcRenderer.send(soft ? Signals.CLOSE_WINDOW_SOFT : Signals.CLOSE_WINDOW_AND_QUIT);
     }
 
     // Handle events for window closing
@@ -54,6 +55,7 @@ export namespace ReInit {
         Paths.detectRootPath();
         await Paths.retrieveAppPath();
         await ReOptions.load();
+        await Locale.initLocale();
     }
 
     // Prepare render content before the window can be shown
@@ -69,8 +71,8 @@ export namespace ReInit {
         root.render(React.createElement(App)); // Making this file pure TS
 
 
-        console.log("All caught up! I'm not showing the window.");
-        ipcRenderer.send(Signals.MAIN_WINDOW_READY);
+        console.log("All caught up! I'm now showing the window.");
+        ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
     }
 
     function printVersionInfo() {

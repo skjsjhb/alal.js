@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 import os from "os";
 import path from "path";
-import { Signals } from "../../main/Signals";
+import { Signals } from "../../background/Signals";
 
 /**
  * Module for file path resolving and file management.
@@ -56,15 +56,27 @@ export namespace Paths {
     }
 
     /**
-     * Resolve a given path relative to the root path.
+     * Resolve a given path in the data directory relative to the root path.
      * @param pt Relative path.
      */
-    export function get(pt: string) {
+    export function getDataPath(pt: string) {
         if (!rootPath) {
             console.warn("Paths used with root uninitialized.");
-            console.warn("This is completed on-demand this time, but the code should be checked to prevent future errors.");
+            console.warn("This is completed on-demand this time. Check the code.");
             detectRootPath();
         }
         return path.resolve(rootPath, pt);
+    }
+
+    /**
+     * Resolve a given app resource path.
+     * @param pt Relative path.
+     */
+    export function getResourcePath(pt: string) {
+        if (!appPath) {
+            console.error("Paths used with app path uninitialized. Skipped.");
+            return "";
+        }
+        return path.resolve(appPath, pt);
     }
 }

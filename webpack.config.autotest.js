@@ -19,7 +19,7 @@ main.plugins = [
     })
 ];
 
-main.entry.main = "./src/main/MainWithTests.ts";
+main.entry.main = "./src/background/MainWithTests.ts";
 main.devtool = false;
 main.output.path = path.resolve(__dirname, "build/autotest");
 

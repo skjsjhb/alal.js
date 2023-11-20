@@ -5,7 +5,7 @@ import { runMainTests } from "../test/MainTestHost";
 import { BootLoader } from "./BootLoader";
 
 function main() {
-    void BootLoader.bootLoaderMain();
+    void BootLoader.bootloaderMain();
 
     // Autotest modules entry
     console.warn("This is a test bundle built for automated tests. They are NOT intended for normal use.");

@@ -26,4 +26,33 @@ export namespace Objects {
         }
         return target;
     }
+
+    /**
+     * Gets the property on an object using dot seperated key as chained index on the target.
+     *
+     * e.g.
+     * ```js
+     * const a = {};
+     * a.b = {};
+     * a.b.c = 1;
+     * Objects.getPropertyByKey(a, "b.c"); // 1
+     * ```
+     *
+     * Returns `undefined` if the key cannot be found, or a middle var cannot be indexed.
+     *
+     * @param target Object to be indexed.
+     * @param k Properties chain split by dot.
+     */
+    export function getPropertyByKey(target: any, k: string): any {
+        const keys = k.split(".");
+        let current: any = target;
+        for (const key of keys) {
+            if (typeof current == "object" && key in current) {
+                current = current[key];
+            } else {
+                return undefined;
+            }
+        }
+        return current;
+    }
 }

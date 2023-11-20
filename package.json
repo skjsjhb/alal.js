@@ -63,7 +63,8 @@
     "sudo-prompt": "^9.2.1",
     "throttle-debounce": "^5.0.0",
     "toml": "^3.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "yaml": "^2.3.4"
   },
   "packageManager": "yarn@4.0.2"
 }

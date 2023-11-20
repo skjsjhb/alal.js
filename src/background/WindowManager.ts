@@ -8,16 +8,7 @@ import { Signals } from "./Signals";
  * Multiple browser window management module.
  */
 export namespace WindowManager {
-
     let mainWindow: BrowserWindow;
-
-    // Calculates a suitable window size according to display size
-    function preferWindowSize() {
-        const size = screen.getPrimaryDisplay().workAreaSize;
-        const height = Math.floor(size.height * 0.55);
-        const width = Math.floor(height * 1.92);
-        return [width, height];
-    }
 
     /**
      * Initialize the main window.
@@ -48,35 +39,50 @@ export namespace WindowManager {
         });
         mainWindow.setAspectRatio(1.92);
         mainWindow.setMenu(null);
+        mainWindow.setTitle("ALAL");
 
         // Minimum event listeners
         console.log("Binding main window event listeners.");
-        ipcMain.on(Signals.MAIN_WINDOW_READY, handleMainWindowReadyEvent);
-        ipcMain.on(Signals.CLOSE_WINDOW_SOFT, closeWindowSoft); // Paired with userCloseRequest and DOM close events
-        ipcMain.on(Signals.CLOSE_AND_QUIT, closeAndQuit); // Paired with userQuitRequest
-        mainWindow.on("close", handleUserCloseRequest);
+        ipcMain.on(Signals.SHOW_MAIN_WINDOW, mainWindow.show.bind(mainWindow)); // If not bound a TypeError will occur
+        ipcMain.on(Signals.CLOSE_WINDOW_SOFT, closeWindowSoft); // Paired with userCloseWindowRequest & DOM close events
+        ipcMain.on(Signals.CLOSE_WINDOW_AND_QUIT, closeWindowAndQuit); // Paired with userQuitRequest
+        mainWindow.on("close", onUserCloseWindowReq);
+        mainWindow.on("resized", pushMainWindowResizeEvent);
+        app.once("before-quit", onUserQuitReq); // This is done by WM to prevent early quit
+
+        // Network setup
+        await setProxy(mainWindow);
+        unblockCORS(mainWindow);
 
         // Open Devtools in case window failures
         if (ReOptions.get().dev.devtools) {
             console.log("Opening devtools.");
             mainWindow.webContents.openDevTools();
         }
+
         // Load content
         await mainWindow.loadFile(path.resolve(app.getAppPath(), "renderer.html"));
     }
 
+    /**
+     * Gets the main window.
+     */
     export function getMainWindow() {
         return mainWindow;
     }
 
-    // The user created window closing request (e.g. Alt+F4) is not dispatched on the renderer process.
-    // This method forward them.
-    function handleUserCloseRequest(e: Event) {
-        console.log("User is requesting main window to close. I'm exiting, gracefully...");
-        e.preventDefault();
-        mainWindow.hide();
-        mainWindow.webContents.send(Signals.USER_CLOSE_REQUEST);
+    function pushMainWindowResizeEvent() {
+        mainWindow.webContents.send(Signals.WINDOW_RESIZE, mainWindow.getSize());
     }
+
+    // Calculates a suitable window size according to display size
+    function preferWindowSize() {
+        const size = screen.getPrimaryDisplay().workAreaSize;
+        const height = Math.floor(size.height * 0.55);
+        const width = Math.floor(height * 1.92);
+        return [width, height];
+    }
+
 
     // Called when the renderer is ready for closing gently. i.e. Hide on macOS and close on others.
     function closeWindowSoft() {
@@ -85,59 +91,66 @@ export namespace WindowManager {
             mainWindow.hide();
         } else {
             console.log("Closing main window.");
-            mainWindow.removeListener("close", handleUserCloseRequest); // Prevent infinite loop
-            mainWindow.close(); // Also triggers the app to quit
+            mainWindow.removeListener("close", onUserCloseWindowReq); // Prevent infinite loop
+            mainWindow.close();
+            app.quit();
         }
     }
 
     // For response to app quit event. This indicates that the renderer is ready for an app-level quit.
-    function closeAndQuit() {
+    function closeWindowAndQuit() {
         console.log("Closing and exiting.");
-        mainWindow.removeListener("close", handleUserCloseRequest);
+        mainWindow.removeListener("close", onUserCloseWindowReq);
         mainWindow.close();
         app.removeAllListeners("before-quit");
         app.quit(); // On macOS the exit has to be triggered manually, no-op for other platforms.
     }
 
-    /**
-     * Forward the user quit event to the renderer and notify the main window to save
-     * data and do an exit.
-     *
-     * On macOS, the app won't exit even if all windows are closed. The app will only quit
-     * when the user requires so.
-     *
-     * On all other platforms, the app will exit when the main window is closed.
-     *
-     * @param e Event instance. (Will be cancelled)
-     */
-    export function informRendererQuitEvent(e: Event) {
+    // Handle event when user are requesting the app to quit (not closing any window).
+    function onUserQuitReq(e: Event) {
         console.log("User is requesting for app quit. Yes, but gracefully...");
         e.preventDefault();
         mainWindow.hide();
         mainWindow.webContents.send(Signals.USER_QUIT_REQUEST);
     }
 
-    async function handleMainWindowReadyEvent() {
-        mainWindowReady();
-        await postWindowInit();
+    // The user created window closing request (e.g. Alt+F4) is not dispatched on the renderer process.
+    // This method forward them.
+    function onUserCloseWindowReq(e: Event) {
+        console.log("User is requesting main window to close. I'm exiting, gracefully...");
+        e.preventDefault();
+        mainWindow.hide();
+        mainWindow.webContents.send(Signals.USER_CLOSE_REQUEST);
     }
 
-    // Called after the window is shown
-    async function postWindowInit() {
-        // Init proxy
+    async function setProxy(window: BrowserWindow) {
+        console.log("Setting proxy for window " + window.getTitle());
         const proxyAddress = ReOptions.get().proxy.address.trim();
         if (proxyAddress) {
-            await mainWindow.webContents.session.setProxy({
+            await window.webContents.session.setProxy({
                 proxyRules: proxyAddress,
                 proxyBypassRules: ReOptions.get().proxy.noProxy
             });
         }
     }
 
-    /**
-     * Show the main window.
-     */
-    export function mainWindowReady() {
-        mainWindow.show();
+    function unblockCORS(window: BrowserWindow) {
+        console.log("Unblocking CORS for window " + window.getTitle());
+        window.webContents.session.webRequest.onBeforeSendHeaders(
+            (details, callback) => {
+                callback({requestHeaders: {Origin: '*', ...details.requestHeaders}});
+            }
+        );
+
+        window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+            callback({
+                responseHeaders: {
+                    'Access-Control-Allow-Origin': ['*'],
+                    ...details.responseHeaders
+                }
+            });
+        });
     }
+
+
 }

@@ -16,7 +16,7 @@ const main = {
     ...baseMain,
     ...devCommon,
     entry: {
-        main: "./src/main/Main.ts"
+        main: "./src/background/Main.ts"
     },
     output: {
         filename: "[name].js",

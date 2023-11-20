@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 import { outputJSON, readJSON } from "fs-extra";
+import { Signals } from "../../background/Signals";
 import OptionsTemplate from "../../constra/options.json";
-import { Signals } from "../../main/Signals";
 import { Objects } from "../util/Objects";
 import { Paths } from "./Paths";
 
@@ -13,7 +13,6 @@ import { Paths } from "./Paths";
  * - The lack of type system for config files.
  */
 export namespace ReOptions {
-    import merge = Objects.merge;
     type OptionsModel = typeof OptionsTemplate;
 
     const OPTIONS_FILE_PATH = "options.json";
@@ -25,8 +24,8 @@ export namespace ReOptions {
     export async function load() {
         try {
             console.log("Loading options file.");
-            const overrides = await readJSON(Paths.get(OPTIONS_FILE_PATH));
-            merge(options, overrides);
+            const overrides = await readJSON(Paths.getDataPath(OPTIONS_FILE_PATH));
+            Objects.merge(options, overrides);
         } catch (e) {
             console.error("Failed to load options file: " + e);
         }
@@ -35,7 +34,7 @@ export namespace ReOptions {
     /**
      * Get the options file as model.
      *
-     * A common practice of using method is unpacking the data, e.g.
+     * A common practice of using this method is unpacking the data, e.g.
      * ```js
      * const {width, height} = ReOptions.get().windowSize;
      * ```
@@ -49,7 +48,7 @@ export namespace ReOptions {
      */
     export async function save() {
         try {
-            await outputJSON(Paths.get(OPTIONS_FILE_PATH), options);
+            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options);
         } catch (e) {
             console.error("Failed to save options file: " + e);
         }

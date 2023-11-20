@@ -8,7 +8,8 @@ import { Signals } from "./Signals";
 export namespace Handlers {
     const BINDINGS = {
         [Signals.GET_APP_PATH]: getAppPath,
-        [Signals.RELOAD_OPTIONS]: reloadOptions
+        [Signals.RELOAD_OPTIONS]: reloadOptions,
+        [Signals.GET_LOCALE]: getLocale
     };
 
     /**
@@ -19,6 +20,10 @@ export namespace Handlers {
             console.log("Binding: " + k);
             ipcMain.handle(k, v);
         }
+    }
+
+    async function getLocale() {
+        return app.getLocale();
     }
 
     // Reload options file

@@ -25,7 +25,7 @@ async function main() {
     console.warn("This is a test bundle built for automated tests. They are NOT intended for normal use.");
     console.warn("For development, use the debug bundle instead.");
     console.warn("For a production ready app, see the release bundle.");
-    runRendererTests();
+    await runRendererTests();
 }
 
 void main();

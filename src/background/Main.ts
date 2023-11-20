@@ -4,7 +4,7 @@
 import { BootLoader } from "./BootLoader";
 
 function main() {
-    void BootLoader.bootLoaderMain();
+    void BootLoader.bootloaderMain();
 }
 
 void main();

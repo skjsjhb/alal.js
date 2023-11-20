@@ -1,6 +1,6 @@
 import { Signals } from "@/background/Signals";
 import { app, ipcRenderer } from "electron";
-import { readdir, readFile, stat } from "fs-extra";
+import { readFile } from "fs-extra";
 import path from "path";
 import yaml from "yaml";
 import { Paths } from "../redata/Paths";
@@ -34,25 +34,14 @@ export namespace Locale {
 
     // Scan locale directory using absolute path and load all files within it
     async function loadLocaleFromDir(absRootPath: string) {
-        try {
-            const dirContent = await readdir(absRootPath);
-            const filesToLoad = [];
-            for (const f of dirContent) {
-                const filePt = path.join(absRootPath, f);
-                const s = await stat(filePt);
-                if (s.isFile()) {
-                    const name = path.basename(f, path.extname(f));
-                    filesToLoad.push(loadLocaleFromFile(name, filePt));
-                }
+        const dirs = await Paths.scanDir(absRootPath, true);
+        for (const f of dirs) {
+            const name = path.basename(f, path.extname(f));
+            try {
+                await loadLocaleFromFile(name, f);
+            } catch (e) {
+                console.error("A locale file could not be loaded: " + e);
             }
-            const results = await Promise.allSettled(filesToLoad);
-            for (const r of results) {
-                if (r.status == "rejected") {
-                    console.error("A locale file could not be loaded: " + r.reason);
-                }
-            }
-        } catch (e) {
-            console.error("Could not load locale dir: " + e);
         }
     }
 

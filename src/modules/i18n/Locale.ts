@@ -35,7 +35,7 @@ export namespace Locale {
 
     // Scan locale directory using absolute path and load all files within it
     async function loadLocaleFromDir(absRootPath: string) {
-        const dirs = await glob("*", {root: absRootPath, nodir: true});
+        const dirs = await glob("*", {cwd: absRootPath, nodir: true, absolute: true});
         for (const f of dirs) {
             const name = path.basename(f, path.extname(f));
             try {

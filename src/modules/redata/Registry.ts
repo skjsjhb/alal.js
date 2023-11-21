@@ -23,7 +23,7 @@ export namespace Registry {
         await ensureDir(rootDir); // When running for the first time
 
         console.log("Loading registry tables.");
-        const dirs = await glob("*" + regFileSuffix, {root: rootDir, nodir: true});
+        const dirs = await glob("*" + regFileSuffix, {cwd: rootDir, nodir: true, absolute: true});
         await Promise.all(dirs.map(loadOneTable));
     }
 

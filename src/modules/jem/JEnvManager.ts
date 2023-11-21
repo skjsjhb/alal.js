@@ -8,7 +8,7 @@ import { glob } from "glob";
  * JRE env manager.
  */
 export namespace JEnvManager {
-    const JEM_REG_ID = "jem";
+    const jemRegId = "jem";
 
     /**
      * Describes a single JRE environment.
@@ -19,7 +19,7 @@ export namespace JEnvManager {
     }
 
     function addProfile(p: JREProfile) {
-        Registry.getTable<JREProfile[]>(JEM_REG_ID, []).push(p);
+        Registry.getTable<JREProfile[]>(jemRegId, []).push(p);
         console.log("Added JRE version " + p.javaVersion + " at " + p.executable);
     }
 

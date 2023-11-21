@@ -1,6 +1,7 @@
 import { Signals } from "@/background/Signals";
 import { app, ipcRenderer } from "electron";
 import { readFile } from "fs-extra";
+import { glob } from "glob";
 import path from "path";
 import yaml from "yaml";
 import { Paths } from "../redata/Paths";
@@ -34,7 +35,7 @@ export namespace Locale {
 
     // Scan locale directory using absolute path and load all files within it
     async function loadLocaleFromDir(absRootPath: string) {
-        const dirs = await Paths.scanDir(absRootPath, true);
+        const dirs = await glob("*", {root: absRootPath, nodir: true});
         for (const f of dirs) {
             const name = path.basename(f, path.extname(f));
             try {

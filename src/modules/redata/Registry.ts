@@ -1,5 +1,6 @@
 import { Paths } from "@/modules/redata/Paths";
 import { ensureDir, outputJSON, readJSON } from "fs-extra";
+import { glob } from "glob";
 import path from "path";
 
 /**
@@ -12,6 +13,8 @@ export namespace Registry {
     let regTables = new Map<string, any>();
     let registryRoot = "reg";
 
+    const regFileSuffix = ".json";
+
     /**
      * Load all tables from disk.
      */
@@ -20,7 +23,7 @@ export namespace Registry {
         await ensureDir(rootDir); // When running for the first time
 
         console.log("Loading registry tables.");
-        const dirs = await Paths.scanDir(rootDir, true);
+        const dirs = await glob("*" + regFileSuffix, {root: rootDir, nodir: true});
         await Promise.all(dirs.map(loadOneTable));
     }
 
@@ -32,7 +35,7 @@ export namespace Registry {
 
         const promos = [];
         for (const [k, t] of regTables.entries()) {
-            const targetPath = Paths.getDataPath(path.join(registryRoot, k + ".json"));
+            const targetPath = Paths.getDataPath(path.join(registryRoot, k + regFileSuffix));
             promos.push(outputJSON(targetPath, t));
         }
         await Promise.all(promos);

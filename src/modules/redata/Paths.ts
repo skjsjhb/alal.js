@@ -1,6 +1,5 @@
 import { Signals } from "@/background/Signals";
 import { app, ipcRenderer } from "electron";
-import { readdir, stat } from "fs-extra";
 import os from "os";
 import path from "path";
 
@@ -83,32 +82,5 @@ export namespace Paths {
             return "";
         }
         return path.resolve(appPath, pt);
-    }
-
-    /**
-     * Scans the specified directory and return its content as an array of abs paths.
-     *
-     * @param root Absolute root path.
-     * @param fileOnly Only include files in the returned array.
-     */
-    export async function scanDir(root: string, fileOnly = false): Promise<string[]> {
-        try {
-            const dirs = await readdir(root);
-            const out = [];
-            for (const d of dirs) {
-                const filePath = path.join(root, d);
-                if (fileOnly) {
-                    const st = await stat(filePath);
-                    if (!st.isFile()) {
-                        continue;
-                    }
-                }
-                out.push(filePath);
-            }
-            return out;
-        } catch (e) {
-            console.error("Could not scan directory: " + e);
-            return [];
-        }
     }
 }

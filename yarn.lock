@@ -4511,6 +4511,7 @@ __metadata:
     electron: "npm:^27.1.0"
     electron-builder: "npm:^24.6.4"
     fs-extra: "npm:^11.1.1"
+    glob: "npm:^10.3.10"
     html-webpack-plugin: "npm:^5.5.3"
     js-base64: "npm:^3.7.5"
     mcnbt: "npm:^2.0.2"

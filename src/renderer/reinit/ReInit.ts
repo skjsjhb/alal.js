@@ -7,6 +7,7 @@
 import { Signals } from "@/background/Signals";
 import { Locale } from "@/modules/i18n/Locale";
 import { Paths } from "@/modules/redata/Paths";
+import { Registry } from "@/modules/redata/Registry";
 import { ReOptions } from "@/modules/redata/ReOptions";
 import { ipcRenderer } from "electron";
 import React from "react";
@@ -56,6 +57,7 @@ export namespace ReInit {
         await Paths.retrieveAppPath();
         await ReOptions.load();
         await Locale.initLocale();
+        await Registry.loadTables();
     }
 
     // Prepare render content before the window can be shown
@@ -73,6 +75,8 @@ export namespace ReInit {
 
         console.log("All caught up! I'm now showing the window.");
         ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
+
+
     }
 
     function printVersionInfo() {
@@ -88,5 +92,6 @@ export namespace ReInit {
 
     async function beforeClose() {
         await ReOptions.save();
+        await Registry.saveTables();
     }
 }

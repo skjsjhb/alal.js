@@ -1,0 +1,15 @@
+{
+  "windows": [
+    "C:/Program Files/Eclipse Adoptium/*/bin/java.exe",
+    "C:/Program Files/AdoptOpenJDK/*/bin/java.exe",
+    "C:/Program Files/Java/*/bin/java.exe"
+  ],
+  "macos": [
+    "/Library/Java/JavaVirtualMachines/*/Contents/Home/bin/java",
+    "/System/Library/Java/JavaVirtualMachines/*/Contents/Home/bin/java"
+  ],
+  "linux": [
+    "/usr/local/java/*/bin/java",
+    "/usr/lib/jvm/*/bin/java"
+  ]
+}

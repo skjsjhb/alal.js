@@ -7,7 +7,6 @@ import { FABRIC_META_ROOT } from "../../commons/Constants";
 import { isFileExist } from "../../commons/FileUtil";
 import { safeGet } from "../../commons/Null";
 import { MinecraftContainer } from "../../container/MinecraftContainer";
-import { getDefaultJavaHome, getJavaRunnable } from "../../java/JavaInfo";
 import { ProfileType } from "../../profile/WhatProfile";
 import { getFabricLikeProfile } from "../get/FabricLikeGet";
 import { generateForgeInstallerName, getForgeInstaller, getMojangByForge, removeForgeInstaller } from "../get/ForgeGet";
@@ -152,7 +151,7 @@ export async function deployModLoader(
             }
             if (
                 !(await performForgeInstall(
-                    await getJavaRunnable(getDefaultJavaHome()),
+                    "", // TODO re-impl with new java module
                     generateForgeInstallerName(mcVersion, version),
                     container
                 ))

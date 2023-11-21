@@ -2,27 +2,11 @@ import { tgz, zip } from "compressing";
 import { emptyDir, readdir, remove, rename } from "fs-extra";
 import os from "os";
 import path from "path";
-import { isFileExist } from "../commons/FileUtil";
 import { getActualDataPath } from "../config/DataSupport";
 import { DownloadMeta } from "../download/AbstractDownloader";
 import { wrappedDownloadFile } from "../download/DownloadWrapper";
 import { getLatestJREURL } from "./GetJRE";
-import { resetJavaList } from "./JavaInfo";
 
-export async function setBuiltInJava(): Promise<void> {
-    const j1 = getActualDataPath(path.join("java", "legacy", "default"));
-    const j2 = getActualDataPath(path.join("java", "modern", "default"));
-    const l = [];
-    if (await isFileExist(j1)) {
-        l.push(j1);
-    }
-    if (await isFileExist(j2)) {
-        l.push(j2);
-    }
-    if (l.length > 0) {
-        resetJavaList(l); // Ensure a 'clean' env
-    }
-}
 
 // This will install two JDKs, 8 and 17
 export async function installBothJDKs(): Promise<boolean> {

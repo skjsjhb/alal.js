@@ -1,21 +1,12 @@
+import JREDownloadMatrix from "@/constra/jre-dl-matrix.json";
+import { OSInfo } from "@/modules/sys/OSInfo";
 import os from "os";
-import JreDlMatrix from "../../constra/jre-dl-matrix.json";
 
+// TODO replace with jem - this is only a temporal replacement
 export function getLatestJREURL(old = false): string {
-    let plat = "unknown";
+    let plat = OSInfo.getSelf();
     let arch = "unknown";
     let ver = old ? "legacy" : "latest";
-    switch (os.platform()) {
-        case "win32":
-            plat = "windows";
-            break;
-        case "darwin":
-            plat = "macos";
-            break;
-        case "linux":
-            plat = "linux";
-            break;
-    }
     switch (os.arch()) {
         case "x64":
         case "amd64":
@@ -27,5 +18,5 @@ export function getLatestJREURL(old = false): string {
             arch = "arm";
     }
     const k = plat + "-" + arch + "-" + ver;
-    return (JreDlMatrix as Record<string, string>)[k] || "";
+    return (JREDownloadMatrix as Record<string, string>)[k] || "";
 }

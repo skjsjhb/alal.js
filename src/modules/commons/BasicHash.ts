@@ -12,12 +12,6 @@ export function uniqueHash(
     return CryptoJS.SHA256(obj.toString()).toString();
 }
 
-export async function abortableBasicHash(
-    obj: string | number | Record<string, unknown>
-): Promise<string> {
-    return "";
-}
-
 export async function abortableUniqueHash(
     obj: string | number | Record<string, unknown>
 ): Promise<string> {

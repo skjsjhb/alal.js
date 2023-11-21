@@ -1,40 +1,8 @@
 import fs from "fs-extra";
-import { PassThrough, Readable } from "stream";
 import { WatchDog } from "../commons/WatchDog";
 import { getNumber } from "../config/ConfigSupport";
 import { MirrorChain } from "./Mirror";
 
-export function getGuardStream(
-    i: Readable,
-    f: fs.WriteStream,
-    timeout = 0
-): PassThrough {
-    let dog: WatchDog | null = null;
-    const s = new PassThrough();
-    f.on("error", (e) => {
-        dog?.kill();
-        f.close();
-        s.emit("error", "Stream ERR: " + e);
-    });
-    f.on("finish", () => {
-        dog?.kill();
-        f.close();
-    });
-    if (timeout > 0) {
-        dog = new WatchDog(timeout * 2, () => {
-            f.close();
-            s.emit("error", "Time limit exceeded: " + timeout * 2);
-        });
-        s.on("data", () => {
-            dog?.feed();
-        });
-        i.on("end", () => {
-            dog?.kill();
-        });
-    }
-
-    return s;
-}
 
 export function getFileWriteStream(
     pt: string,

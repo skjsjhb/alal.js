@@ -1,9 +1,11 @@
 import { Locale } from "@/modules/i18n/Locale";
+import { Registry } from "@/modules/redata/Registry";
 import { ipcRenderer } from "electron";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
 import { TestTools } from "./TestTools";
 import assertEquals = TestTools.assertEquals;
+import assertNotEquals = TestTools.assertNotEquals;
 import assertTrue = TestTools.assertTrue;
 import test = TestTools.test;
 
@@ -22,6 +24,10 @@ async function allTests() {
     await test("Locale Loading", () => {
         Locale.setActiveLocale("en-US");
         assertEquals(Locale.getTranslation("name"), "English (US)");
+    });
+    await test("Mirror Latency Test", () => {
+        // This is executed after a full initialization. Mirrors should be usable.
+        assertNotEquals(Registry.getTable("mirrors", []).length, 0);
     });
     await saveSummary();
 }

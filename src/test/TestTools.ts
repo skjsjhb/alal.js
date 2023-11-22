@@ -67,7 +67,7 @@ export namespace TestTools {
     export function assertNotEquals<T>(expected: T, received: T) {
         assertRecords.push({
             type: "notEquals",
-            ok: expected == received || jsonEquals(expected, received),
+            ok: expected != received && !jsonEquals(expected, received),
             expected,
             received
         });

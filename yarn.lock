@@ -3523,13 +3523,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"long@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "long@npm:4.0.0"
-  checksum: 50a6417d15b06104dbe4e3d4a667c39b137f130a9108ea8752b352a4cfae047531a3ac351c181792f3f8768fe17cca6b0f406674a541a86fb638aaac560d83ed
-  languageName: node
-  linkType: hard
-
 "loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -3600,15 +3593,6 @@ __metadata:
   dependencies:
     escape-string-regexp: "npm:^4.0.0"
   checksum: 2edf24194a2879690bcdb29985fc6bc0d003df44e04df21ebcac721fa6ce2f6201c579866bb92f9380bffe946f11ecd8cd31f34117fb67ebf8aca604918e127e
-  languageName: node
-  linkType: hard
-
-"mcnbt@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "mcnbt@npm:2.0.2"
-  dependencies:
-    long: "npm:^4.0.0"
-  checksum: 27766038dba98c74874e719805908dc26e617a1eca2d05457c73e362151f9ea0315850f7eb37628b069527071b1429bc552c620b42a63f715421bfe9edb630b1
   languageName: node
   linkType: hard
 
@@ -4524,7 +4508,6 @@ __metadata:
     glob: "npm:^10.3.10"
     html-webpack-plugin: "npm:^5.5.3"
     js-base64: "npm:^3.7.5"
-    mcnbt: "npm:^2.0.2"
     node-fetch: "npm:^3.3.2"
     node-machine-id: "npm:^1.1.12"
     node-stream-zip: "npm:^1.15.0"

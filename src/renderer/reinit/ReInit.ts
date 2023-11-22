@@ -9,6 +9,7 @@ import { Locale } from "@/modules/i18n/Locale";
 import { Paths } from "@/modules/redata/Paths";
 import { Registry } from "@/modules/redata/Registry";
 import { ReOptions } from "@/modules/redata/ReOptions";
+import { Mirrors } from "@/modules/renet/Mirrors";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -31,6 +32,10 @@ export namespace ReInit {
         } else {
             window.addEventListener("load", prepareContent);
         }
+
+        // Post init steps
+        console.log("Running post-init tasks.");
+        await postInit();
     }
 
     /**
@@ -60,6 +65,11 @@ export namespace ReInit {
         await Registry.loadTables();
     }
 
+    // Tasks to run after renderer initialization
+    async function postInit() {
+        await Mirrors.updateRules();
+    }
+
     // Prepare render content before the window can be shown
     function prepareContent() {
         console.log("Preparing content to display.");
@@ -75,8 +85,6 @@ export namespace ReInit {
 
         console.log("All caught up! I'm now showing the window.");
         ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
-
-
     }
 
     function printVersionInfo() {

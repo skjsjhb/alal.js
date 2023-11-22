@@ -2312,6 +2312,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"electron-fetch@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "electron-fetch@npm:1.9.1"
+  dependencies:
+    encoding: "npm:^0.1.13"
+  checksum: 650d91e7957ed9d7e054a5cf2d3f57ed2fae859cbe51e6910b75699f33fcf08a9cd812d418d14280da6fc58e6914dfc3177ca7b081308c4074326ced47409cd8
+  languageName: node
+  linkType: hard
+
 "electron-publish@npm:24.5.0":
   version: 24.5.0
   resolution: "electron-publish@npm:24.5.0"
@@ -4510,6 +4519,7 @@ __metadata:
     crypto-js: "npm:^4.2.0"
     electron: "npm:^27.1.0"
     electron-builder: "npm:^24.6.4"
+    electron-fetch: "npm:^1.9.1"
     fs-extra: "npm:^11.1.1"
     glob: "npm:^10.3.10"
     html-webpack-plugin: "npm:^5.5.3"

@@ -59,6 +59,15 @@ export namespace Registry {
         return regTables.get(name);
     }
 
+    /**
+     * Sets a table with specified name and source.
+     * Note that this does not necessarily preserve the reference - the map value will be overridden by the new
+     * reference, regardless of the equality.
+     */
+    export function setTable(name: string, src: any) {
+        regTables.set(name, src);
+    }
+
     // Loads a single table from file
     async function loadOneTable(absPath: string): Promise<void> {
         const name = path.basename(absPath, path.extname(absPath));

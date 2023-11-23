@@ -1,7 +1,6 @@
 import Keyring from "@/constra/keyring.json";
 import { Paths } from "@/modules/redata/Paths";
-import { copyFile, ensureDir } from "fs-extra";
-import { access } from "fs/promises";
+import { access, copyFile, ensureDir } from "fs-extra";
 import path from "path";
 import * as uuid from "uuid";
 

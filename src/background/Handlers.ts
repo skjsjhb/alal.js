@@ -1,5 +1,6 @@
 import { MicrosoftBrowserLogin } from "@/modules/reauth/MicrosoftBrowserLogin";
 import { ReOptions } from "@/modules/redata/ReOptions";
+import { Downloader } from "@/modules/renet/Downloader";
 import { app, ipcMain } from "electron";
 import { Signals } from "./Signals";
 
@@ -7,11 +8,13 @@ import { Signals } from "./Signals";
  * Backend handlers registry module.
  */
 export namespace Handlers {
+    import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
     const BINDINGS = {
         [Signals.GET_APP_PATH]: getAppPath,
         [Signals.RELOAD_OPTIONS]: reloadOptions,
         [Signals.GET_LOCALE]: getLocale,
-        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow
+        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow,
+        [Signals.WEB_GET_FILE]: webGetFileMainProc
     };
 
     /**
@@ -36,5 +39,10 @@ export namespace Handlers {
 
     async function getAppPath() {
         return app.getAppPath();
+    }
+
+    // Wrapper method for webGetFileMain
+    function webGetFileMainProc(_e: IpcMainInvokeEvent, u: string, l: string, t: number, m: number): Promise<void> {
+        return Downloader.webGetFileMain(u, l, t, m);
     }
 }

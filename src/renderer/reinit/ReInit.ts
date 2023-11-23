@@ -6,10 +6,12 @@
  */
 import { Signals } from "@/background/Signals";
 import { Locale } from "@/modules/i18n/Locale";
+import { JavaGet } from "@/modules/jem/JavaGet";
 import { Paths } from "@/modules/redata/Paths";
 import { Registry } from "@/modules/redata/Registry";
 import { ReOptions } from "@/modules/redata/ReOptions";
 import { Cacher } from "@/modules/renet/Cacher";
+import { DownloadManager } from "@/modules/renet/DownloadManager";
 import { Mirrors } from "@/modules/renet/Mirrors";
 import { ipcRenderer } from "electron";
 import React from "react";
@@ -65,6 +67,8 @@ export namespace ReInit {
         await Locale.initLocale();
         await Registry.loadTables();
         await Cacher.configure();
+        DownloadManager.configure();
+        await JavaGet.configure();
     }
 
     // Tasks to run after renderer initialization
@@ -95,7 +99,7 @@ export namespace ReInit {
         console.log("%c❤ From Annie K Rarity Sparklight", "color:#df307f;font-weight:bold;");
         console.log("%cALAL Forked and re-designed by skjsjhb", "color: #f8d854;font-weight:bold;");
         console.log("Alicorn Launcher Copyright (C) 2021-2022 Annie K Rarity Sparklight");
-        console.log('Alicorn Again Launcher Copyright (C) 2023 Ted "skjsjhb" Gao');
+        console.log("Alicorn Again Launcher Copyright (C) 2023 Ted \"skjsjhb\" Gao");
         console.log("This program comes with ABSOLUTELY NO WARRANTY; for details, please see 'resources/app/LICENSE'.");
         console.log("This is free software, and you are welcome to redistribute it under certain conditions; see the license file for details.");
     }

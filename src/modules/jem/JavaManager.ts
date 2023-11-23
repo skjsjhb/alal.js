@@ -1,13 +1,13 @@
 import JavaSearchPaths from "@/constra/jre-search-paths.json";
 import { Registry } from "@/modules/redata/Registry";
-import { OSInfo } from "@/modules/sys/OSInfo";
+import { OSInfo } from "@/modules/util/OSInfo";
 import childProcess, { ExecFileException } from "child_process";
 import { glob } from "glob";
 
 /**
  * JRE env manager.
  */
-export namespace JEnvManager {
+export namespace JavaManager {
     const jemRegId = "jem";
 
     /**

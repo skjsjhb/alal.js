@@ -1,6 +1,6 @@
 import Keyring from "@/constra/keyring.json";
 import { Paths } from "@/modules/redata/Paths";
-import { access, copyFile, ensureDir } from "fs-extra";
+import { access, copyFile, ensureDir, remove } from "fs-extra";
 import path from "path";
 import * as uuid from "uuid";
 
@@ -64,5 +64,14 @@ export namespace Cacher {
             console.error("Error during applying cache: " + e);
             return false;
         }
+    }
+
+    /**
+     * Remove specified cache file.
+     */
+    export async function removeCache(key: string): Promise<void> {
+        try {
+            await remove(path.join(cacheRoot, getUUID(key)));
+        } catch {}
     }
 }

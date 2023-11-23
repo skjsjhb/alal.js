@@ -16,6 +16,6 @@ jobs:
         with:
           node-version: "18"
       - name: Build
-        run: corepack enable && yarn && yarn bundle-autotest
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: yarn test

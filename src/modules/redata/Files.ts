@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
-import { createReadStream } from "fs-extra";
+import { access, createReadStream, createWriteStream } from "fs-extra";
+import lzma from "lzma-native";
 import { pipeline } from "stream/promises";
 
 /**
@@ -25,5 +26,32 @@ export namespace Files {
         const hashed = createHash(type);
         await pipeline(createReadStream(file), hashed);
         return hashed.digest("hex").toLowerCase();
+    }
+
+    /**
+     * Decompress a lzma archive.
+     */
+    export async function decompressLZMA(src: string, target: string): Promise<boolean> {
+        try {
+            const stream = lzma.createDecompressor();
+            await pipeline(createReadStream(src), stream, createWriteStream(target));
+            console.log("Dec (LZMA): " + src + " -> " + target);
+            return true;
+        } catch (e) {
+            console.error("Could not decompress LZMA " + src + ": " + e);
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a file exists. Can be used as an alternative to `fs.exists()`.
+     */
+    export async function exists(loc: string): Promise<boolean> {
+        try {
+            await access(loc);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 }

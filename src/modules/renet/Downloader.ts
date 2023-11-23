@@ -29,10 +29,8 @@ export namespace Downloader {
         checksum: string
     }
 
-
     /**
      * Create download profile from several user-specified fields.
-     * @param opt
      */
     export function createProfile(opt: {
         url: string, // Mandatory
@@ -48,7 +46,7 @@ export namespace Downloader {
     }): DownloadProfile {
         const {url, location, headerTimeout, minSpeed, tries, cache, size, checksum, validation, mirror} = opt;
         let effectiveURL = url;
-        if (mirror) {
+        if (mirror ?? true) { // Enabled by default
             effectiveURL = Mirrors.apply(effectiveURL);
         }
         return {
@@ -66,12 +64,13 @@ export namespace Downloader {
 
     /**
      * All-in-one bundle of {@link webGetFile}, {@link checkCache} and {@link validateFile}.
-     * @param p
      */
     export async function downloadFile(p: DownloadProfile): Promise<boolean> {
+        let usingCache = true;
         const tries = p.tries;
         for (const _i of Array(tries)) {
             if (!await checkCache(p)) {
+                usingCache = false;
                 // Download file since cache not found
                 const dlok = await webGetFile(p);
                 if (!dlok) {
@@ -85,8 +84,11 @@ export namespace Downloader {
                 console.log("Got: " + p.url);
                 return true;
             } else {
-                // Try again, but disable cache this time
-                p.cache = false;
+                if (usingCache) {
+                    // This cache is invalid
+                    await invalidateCache(p);
+                }
+                // Try again
                 console.log("Try: " + p.url);
             }
         }
@@ -136,6 +138,10 @@ export namespace Downloader {
             return;
         }
         await Cacher.addCache(p.url, p.location);
+    }
+
+    function invalidateCache(p: DownloadProfile): Promise<void> {
+        return Cacher.removeCache(p.url);
     }
 
     /**

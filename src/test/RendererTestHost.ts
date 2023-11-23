@@ -3,8 +3,11 @@ import { Files } from "@/modules/redata/Files";
 import { Registry } from "@/modules/redata/Registry";
 import { Cacher } from "@/modules/renet/Cacher";
 import { Downloader } from "@/modules/renet/Downloader";
+import { Throttle } from "@/modules/util/Throttle";
+import { testJavaDownload } from "@/test/JavaGetTest";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
+import lzma from "lzma-native";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
 import { TestTools } from "./TestTools";
@@ -33,7 +36,6 @@ async function allTests() {
         // This is executed after a full initialization. Mirrors should be usable.
         assertNotEquals(Registry.getTable("mirrors", []).length, 0);
     });
-
     const testFile = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json";
     await test("Single File Download", async () => {
         await remove("file.json");
@@ -54,6 +56,22 @@ async function allTests() {
         await Cacher.applyCache(testFile, "cache.json");
         assertEquals((await readFile("cache.json")).toString(), (await readFile("file.json")).toString());
     });
+    await test("Throttle Pool", async () => {
+        let a = 0;
+        const pool = new Throttle.Pool(2);
+        await Promise.all([pool.acquire(), pool.acquire()]);
+        const prom = pool.acquire();
+        prom.then(() => { a = 1;});
+        assertEquals(pool.getSize(), 2);
+        assertNotEquals(a, 1);
+        pool.release();
+        await prom;
+        assertEquals(a, 1);
+    });
+    await test("LZMA Native Module", async () => {
+        assertNotEquals(lzma.versionString(), "");
+    });
+    await testJavaDownload();
     await saveSummary();
 }
 

@@ -5,7 +5,7 @@
     "timeout": 5000,
     "minSpeed": 8192,
     "tries": 5,
-    "maxTasks": 32,
+    "maxTasks": 128,
     "validation": "size",
     "cache": true
   },

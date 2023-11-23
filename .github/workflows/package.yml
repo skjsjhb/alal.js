@@ -13,8 +13,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+      - name: Install Dependencies
+        run: corepack enable && yarn
+      - name: Rebuild Natives
+        run: yarn electron-rebuild
       - name: Build
-        run: corepack enable && yarn && yarn bundle-release && yarn make-release -l
+        run: yarn bundle-release && yarn make-release -l
       - name: List Files
         run: ls ./dist/release
 
@@ -26,8 +30,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+      - name: Install Dependencies
+        run: corepack enable && yarn
+      - name: Rebuild Natives
+        run: yarn electron-rebuild
       - name: Build
-        run: corepack enable && yarn && yarn bundle-release && yarn make-release -w
+        run: yarn bundle-release && yarn make-release -w
       - name: List Files
         run: ls ./dist/release
 
@@ -39,7 +47,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+      - name: Install Dependencies
+        run: corepack enable && yarn
+      - name: Rebuild Natives
+        run: yarn electron-rebuild
       - name: Build
-        run: corepack enable && yarn && yarn bundle-release && yarn make-release -m
+        run: yarn bundle-release && yarn make-release -m
       - name: List Files
         run: ls ./dist/release

@@ -26,6 +26,9 @@ const moduleResolution = {
         alias: {
             '@': path.resolve(__dirname, 'src')
         }
+    },
+    externals: {
+        "lzma-native": "node-commonjs lzma-native"
     }
 };
 

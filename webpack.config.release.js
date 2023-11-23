@@ -39,6 +39,18 @@ const main = {
                 {
                     from: path.resolve(__dirname, "resources/static"),
                     to: path.resolve(__dirname, "build/release")
+                },
+                {
+                    from: path.resolve(__dirname, "node_modules/lzma-native/prebuilds"),
+                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/prebuilds")
+                },
+                {
+                    from: path.resolve(__dirname, "node_modules/lzma-native/build"),
+                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/build")
+                },
+                {
+                    from: path.resolve(__dirname, "node_modules/lzma-native/index.js"),
+                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/index.js")
                 }
             ]
         }),

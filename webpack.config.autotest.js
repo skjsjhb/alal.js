@@ -14,6 +14,18 @@ main.plugins = [
             {
                 from: path.resolve(__dirname, "resources/static"),
                 to: path.resolve(__dirname, "build/autotest")
+            },
+            {
+                from: path.resolve(__dirname, "node_modules/lzma-native/prebuilds"),
+                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/prebuilds")
+            },
+            {
+                from: path.resolve(__dirname, "node_modules/lzma-native/build"),
+                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/build")
+            },
+            {
+                from: path.resolve(__dirname, "node_modules/lzma-native/index.js"),
+                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/index.js")
             }
         ]
     })

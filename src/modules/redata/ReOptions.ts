@@ -1,6 +1,7 @@
 import { Signals } from "@/background/Signals";
+import { Files } from "@/modules/redata/Files";
 import { ipcRenderer } from "electron";
-import { access, outputJSON, readJSON } from "fs-extra";
+import { outputJSON, readJSON } from "fs-extra";
 import OptionsTemplate from "../../constra/options.json";
 import { Objects } from "../util/Objects";
 import { Paths } from "./Paths";
@@ -24,10 +25,9 @@ export namespace ReOptions {
     export async function load() {
         try {
             const optnPath = Paths.getDataPath(OPTIONS_FILE_PATH);
-            try {
-                await access(optnPath);
-            } catch {
+            if (!await Files.exists(optnPath)) {
                 console.log("Options file not present, skipped.");
+                return;
             }
             console.log("Loading options file.");
             const overrides = await readJSON(optnPath);

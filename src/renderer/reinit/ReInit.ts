@@ -9,6 +9,7 @@ import { Locale } from "@/modules/i18n/Locale";
 import { Paths } from "@/modules/redata/Paths";
 import { Registry } from "@/modules/redata/Registry";
 import { ReOptions } from "@/modules/redata/ReOptions";
+import { Cacher } from "@/modules/renet/Cacher";
 import { Mirrors } from "@/modules/renet/Mirrors";
 import { ipcRenderer } from "electron";
 import React from "react";
@@ -63,6 +64,7 @@ export namespace ReInit {
         await ReOptions.load();
         await Locale.initLocale();
         await Registry.loadTables();
+        await Cacher.configure();
     }
 
     // Tasks to run after renderer initialization

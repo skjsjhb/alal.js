@@ -42,7 +42,7 @@ export namespace Handlers {
     }
 
     // Wrapper method for webGetFileMain
-    function webGetFileMainProc(_e: IpcMainInvokeEvent, u: string, l: string, t: number, m: number) {
-        return Downloader.webGetFileMain(u, l, t, m);
+    function webGetFileMainProc(_e: IpcMainInvokeEvent, p: Downloader.DownloadProfile) {
+        return Downloader.webGetFileMain(p);
     }
 }

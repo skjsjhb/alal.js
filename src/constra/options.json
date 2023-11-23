@@ -1,51 +1,15 @@
 {
   "locale": "",
-  "dev": {
-    "devtools": false,
-    "debug": false,
-    "experimental": false
-  },
+  "dev": false,
   "download": {
-    "lib": "fetch",
-    "timeout": 10000,
+    "timeout": 5000,
+    "minSpeed": 8192,
     "tries": 5,
     "maxTasks": 32,
-    "chunkSize": 8192,
     "validation": "size",
-    "mirror": "mcbbs"
-  },
-  "launch": {
-    "windowSize": {
-      "width": 960,
-      "height": 540
-    },
-    "jvm": {
-      "memory": 0,
-      "flagsAdd": "-Dfile.encoding=UTF-8 -XX:+UseG1GC -showversion -XX:+IgnoreUnrecognizedVMOptions -XX:+UnlockExperimentalVMOptions"
-    },
-    "fastLaunch": true
-  },
-  "proxy": {
-    "address": "",
-    "noProxy": "<local>"
-  },
-  "update": {
-    "autoUpdate": true,
-    "source": ""
-  },
-  "mods": {
-    "checkMods": true
+    "cache": true
   },
   "ui": {
-    "nativeFrame": false,
-    "theme": "SakuraKumoDark",
-    "zoomFactor": 0
-  },
-  "accounts": {
-    "skinView3D": true
-  },
-  "telemetry": {
-    "ping": true,
-    "crashReport": true
+    "theme": "SakuraKumoDark"
   }
 }

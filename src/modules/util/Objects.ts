@@ -47,7 +47,7 @@ export namespace Objects {
         const keys = k.split(".");
         let current: any = target;
         for (const key of keys) {
-            if (typeof current == "object" && key in current) {
+            if (current && typeof current == "object" && key in current) {
                 current = current[key];
             } else {
                 return undefined;

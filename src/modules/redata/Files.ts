@@ -8,20 +8,22 @@ import { pipeline } from "stream/promises";
 export namespace Files {
     /**
      * Check the integrity of the specified file.
-     *
-     * @param file Path to the file for validation.
-     * @param hash Hash data as string.
-     * @param type Hash type.
      */
     export async function checkIntegrity(file: string, hash: string, type: string): Promise<boolean> {
         try {
-            const hashed = createHash(type);
-            await pipeline(createReadStream(file), hashed);
-            const result = hashed.digest("hex");
-            return result.toLowerCase() == hash.toLowerCase();
+            return (await hashFile(file, type)) == hash.toLowerCase();
         } catch (e) {
             console.error("Failed to validate hash for " + file + ": " + e);
             return false;
         }
+    }
+
+    /**
+     * Calculates the hash of a given file using specified algorithm. Returns the result as lowercase hex string.
+     */
+    export async function hashFile(file: string, type: string): Promise<string> {
+        const hashed = createHash(type);
+        await pipeline(createReadStream(file), hashed);
+        return hashed.digest("hex").toLowerCase();
     }
 }

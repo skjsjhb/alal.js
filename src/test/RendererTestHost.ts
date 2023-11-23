@@ -1,9 +1,10 @@
 import { Locale } from "@/modules/i18n/Locale";
 import { Files } from "@/modules/redata/Files";
 import { Registry } from "@/modules/redata/Registry";
+import { Cacher } from "@/modules/renet/Cacher";
 import { Downloader } from "@/modules/renet/Downloader";
 import { ipcRenderer } from "electron";
-import { readJSON } from "fs-extra";
+import { readFile, readJSON, remove } from "fs-extra";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
 import { TestTools } from "./TestTools";
@@ -32,14 +33,26 @@ async function allTests() {
         // This is executed after a full initialization. Mirrors should be usable.
         assertNotEquals(Registry.getTable("mirrors", []).length, 0);
     });
+
+    const testFile = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json";
     await test("Single File Download", async () => {
-        const testFile = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json";
-        await Downloader.webGetFile(testFile, "file.json", 5000, 100);
+        await remove("file.json");
+        await Downloader.downloadFile(Downloader.createProfile({
+            url: testFile,
+            location: "file.json",
+            validation: "sha1",
+            checksum: "29c9d911cdf957f926e37c0216f052c9c02e0b2a",
+            cache: true
+        }));
         const f = await readJSON("file.json");
         assertEquals(f.variant, "temurin");
     });
     await test("File Integrity Check", async () => {
         assertTrue(await Files.checkIntegrity("file.json", "29c9d911cdf957f926e37c0216f052c9c02e0b2a", "sha1"));
+    });
+    await test("File Cache", async () => {
+        await Cacher.applyCache(testFile, "cache.json");
+        assertEquals((await readFile("cache.json")).toString(), (await readFile("file.json")).toString());
     });
     await saveSummary();
 }

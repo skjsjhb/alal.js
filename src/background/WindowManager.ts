@@ -28,13 +28,11 @@ export namespace WindowManager {
                 sandbox: false,
                 contextIsolation: false,
                 spellcheck: false,
-                zoomFactor: ReOptions.get().ui.zoomFactor || 1,
                 defaultEncoding: "utf-8",
                 backgroundThrottling: false,
                 webgl: true,
-                devTools: ReOptions.get().dev.devtools || false
+                devTools: ReOptions.get().dev ?? false
             },
-            frame: ReOptions.get().ui.nativeFrame,
             show: false
         });
         mainWindow.setAspectRatio(1.92);
@@ -51,11 +49,10 @@ export namespace WindowManager {
         app.once("before-quit", onUserQuitReq); // This is done by WM to prevent early quit
 
         // Network setup
-        await setProxy(mainWindow);
         unblockCORS(mainWindow);
 
         // Open Devtools in case window failures
-        if (ReOptions.get().dev.devtools) {
+        if (ReOptions.get().dev) {
             console.log("Opening devtools.");
             mainWindow.webContents.openDevTools();
         }
@@ -126,16 +123,6 @@ export namespace WindowManager {
         mainWindow.webContents.send(Signals.USER_CLOSE_REQUEST);
     }
 
-    async function setProxy(window: BrowserWindow) {
-        console.log("Setting proxy for window " + window.getTitle());
-        const proxyAddress = ReOptions.get().proxy.address.trim();
-        if (proxyAddress) {
-            await window.webContents.session.setProxy({
-                proxyRules: proxyAddress,
-                proxyBypassRules: ReOptions.get().proxy.noProxy
-            });
-        }
-    }
 
     function unblockCORS(window: BrowserWindow) {
         console.log("Unblocking CORS for window " + window.getTitle());

@@ -61,10 +61,8 @@ export namespace BootLoader {
                 app.quit();
             }
         });
-        app.on("second-instance", () => { WindowManager.getMainWindow().show();});
-        app.on("open-file", () => { WindowManager.getMainWindow().show();});
-        app.on("open-url", () => { WindowManager.getMainWindow().show();});
+        app.on("second-instance", () => { WindowManager.getMainWindow()?.show();});
+        app.on("open-file", () => { WindowManager.getMainWindow()?.show();});
+        app.on("open-url", () => { WindowManager.getMainWindow()?.show();});
     }
-
-
 }

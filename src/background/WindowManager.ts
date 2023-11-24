@@ -8,7 +8,7 @@ import { Signals } from "./Signals";
  * Multiple browser window management module.
  */
 export namespace WindowManager {
-    let mainWindow: BrowserWindow;
+    let mainWindow: BrowserWindow | null = null;
 
     /**
      * Initialize the main window.
@@ -64,7 +64,7 @@ export namespace WindowManager {
     /**
      * Gets the main window.
      */
-    export function getMainWindow() {
+    export function getMainWindow(): BrowserWindow | null {
         return mainWindow;
     }
 
@@ -79,7 +79,7 @@ export namespace WindowManager {
     }
 
     function pushMainWindowResizeEvent() {
-        mainWindow.webContents.send(Signals.WINDOW_RESIZE, mainWindow.getSize());
+        mainWindow?.webContents.send(Signals.WINDOW_RESIZE, mainWindow?.getSize());
     }
 
 
@@ -87,11 +87,12 @@ export namespace WindowManager {
     function closeWindowSoft() {
         if (os.platform() == "darwin") {
             console.log("Hiding main window.");
-            mainWindow.hide();
+            mainWindow?.hide();
         } else {
             console.log("Closing main window.");
-            mainWindow.removeListener("close", onUserCloseWindowReq); // Prevent infinite loop
-            mainWindow.close();
+            mainWindow?.removeListener("close", onUserCloseWindowReq); // Prevent infinite loop
+            mainWindow?.close();
+            mainWindow = null;
             app.removeAllListeners("before-quit");
             app.quit();
         }
@@ -100,8 +101,9 @@ export namespace WindowManager {
     // For response to app quit event. This indicates that the renderer is ready for an app-level quit.
     function closeWindowAndQuit() {
         console.log("Closing and exiting.");
-        mainWindow.removeListener("close", onUserCloseWindowReq);
-        mainWindow.close();
+        mainWindow?.removeListener("close", onUserCloseWindowReq);
+        mainWindow?.close();
+        mainWindow = null;
         app.removeAllListeners("before-quit");
         app.quit(); // On macOS the exit has to be triggered manually, no-op for other platforms.
     }
@@ -110,8 +112,8 @@ export namespace WindowManager {
     function onUserQuitReq(e: Event) {
         console.log("User is requesting for app quit. Yes, but gracefully...");
         e.preventDefault();
-        mainWindow.hide();
-        mainWindow.webContents.send(Signals.USER_QUIT_REQUEST);
+        mainWindow?.hide();
+        mainWindow?.webContents.send(Signals.USER_QUIT_REQUEST);
     }
 
     // The user created window closing request (e.g. Alt+F4) is not dispatched on the renderer process.
@@ -119,8 +121,8 @@ export namespace WindowManager {
     function onUserCloseWindowReq(e: Event) {
         console.log("User is requesting main window to close. I'm exiting, gracefully...");
         e.preventDefault();
-        mainWindow.hide();
-        mainWindow.webContents.send(Signals.USER_CLOSE_REQUEST);
+        mainWindow?.hide();
+        mainWindow?.webContents.send(Signals.USER_CLOSE_REQUEST);
     }
 
 
@@ -133,7 +135,7 @@ export namespace WindowManager {
                 if (!details.responseHeaders) {
                     details.responseHeaders = {};
                 }
-                details.responseHeaders["Access-Control-Allow-Origin"] = ['*'];
+                details.responseHeaders["Access-Control-Allow-Origin"] = ["*"];
             }
             callback(details);
         });

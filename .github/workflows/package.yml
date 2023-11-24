@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  package-unix:
+  package-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

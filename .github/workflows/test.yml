@@ -19,3 +19,31 @@ jobs:
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: yarn test
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Build
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
+      - name: Test
+        run: yarn test
+
+  test-linux:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Setup Xvfb
+        run: sudo apt install xvfb
+      - name: Build
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
+      - name: Test
+        run: xvfb-run yarn test

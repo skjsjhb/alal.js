@@ -120,8 +120,10 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
 ### Hints
 
-- `lzma-native` is disabled by default for platform `win32-arm64` (and other platforms not officially supported), as the
-  library does not came with it prebuilt. ALAL uses a JS-based implementation under this case. Usages of LZMA are also
+- `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially
+  supported), as the
+  library does not came with a valid prebuilt (either missing or malfunctioned). ALAL uses a JS-based implementation
+  under this case. Usages of LZMA are also
   reduced.
 
   However, the software version is comparably slow and (more importantly) unreliable due to the lack of maintenance of
@@ -164,5 +166,3 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 Copyright (C) 2020 - 2022 Annie K Rarity Sparklight (ThatRarityEG). For Alicorn Launcher.
 
 Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). For Alicorn Again Launcher.
-
- 

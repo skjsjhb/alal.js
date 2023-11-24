@@ -11,23 +11,27 @@ import { PassThrough, Transform, TransformCallback } from "stream";
 import { pipeline } from "stream/promises";
 
 /**
+ * The profile to tell downloader how to get the files.
+ */
+export interface DownloadProfile {
+    url: string,
+    location: string,
+    headerTimeout: number,
+    minSpeed: number,
+    tries: number,
+    cache: boolean,
+    size: number,
+    validation: string, // See method 'validateFile'
+    checksum: string
+}
+
+/**
  * Builtin file downloader.
  *
  * This module runs on the main process, but all methods are also compatible for renderer use.
  */
 export namespace Downloader {
 
-    export interface DownloadProfile {
-        url: string,
-        location: string,
-        headerTimeout: number,
-        minSpeed: number,
-        tries: number,
-        cache: boolean,
-        size: number,
-        validation: string, // See method 'validateFile'
-        checksum: string
-    }
 
     /**
      * Create download profile from several user-specified fields.

@@ -1,6 +1,6 @@
 import { Files } from "@/modules/data/Files";
 import { Options } from "@/modules/data/Options";
-import { Downloader } from "@/modules/net/Downloader";
+import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { Task } from "@/modules/task/Task";
 import { Throttle } from "@/modules/util/Throttle";
 import { stat } from "fs-extra";
@@ -23,7 +23,7 @@ export namespace DownloadManager {
     /**
      * Resolves a batch of download profiles, with an optional progress signal.
      */
-    export function downloadBatched(batch: Downloader.DownloadProfile[]): Task<void> {
+    export function downloadBatched(batch: DownloadProfile[]): Task<void> {
         return new Task("download.batch", batch.length, async (task) => {
             const results = await Promise.all(batch.map(async (p) => {
                 await pool.acquire();
@@ -47,7 +47,7 @@ export namespace DownloadManager {
 
     }
 
-    async function downloadSingleInBatched(p: Downloader.DownloadProfile): Promise<boolean> {
+    async function downloadSingleInBatched(p: DownloadProfile): Promise<boolean> {
         if (await checkForExistence(p)) {
             console.log("Fnd: " + p.url);
             return true;
@@ -56,7 +56,7 @@ export namespace DownloadManager {
     }
 
     // Check whether the target file already exists, matching the profile-specified checksum and size.
-    async function checkForExistence(prof: Downloader.DownloadProfile): Promise<boolean> {
+    async function checkForExistence(prof: DownloadProfile): Promise<boolean> {
         if (!await Files.exists(prof.location)) {
             return false;
         }

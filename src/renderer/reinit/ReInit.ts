@@ -96,7 +96,7 @@ export namespace ReInit {
     }
 
     function printVersionInfo() {
-        console.log(`Alicorn Again (ALAL) ${pkg.appVersion} ${pkg.updatorVersion}`);
+        console.log(`Alicorn Again (ALAL) ${pkg.versionName} ${pkg.updatorVersion}`);
         console.log("This is ReInit for ALAL. Leaving everything behind.");
         console.log("%c❤ From Annie K Rarity Sparklight", "color:#df307f;font-weight:bold;");
         console.log("%cALAL Forked and re-designed by skjsjhb", "color: #f8d854;font-weight:bold;");

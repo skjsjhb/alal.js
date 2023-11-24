@@ -4,22 +4,20 @@ import { Options } from "@/modules/data/Options";
 import { Paths } from "@/modules/data/Paths";
 import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
-import { Downloader } from "@/modules/net/Downloader";
+import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { Mirrors } from "@/modules/net/Mirrors";
 import { Task } from "@/modules/task/Task";
 import { Availability } from "@/modules/util/Availability";
-import { OSInfo } from "@/modules/util/OSInfo";
+import { OSInfo, OSType } from "@/modules/util/OSInfo";
 import { chmod, ensureDir, remove } from "fs-extra";
 import os from "os";
 import path from "path";
-import OSType = OSInfo.OSType;
 
 /**
  * Implementing Mojang JRE component downloading.
  */
 export namespace JavaGet {
-    import DownloadProfile = Downloader.DownloadProfile;
     let jreStorePath: string;
     let javaGetRegistryId = "java-get";
 

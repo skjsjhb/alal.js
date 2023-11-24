@@ -1,17 +1,17 @@
 import os from "os";
 
-export namespace OSInfo {
-    /**
-     * The type of supported OS.
-     *
-     * Mojang officially supports only these three platforms, when porting for others, modifications are needed.
-     */
-    export enum OSType {
-        WINDOWS = "windows",
-        MACOS = "macos",
-        LINUX = "linux"
-    }
+/**
+ * The type of supported OS.
+ *
+ * Mojang officially supports only these three platforms, when porting for others, modifications are needed.
+ */
+export enum OSType {
+    WINDOWS = "windows",
+    MACOS = "macos",
+    LINUX = "linux"
+}
 
+export namespace OSInfo {
     /**
      * Make the input raw os name string canonical.
      *

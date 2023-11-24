@@ -1,6 +1,6 @@
 import { MicrosoftBrowserLogin } from "@/modules/auth/MicrosoftBrowserLogin";
 import { Options } from "@/modules/data/Options";
-import { Downloader } from "@/modules/net/Downloader";
+import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { app, ipcMain } from "electron";
 import { Signals } from "./Signals";
 
@@ -42,7 +42,7 @@ export namespace Handlers {
     }
 
     // Wrapper method for webGetFileMain
-    function webGetFileMainProc(_e: IpcMainInvokeEvent, p: Downloader.DownloadProfile) {
+    function webGetFileMainProc(_e: IpcMainInvokeEvent, p: DownloadProfile) {
         return Downloader.webGetFileMain(p);
     }
 }

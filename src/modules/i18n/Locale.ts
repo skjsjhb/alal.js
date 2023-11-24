@@ -80,16 +80,18 @@ export namespace Locale {
     }
 
     /**
-     * Gets the translation of a specified key.
+     * Gets the translation of a specified key. Optionally using an argument list.
+     *
+     * String templates have `${name}` as their placeholder.
      */
-    export function getTranslation(key: string): string {
+    export function getTranslation(key: string, vars?: Record<string, any>): string {
         if (!currentLocale || !locales.has(currentLocale)) {
             console.warn("Attempting to get translation when locale is not set. Skipped.");
             return "";
         }
         const v = Objects.getPropertyByKey(locales.get(currentLocale), key);
         if (typeof v == "string") {
-            return v;
+            return applyVars(v, vars);
         }
         console.warn(`Translation key ${key} does not map to a valid value. Check lang files.`);
         return ""; // Invalid values are skipped
@@ -99,9 +101,18 @@ export namespace Locale {
      * Generates a function which wraps {@link getTranslation}, using `rootKey` as prefix.
      * @param rootKey Key prefix to attach.
      */
-    export function getSection(rootKey: string): (k: string) => string {
-        return (k: string) => {
-            return getTranslation(rootKey + "." + k);
-        };
+    export function getSection(rootKey: string): (key: string, vars?: Record<string, any>) => string {
+        return (k, v) => getTranslation(rootKey + "." + k, v);
+    }
+
+
+    // Put values into the template.
+    function applyVars(str: string, vars?: Record<string, any>) {
+        if (!vars) {
+            return str;
+        }
+        return str.replace(/\$\{(\w+)}/g, (match, key) => {
+            return vars[key] || match;
+        });
     }
 }

@@ -33,7 +33,7 @@ export namespace TestTools {
             type: "error",
             ok: false,
             expected: null,
-            received: e
+            received: e.toString()
         });
     }
 

@@ -35,7 +35,7 @@ export namespace Files {
         try {
             const stream = lzma.createDecompressor();
             await pipeline(createReadStream(src), stream, createWriteStream(target));
-            console.log("Dec (LZMA): " + src + " -> " + target);
+            console.log("Inflate: " + src);
             return true;
         } catch (e) {
             console.error("Could not decompress LZMA " + src + ": " + e);

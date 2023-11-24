@@ -6,3 +6,12 @@ ms-browser-login:
     content: "登录还没有完成，取消登录吗？"
     b-yes: "我知道我在做什么！"
     b-no: "继续登录"
+
+download:
+  batch: "正在下载并验证"
+
+java-get:
+  get: "正在安装 Java 组件: ${name}"
+  download: "正在下载并验证: ${name}"
+  resolve: "正在获取 Java 组件列表"
+  post-process: "正在提取: ${name}"

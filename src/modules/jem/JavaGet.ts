@@ -1,10 +1,13 @@
 import Sources from "@/constra/sources.json";
+import { Locale } from "@/modules/i18n/Locale";
 import { Files } from "@/modules/redata/Files";
 import { Paths } from "@/modules/redata/Paths";
 import { Registry } from "@/modules/redata/Registry";
+import { ReOptions } from "@/modules/redata/ReOptions";
 import { Downloader } from "@/modules/renet/Downloader";
 import { DownloadManager } from "@/modules/renet/DownloadManager";
 import { Mirrors } from "@/modules/renet/Mirrors";
+import { Task } from "@/modules/task/Task";
 import { OSInfo } from "@/modules/util/OSInfo";
 import { chmod, ensureDir, remove } from "fs-extra";
 import os from "os";
@@ -82,7 +85,7 @@ export namespace JavaGet {
         const url = Mirrors.apply(Sources.mojangJavaRuntimeManifest);
         const res = await fetch(url);
         if (!res.ok) {
-            throw "Could not retrieve index manifest: " + res.status;
+            console.error("Could not retrieve index manifest: " + res.status);
         }
         return await res.json();
     }
@@ -91,65 +94,85 @@ export namespace JavaGet {
         const url = Mirrors.apply(u);
         const res = await fetch(url);
         if (!res.ok) {
-            throw "Could not retrieve manifest " + u + ": " + res.status;
+            console.error("Could not retrieve manifest " + u + ": " + res.status);
         }
         return await res.json();
+    }
+
+    function resolveComponentDownloadManifest(c: string): Task<MojangJavaDownloadManifest> {
+        return new Task("java-get.resolve", null, async (task) => {
+            try {
+                const matrix = await retrieveIndexManifest();
+                const platform = getMojangNamedPlatform();
+                const componentProfile = matrix[platform as MojangJavaPlatforms][c];
+                if (!componentProfile || componentProfile.length == 0) {
+                    task.fail("No JRE component named " + c + " for platform " + platform);
+                }
+                const component = componentProfile[0];
+                const manifest = await retrieveDownloadManifest(component.manifest.url);
+                task.resolve(manifest);
+            } catch (e) {
+                task.fail(e);
+            }
+        });
+
+
+    }
+
+    // Exclude unnecessary files e.g. documents from downloading in-place. Controlled by options.
+    function optimizeFiles(f: MojangJavaDownloadManifest): void {
+        if (ReOptions.get().jem.optimize) {
+            const files = f.files;
+            for (const [fileName, profile] of Object.entries(files)) {
+                // Exclude legal files and directories
+                if (fileName.startsWith("legal/") || profile.type == "directory") {
+                    delete files[fileName];
+                }
+            }
+        }
     }
 
     /**
      * Install specified JRE component.
      */
-    export async function installComponent(componentName: string): Promise<boolean> {
-        console.log("Installing JRE component: " + componentName);
-        // Retrieve manifest
-        const matrix = await retrieveIndexManifest();
-        const platform = getMojangNamedPlatform();
-        if (!matrix || !(platform in matrix)) {
-            console.error("Platform " + platform + " does not have official JRE index.");
-            return false;
-        }
-        const componentProfile = matrix[platform as MojangJavaPlatforms][componentName];
-        if (!componentProfile || componentProfile.length == 0) {
-            console.error("No JRE component named " + componentName + " for platform " + platform);
-            return false;
-        }
-        const component = componentProfile[0];
-        const dlManifest = await retrieveDownloadManifest(component.manifest.url);
-        console.log("Fetched JRE download manifest for " + componentName);
+    export function installComponent(componentName: string): Task<void> {
+        const taskName = Locale.getTranslation("java-get.get", {name: componentName});
+        return new Task(taskName, 3, async (task) => {
+            try {
+                // Fetch manifest
+                console.log("Fetching JRE download manifest for " + componentName);
+                const dlManifest = await resolveComponentDownloadManifest(componentName).linkTo(task).whenFinish();
+                task.addSuccess();
 
-        // Download files in batch
-        const downloadBatch = [];
+                // Optimize files
+                console.log("Optimizing JRE files.");
+                optimizeFiles(dlManifest);
 
-        for (const [fileName, profile] of Object.entries(dlManifest.files)) {
-            const prof = generateDownloadProfile(componentName, fileName, profile);
-            if (prof) {
-                downloadBatch.push(prof);
+                // Download files in batch
+                console.log("Downloading files for " + componentName);
+                const downloadBatch = generateDownloadProfileList(componentName, dlManifest);
+                const downloadTask = DownloadManager.downloadBatched(downloadBatch);
+                downloadTask.setName(Locale.getTranslation("java-get.download", {name: componentName})); // Rename
+                await downloadTask.linkTo(task).whenFinish();
+                task.addSuccess();
+
+                // Post process
+                console.log("Processing files for " + componentName);
+                await postProcessFiles(componentName, dlManifest).linkTo(task).whenFinish();
+                task.addSuccess();
+
+                // Add to registry
+                const jgt = Registry.getTable<string[]>(javaGetRegistryId, []);
+                if (!jgt.includes(componentName)) {
+                    jgt.push(componentName);
+                }
+                console.log("Installed " + componentName);
+                task.resolve();
+            } catch (e) {
+                task.fail(e);
             }
-        }
-        console.log("Downloading files for " + componentName);
-        if (!await DownloadManager.downloadBatched(downloadBatch)) {
-            console.error("Some files failed to download for JRE component " + componentName);
-            return false;
-        }
 
-        // Post process
-        console.log("Processing files for " + componentName);
-        const postProcessPromos = Object.entries(dlManifest.files)
-            .map(([fileName, profile]) => postProcessFile(componentName, fileName, profile));
-        const postProcessResult = await Promise.all(postProcessPromos);
-        const succ = postProcessResult.every((r) => r);
-        if (!succ) {
-            console.error("Some files failed to process for " + componentName);
-            return false;
-        }
-
-        // Add to registry
-        const jgt = Registry.getTable<string[]>(javaGetRegistryId, []);
-        if (!jgt.includes(componentName)) {
-            jgt.push(componentName);
-        }
-        console.log("Installed " + componentName);
-        return true;
+        });
     }
 
     /**
@@ -171,6 +194,18 @@ export namespace JavaGet {
      */
     export function hasComponent(c: string): boolean {
         return Registry.getTable<string[]>(javaGetRegistryId, []).includes(c);
+    }
+
+    // Batch version
+    function generateDownloadProfileList(componentName: string, manifest: MojangJavaDownloadManifest): DownloadProfile[] {
+        const downloadBatch = [];
+        for (const [fileName, profile] of Object.entries(manifest.files)) {
+            const prof = generateDownloadProfile(componentName, fileName, profile);
+            if (prof) {
+                downloadBatch.push(prof);
+            }
+        }
+        return downloadBatch;
     }
 
     function generateDownloadProfile(componentName: string, fileName: string, profile: MojangJavaFileDownload): DownloadProfile | null {
@@ -229,6 +264,27 @@ export namespace JavaGet {
                 break;
         }
         return sys + "-" + arch;
+    }
+
+    function postProcessFiles(componentName: string, manifest: MojangJavaDownloadManifest): Task<void> {
+        const taskName = Locale.getTranslation("java-get.post-process", {name: componentName});
+        return new Task(taskName, Object.keys(manifest.files).length, async (task) => {
+            const results = await Promise.all(Object.entries(manifest.files).map(async ([location, dl]) => {
+                const state = await postProcessFile(componentName, location, dl);
+                if (state) {
+                    task.addSuccess();
+                } else {
+                    task.addFailed();
+                }
+                return state;
+            }));
+
+            if (results.every(r => r)) {
+                task.resolve();
+            } else {
+                task.fail("Some files failed to decompress | chmod.");
+            }
+        });
     }
 
     async function postProcessFile(componentName: string, location: string, dl: MojangJavaFileDownload): Promise<boolean> {

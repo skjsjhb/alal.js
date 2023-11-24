@@ -1,6 +1,7 @@
 import { Files } from "@/modules/redata/Files";
 import { ReOptions } from "@/modules/redata/ReOptions";
 import { Downloader } from "@/modules/renet/Downloader";
+import { Task } from "@/modules/task/Task";
 import { Throttle } from "@/modules/util/Throttle";
 import { stat } from "fs-extra";
 
@@ -8,8 +9,7 @@ import { stat } from "fs-extra";
  * Batched file download manager.
  *
  * Note that this module is different from Downloader, as the manager checks for file existence, manage concurrency and
- * summary the download progress on the fly. While the Downloader is dedicated to complete the transfer process at
- * the maximum speed and reliability.
+ * summary the download progress on the fly. The download manager also generates tasks for tracing.
  */
 export namespace DownloadManager {
     const pool = new Throttle.Pool(32);
@@ -23,14 +23,28 @@ export namespace DownloadManager {
     /**
      * Resolves a batch of download profiles, with an optional progress signal.
      */
-    export async function downloadBatched(batch: Downloader.DownloadProfile[]): Promise<boolean> {
-        const results = await Promise.all(batch.map(async (p) => {
-            await pool.acquire();
-            const res = await downloadSingleInBatched(p);
-            pool.release();
-            return res;
-        }));
-        return results.every((r) => r);
+    export function downloadBatched(batch: Downloader.DownloadProfile[]): Task<void> {
+        return new Task("download.batch", batch.length, async (task) => {
+            const results = await Promise.all(batch.map(async (p) => {
+                await pool.acquire();
+                const res = await downloadSingleInBatched(p);
+                if (res) {
+                    task.addSuccess();
+                } else {
+                    task.addFailed();
+                }
+                console.log(task.getProgressString());
+                pool.release();
+                return res;
+            }));
+            if (results.every(r => r)) {
+                task.resolve();
+            } else {
+                task.fail("Some files failed to download.");
+            }
+            return results.every((r) => r);
+        });
+
     }
 
     async function downloadSingleInBatched(p: Downloader.DownloadProfile): Promise<boolean> {

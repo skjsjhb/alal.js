@@ -11,5 +11,8 @@
   },
   "ui": {
     "theme": "SakuraKumoDark"
+  },
+  "jem": {
+    "optimize": true
   }
 }

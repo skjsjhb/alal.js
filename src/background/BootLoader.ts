@@ -1,6 +1,6 @@
+import { Options } from "@/modules/data/Options";
+import { Paths } from "@/modules/data/Paths";
 import { Locale } from "@/modules/i18n/Locale";
-import { Paths } from "@/modules/redata/Paths";
-import { ReOptions } from "@/modules/redata/ReOptions";
 import { app } from "electron";
 import os from "os";
 import { Handlers } from "./Handlers";
@@ -42,7 +42,7 @@ export namespace BootLoader {
         console.log("Loading config.");
         Paths.detectRootPath();
         await Paths.retrieveAppPath();
-        await ReOptions.load();
+        await Options.load();
         await Locale.initLocale();
     }
 

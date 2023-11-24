@@ -1,5 +1,5 @@
 import { Signals } from "@/background/Signals";
-import { Files } from "@/modules/redata/Files";
+import { Files } from "@/modules/data/Files";
 import { ipcRenderer } from "electron";
 import { outputJSON, readJSON } from "fs-extra";
 import OptionsTemplate from "../../constra/options.json";
@@ -13,7 +13,7 @@ import { Paths } from "./Paths";
  * - Config handling is cumbersome for both main process and renderer process.
  * - The lack of type system for config files.
  */
-export namespace ReOptions {
+export namespace Options {
     type OptionsModel = typeof OptionsTemplate;
 
     const OPTIONS_FILE_PATH = "options.json";

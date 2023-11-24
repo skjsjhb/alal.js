@@ -1,12 +1,12 @@
 import Sources from "@/constra/sources.json";
+import { Compressing } from "@/modules/data/Compressing";
+import { Options } from "@/modules/data/Options";
+import { Paths } from "@/modules/data/Paths";
+import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
-import { Compressing } from "@/modules/redata/Compressing";
-import { Paths } from "@/modules/redata/Paths";
-import { Registry } from "@/modules/redata/Registry";
-import { ReOptions } from "@/modules/redata/ReOptions";
-import { Downloader } from "@/modules/renet/Downloader";
-import { DownloadManager } from "@/modules/renet/DownloadManager";
-import { Mirrors } from "@/modules/renet/Mirrors";
+import { Downloader } from "@/modules/net/Downloader";
+import { DownloadManager } from "@/modules/net/DownloadManager";
+import { Mirrors } from "@/modules/net/Mirrors";
 import { Task } from "@/modules/task/Task";
 import { Availability } from "@/modules/util/Availability";
 import { OSInfo } from "@/modules/util/OSInfo";
@@ -122,7 +122,7 @@ export namespace JavaGet {
 
     // Exclude unnecessary files e.g. documents from downloading in-place. Controlled by options.
     function optimizeFiles(f: MojangJavaDownloadManifest): void {
-        if (ReOptions.get().jem.optimize) {
+        if (Options.get().jem.optimize) {
             const files = f.files;
             for (const [fileName, profile] of Object.entries(files)) {
                 // Exclude legal files and directories

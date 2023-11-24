@@ -1,6 +1,6 @@
-import { MicrosoftBrowserLogin } from "@/modules/reauth/MicrosoftBrowserLogin";
-import { ReOptions } from "@/modules/redata/ReOptions";
-import { Downloader } from "@/modules/renet/Downloader";
+import { MicrosoftBrowserLogin } from "@/modules/auth/MicrosoftBrowserLogin";
+import { Options } from "@/modules/data/Options";
+import { Downloader } from "@/modules/net/Downloader";
 import { app, ipcMain } from "electron";
 import { Signals } from "./Signals";
 
@@ -34,7 +34,7 @@ export namespace Handlers {
     // Reload options file
     async function reloadOptions() {
         console.log("Reloading options.");
-        await ReOptions.load();
+        await Options.load();
     }
 
     async function getAppPath() {

@@ -5,14 +5,14 @@
  * with focus on a clean and fast initialization process.
  */
 import { Signals } from "@/background/Signals";
+import { Options } from "@/modules/data/Options";
+import { Paths } from "@/modules/data/Paths";
+import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
 import { JavaGet } from "@/modules/jem/JavaGet";
-import { Paths } from "@/modules/redata/Paths";
-import { Registry } from "@/modules/redata/Registry";
-import { ReOptions } from "@/modules/redata/ReOptions";
-import { Cacher } from "@/modules/renet/Cacher";
-import { DownloadManager } from "@/modules/renet/DownloadManager";
-import { Mirrors } from "@/modules/renet/Mirrors";
+import { Cacher } from "@/modules/net/Cacher";
+import { DownloadManager } from "@/modules/net/DownloadManager";
+import { Mirrors } from "@/modules/net/Mirrors";
 import { Availability } from "@/modules/util/Availability";
 import { ipcRenderer } from "electron";
 import React from "react";
@@ -65,7 +65,7 @@ export namespace ReInit {
         Availability.synthensisFeatures();
         Paths.detectRootPath();
         await Paths.retrieveAppPath();
-        await ReOptions.load();
+        await Options.load();
         await Locale.initLocale();
         await Registry.loadTables();
         DownloadManager.configure();
@@ -107,7 +107,7 @@ export namespace ReInit {
     }
 
     async function beforeClose() {
-        await ReOptions.save();
+        await Options.save();
         await Registry.saveTables();
     }
 }

@@ -1,4 +1,4 @@
-import { ReOptions } from "@/modules/redata/ReOptions";
+import { Options } from "@/modules/data/Options";
 import { app, BrowserWindow, Event, ipcMain, screen } from "electron";
 import os from "os";
 import path from "path";
@@ -31,7 +31,7 @@ export namespace WindowManager {
                 defaultEncoding: "utf-8",
                 backgroundThrottling: false,
                 webgl: true,
-                devTools: ReOptions.get().dev ?? false
+                devTools: Options.get().dev ?? false
             },
             show: false
         });
@@ -52,7 +52,7 @@ export namespace WindowManager {
         unblockCORS(mainWindow);
 
         // Open Devtools in case window failures
-        if (ReOptions.get().dev) {
+        if (Options.get().dev) {
             console.log("Opening devtools.");
             mainWindow.webContents.openDevTools();
         }

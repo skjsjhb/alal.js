@@ -1,8 +1,8 @@
 import { Signals } from "@/background/Signals";
-import { Files } from "@/modules/redata/Files";
-import { ReOptions } from "@/modules/redata/ReOptions";
-import { Cacher } from "@/modules/renet/Cacher";
-import { Mirrors } from "@/modules/renet/Mirrors";
+import { Files } from "@/modules/data/Files";
+import { Options } from "@/modules/data/Options";
+import { Cacher } from "@/modules/net/Cacher";
+import { Mirrors } from "@/modules/net/Mirrors";
 import { ipcRenderer } from "electron";
 import fetch from "electron-fetch";
 import { createWriteStream, ensureDir, stat } from "fs-extra";
@@ -52,13 +52,13 @@ export namespace Downloader {
         return {
             url: effectiveURL,
             location: location,
-            headerTimeout: headerTimeout ?? ReOptions.get().download.timeout,
-            minSpeed: minSpeed ?? ReOptions.get().download.minSpeed,
-            tries: tries || ReOptions.get().download.tries,
+            headerTimeout: headerTimeout ?? Options.get().download.timeout,
+            minSpeed: minSpeed ?? Options.get().download.minSpeed,
+            tries: tries || Options.get().download.tries,
             cache: cache ?? false, // Cache is not enabled by default
             size: size ?? -1,
             checksum: checksum ?? "",
-            validation: validation ?? ReOptions.get().download.validation
+            validation: validation ?? Options.get().download.validation
         };
     }
 
@@ -122,7 +122,7 @@ export namespace Downloader {
 
     // Check the cache and apply if applicable
     async function checkCache(p: DownloadProfile): Promise<boolean> {
-        if (!ReOptions.get().download.cache || !p.cache) {
+        if (!Options.get().download.cache || !p.cache) {
             return false; // Disabled by caller or global settings
         }
         if (await Cacher.applyCache(p.url, p.location)) {
@@ -134,7 +134,7 @@ export namespace Downloader {
 
     // Adds file to cache. This method is controlled by global settings.
     async function saveCache(p: DownloadProfile): Promise<void> {
-        if (!ReOptions.get().download.cache || !p.cache) {
+        if (!Options.get().download.cache || !p.cache) {
             return;
         }
         await Cacher.addCache(p.url, p.location);

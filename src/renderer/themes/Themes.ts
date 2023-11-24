@@ -1,4 +1,4 @@
-import { ReOptions } from "@/modules/redata/ReOptions";
+import { Options } from "@/modules/data/Options";
 import SakuraKumoDark from "./SakuraKumoDark";
 import SakuraKumoLight from "./SakuraKumoLight";
 
@@ -22,6 +22,6 @@ export namespace Themes {
      * SakuraKumoDark as the fallback.
      */
     export function getTheme(): any {
-        return BUNDLED_THEMES[ReOptions.get().ui.theme] || SakuraKumoDark;
+        return BUNDLED_THEMES[Options.get().ui.theme] || SakuraKumoDark;
     }
 }

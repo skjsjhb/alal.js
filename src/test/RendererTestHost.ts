@@ -1,8 +1,8 @@
+import { Files } from "@/modules/data/Files";
+import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
-import { Files } from "@/modules/redata/Files";
-import { Registry } from "@/modules/redata/Registry";
-import { Cacher } from "@/modules/renet/Cacher";
-import { Downloader } from "@/modules/renet/Downloader";
+import { Cacher } from "@/modules/net/Cacher";
+import { Downloader } from "@/modules/net/Downloader";
 import { Throttle } from "@/modules/util/Throttle";
 import { testJavaDownload } from "@/test/JavaGetTest";
 import { ipcRenderer } from "electron";

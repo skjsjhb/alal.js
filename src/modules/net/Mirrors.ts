@@ -1,5 +1,5 @@
 import OriginalRulesRaw from "@/constra/mirrors.json";
-import { Registry } from "@/modules/redata/Registry";
+import { Registry } from "@/modules/data/Registry";
 
 /**
  * Mirrors latency test, resolve and management module.

@@ -1,6 +1,6 @@
-import { Files } from "@/modules/redata/Files";
-import { ReOptions } from "@/modules/redata/ReOptions";
-import { Downloader } from "@/modules/renet/Downloader";
+import { Files } from "@/modules/data/Files";
+import { Options } from "@/modules/data/Options";
+import { Downloader } from "@/modules/net/Downloader";
 import { Task } from "@/modules/task/Task";
 import { Throttle } from "@/modules/util/Throttle";
 import { stat } from "fs-extra";
@@ -15,7 +15,7 @@ export namespace DownloadManager {
     const pool = new Throttle.Pool(32);
 
     export function configure() {
-        const limit = ReOptions.get().download.maxTasks;
+        const limit = Options.get().download.maxTasks;
         console.log("Max tasks for download: " + limit);
         pool.setLimit(limit);
     }

@@ -1,4 +1,4 @@
-import { Paths } from "@/modules/redata/Paths";
+import { Paths } from "@/modules/data/Paths";
 import { ensureDir, outputJSON, readJSON } from "fs-extra";
 import { glob } from "glob";
 import path from "path";

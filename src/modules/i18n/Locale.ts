@@ -1,11 +1,11 @@
 import { Signals } from "@/background/Signals";
+import { Options } from "@/modules/data/Options";
+import { Paths } from "@/modules/data/Paths";
 import { app, ipcRenderer } from "electron";
 import { readFile } from "fs-extra";
 import { glob } from "glob";
 import path from "path";
 import yaml from "yaml";
-import { Paths } from "../redata/Paths";
-import { ReOptions } from "../redata/ReOptions";
 import { Objects } from "../util/Objects";
 
 export namespace Locale {
@@ -25,10 +25,10 @@ export namespace Locale {
         let userLocale;
         if (ipcRenderer) {
             // Remote
-            userLocale = ReOptions.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
+            userLocale = Options.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
         } else {
             // Background
-            userLocale = ReOptions.get().locale || app.getLocale();
+            userLocale = Options.get().locale || app.getLocale();
         }
         setActiveLocale(userLocale);
     }

@@ -1,7 +1,7 @@
 [
   {
     "enable": true,
-    "platform": "^(win32-x64)|(darwin-x64)|(darwin-arm64)|(linux-x64)|(linux-arm64)$",
+    "platform": "^(win32-x64)|(darwin-x64)|(linux-x64)|(linux-arm64)$",
     "value": [
       "lzma-native"
     ]

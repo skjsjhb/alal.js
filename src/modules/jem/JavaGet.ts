@@ -184,6 +184,8 @@ export namespace JavaGet {
         let pathToJava = "bin/java";
         if (OSInfo.getSelf() == OSType.WINDOWS) {
             pathToJava = "bin/java.exe";
+        } else if (OSInfo.getSelf() == OSType.MACOS) {
+            pathToJava = "jre.bundle/Contents/Home/bin/java";
         }
         return path.join(jreStorePath, c, pathToJava);
     }

@@ -2,7 +2,7 @@
  * This config generates production build.
  * Production builds are slower but optimized. Use for official releases and updates.
  */
-const [baseMain, baseRenderer, rendererOptimization] = require("./webpack.config.base");
+const [baseMain, baseRenderer, rendererOptimization, genConfig] = require("./webpack.config.base");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -36,22 +36,7 @@ const main = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                {
-                    from: path.resolve(__dirname, "resources/static"),
-                    to: path.resolve(__dirname, "build/release")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/prebuilds"),
-                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/prebuilds")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/build"),
-                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/build")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/index.js"),
-                    to: path.resolve(__dirname, "build/release/node_modules/lzma-native/index.js")
-                }
+                ...genConfig(path.resolve(__dirname, "build/release"))
             ]
         }),
         new BannerPlugin({

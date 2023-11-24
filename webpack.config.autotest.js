@@ -5,28 +5,14 @@
  * it runs a series of tests and generate a report of the tests.
  */
 const [main, renderer] = require("./webpack.config.debug");
+const [, , , genConfig] = require("./webpack.config.base");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 
 main.plugins = [
     new CopyWebpackPlugin({
         patterns: [
-            {
-                from: path.resolve(__dirname, "resources/static"),
-                to: path.resolve(__dirname, "build/autotest")
-            },
-            {
-                from: path.resolve(__dirname, "node_modules/lzma-native/prebuilds"),
-                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/prebuilds")
-            },
-            {
-                from: path.resolve(__dirname, "node_modules/lzma-native/build"),
-                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/build")
-            },
-            {
-                from: path.resolve(__dirname, "node_modules/lzma-native/index.js"),
-                to: path.resolve(__dirname, "build/autotest/node_modules/lzma-native/index.js")
-            }
+            ...genConfig(path.resolve(__dirname, "build/autotest"))
         ]
     })
 ];

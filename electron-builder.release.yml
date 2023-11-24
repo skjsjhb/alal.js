@@ -15,12 +15,16 @@ mac:
     - target: "zip"
       arch: [ "x64", "arm64" ]
 
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  license: LICENSE
 win:
   target:
     - target: "nsis"
-      arch: [ "x64" ]
+      arch: [ "x64", "arm64" ]
     - target: "zip"
-      arch: [ "x64" ]
+      arch: [ "x64", "arm64" ]
 
 linux:
   target:

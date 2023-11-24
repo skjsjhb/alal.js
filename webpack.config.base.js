@@ -3,6 +3,10 @@
  * Note that this cannot be used for build directly.
  */
 const path = require("path");
+const webpack = require("webpack");
+const fs = require("fs");
+const os = require("os");
+const resources = fs.readFileSync("resources/build/resource-map.json");
 
 const moduleResolution = {
     module: {
@@ -27,9 +31,15 @@ const moduleResolution = {
             '@': path.resolve(__dirname, 'src')
         }
     },
-    externals: {
-        "lzma-native": "node-commonjs lzma-native"
-    }
+    externals: [
+        (ctx, callback) => {
+            if (ctx.context.endsWith("lzma-native") && ctx.request === "node-gyp-build") {
+                callback(null, "global node_gyp_build_lzma");
+            } else {
+                callback();
+            }
+        }
+    ]
 };
 
 const baseConfig = {
@@ -51,15 +61,27 @@ const rendererOptimization = {
                     test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
                     name: 'vendor-react',
                     chunks: 'all'
-                },
-                muiVendor: {
-                    test: /[\\/]node_modules[\\/](@mui[\\/].*)[\\/]/,
-                    name: 'vendor-mui',
-                    chunks: 'all'
                 }
             }
         }
     }
 };
 
-module.exports = [baseConfig.main, baseConfig.renderer, rendererOptimization];
+function generateCopyPluginConfig(output) {
+    const out = [];
+    const ro = JSON.parse(resources.toString());
+    const plat = os.platform() + "-" + os.arch();
+    for (let [from, to] of Object.entries(ro)) {
+        from = from.replace("${platform}", plat);
+        to = to.replace("${platform}", plat);
+        if (fs.existsSync(from)) {
+            out.push({
+                from: from,
+                to: path.join(output, String(to))
+            });
+        }
+    }
+    return out;
+}
+
+module.exports = [baseConfig.main, baseConfig.renderer, rendererOptimization, generateCopyPluginConfig];

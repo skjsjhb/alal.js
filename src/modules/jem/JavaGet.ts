@@ -1,6 +1,6 @@
 import Sources from "@/constra/sources.json";
 import { Locale } from "@/modules/i18n/Locale";
-import { Files } from "@/modules/redata/Files";
+import { Compressing } from "@/modules/redata/Compressing";
 import { Paths } from "@/modules/redata/Paths";
 import { Registry } from "@/modules/redata/Registry";
 import { ReOptions } from "@/modules/redata/ReOptions";
@@ -8,6 +8,7 @@ import { Downloader } from "@/modules/renet/Downloader";
 import { DownloadManager } from "@/modules/renet/DownloadManager";
 import { Mirrors } from "@/modules/renet/Mirrors";
 import { Task } from "@/modules/task/Task";
+import { Availability } from "@/modules/util/Availability";
 import { OSInfo } from "@/modules/util/OSInfo";
 import { chmod, ensureDir, remove } from "fs-extra";
 import os from "os";
@@ -214,7 +215,7 @@ export namespace JavaGet {
         if (!profile.downloads) {
             return null; // Directories are automatically created
         } else {
-            if (profile.downloads.lzma) {
+            if (profile.downloads.lzma && Availability.supports("lzma-native")) {
                 // Download LZMA
                 return Downloader.createProfile({
                     url: profile.downloads.lzma.url,
@@ -292,8 +293,8 @@ export namespace JavaGet {
         const archivePath = originalPath + ".lzma";
 
         // Decompress
-        if (dl.downloads?.lzma) {
-            if (!await Files.decompressLZMA(archivePath, originalPath)) {
+        if (dl.downloads?.lzma && Availability.supports("lzma-native")) {
+            if (!await Compressing.decompressLZMA(archivePath, originalPath)) {
                 return false; // Decompression failed
             }
             await remove(archivePath);

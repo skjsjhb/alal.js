@@ -3841,6 +3841,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lzma@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "lzma@npm:2.3.2"
+  bin:
+    lzma.js: bin/lzma.js
+  checksum: 80650ae54e9216bec16850f20bd1af2ab5f2c4ffa6b598fece0fedd5304c5d76671b50c254e7e1a843e0612885c7b7f24311bfb9bc765673935a354764cc8064
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^10.0.3":
   version: 10.2.1
   resolution: "make-fetch-happen@npm:10.2.1"
@@ -4191,13 +4200,13 @@ __metadata:
   linkType: hard
 
 "node-gyp-build@npm:^4.2.1":
-  version: 4.7.0
-  resolution: "node-gyp-build@npm:4.7.0"
+  version: 4.7.1
+  resolution: "node-gyp-build@npm:4.7.1"
   bin:
     node-gyp-build: bin.js
     node-gyp-build-optional: optional.js
     node-gyp-build-test: build-test.js
-  checksum: fe158b20ef63394d7c95d1d5a5e1eb5284e9e2d85c6e0499052baacef2221ad5bc1da3c1d67ec9406c603f5ab41a13402891fc042f6f990ab245d30aa4471807
+  checksum: b8e4a3f889237cd08edde3775e2b4e1e39a0571580584e33e29979f0c532a254ce3c5ec9435bd526254ad0b3f0b4a7e7fe14e53bd400f6ea9445f3bfd88a6b1e
   languageName: node
   linkType: hard
 
@@ -4954,6 +4963,7 @@ __metadata:
     glob: "npm:^10.3.10"
     html-webpack-plugin: "npm:^5.5.3"
     js-base64: "npm:^3.7.5"
+    lzma: "npm:^2.3.2"
     lzma-native: "npm:^8.0.6"
     node-machine-id: "npm:^1.1.12"
     node-stream-zip: "npm:^1.15.0"

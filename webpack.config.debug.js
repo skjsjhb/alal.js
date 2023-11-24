@@ -2,7 +2,7 @@
  * This config generates debug build output.
  * Debug outputs are used during development. They builds fast, but are not optimized nor packed.
  */
-const [baseMain, baseRenderer, rendererOptimization] = require("./webpack.config.base");
+const [baseMain, baseRenderer, rendererOptimization, genConfig] = require("./webpack.config.base");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -26,22 +26,7 @@ const main = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                {
-                    from: path.resolve(__dirname, "resources/static"),
-                    to: path.resolve(__dirname, "build/debug")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/prebuilds"),
-                    to: path.resolve(__dirname, "build/debug/node_modules/lzma-native/prebuilds")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/build"),
-                    to: path.resolve(__dirname, "build/debug/node_modules/lzma-native/build")
-                },
-                {
-                    from: path.resolve(__dirname, "node_modules/lzma-native/index.js"),
-                    to: path.resolve(__dirname, "build/debug/node_modules/lzma-native/index.js")
-                }
+                ...genConfig(path.resolve(__dirname, "build/debug"))
             ]
         })
     ]

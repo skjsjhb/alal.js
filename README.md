@@ -64,6 +64,14 @@ configured several targets for the new build system:
 - Release - Production build for releases. This is not the final version handed to users, but being part of the
   ingredients.
 
+### Prerequisites
+
+- Node.js 18+
+
+- Git
+
+- Node.js toolchain (If building native libraries on Windows ARM)
+
 ### How To
 
 We've created seperated all-in-one scripts for the build. Below is an example of running the **autotest** build, but *
@@ -84,6 +92,10 @@ We've created seperated all-in-one scripts for the build. Below is an example of
    ```shell
    corepack enable && yarn
    ```
+
+   You may encounter build failures for this step. If you see anything related to `lzma-native`, this is OK - Your
+   platform does not have prebuilt binaries and nor can the build tools create one. See **Hints** below for details
+   about this.
 
 3. Bundle scripts:
 
@@ -107,6 +119,40 @@ We've created seperated all-in-one scripts for the build. Below is an example of
    Output files locates in `dist/<target>`.
 
 ### Hints
+
+- `lzma-native` is disabled by default for platform `win32-arm64` (and other platforms not officially supported), as the
+  library does not came with it prebuilt. ALAL uses a JS-based implementation under this case. Usages of LZMA are also
+  reduced.
+
+  However, the software version is comparably slow and (more importantly) unreliable due to the lack of maintenance of
+  the package. You might want to enable `lzma-native` manually. To do that:
+
+    1. Confirm that `lzma-native` has been built successfully (`yarn` and check for any errors).
+
+    2. Rebuild libraries using `@electron/rebuild` (`yarn electron-rebuild` will work).
+
+    3. Edit `src/constra/feature-matrix.json`, and add an entry:
+
+       ```json5
+       {
+         "enable": true,
+         "platform": "^win32-arm64$", // Or your platform name
+         "value": [
+           "lzma-native"
+         ]
+       }
+       ```
+
+    4. Edit `resource/build/resource-map.json`, and add a field:
+
+       ```json5
+       "<source/to/your/build>": "natives/lzma/${platform}/electron.napi.node"
+       ```
+
+       Where `<source/to/your/build>` should be the path to the rebuilt binaries **for electron**. If there are any
+       dependencies (e.g. `liblzma.dll`), add extra entries to make the copy plugin realize them.
+
+    5. Run to check whether these modifications work.
 
 - The package script only builds the same output as the runner's platform. i.e. On macOS only macOS packges are built,
   etc. However, architecture of the host does not matter. (x64 packages can be built on arm64 and vice versa)

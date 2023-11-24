@@ -1,0 +1,5 @@
+{
+  "resources/static": ".",
+  "node_modules/lzma-native/prebuilds/${platform}/electron.napi.node": "natives/lzma/${platform}/electron.napi.node",
+  "node_modules/lzma-native/prebuilds/${platform}/liblzma.dll": "natives/lzma/${platform}/liblzma.dll"
+}

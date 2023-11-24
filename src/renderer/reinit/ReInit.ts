@@ -13,6 +13,7 @@ import { ReOptions } from "@/modules/redata/ReOptions";
 import { Cacher } from "@/modules/renet/Cacher";
 import { DownloadManager } from "@/modules/renet/DownloadManager";
 import { Mirrors } from "@/modules/renet/Mirrors";
+import { Availability } from "@/modules/util/Availability";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -61,6 +62,7 @@ export namespace ReInit {
     // Init renderer-side modules
     async function initModules() {
         console.log("Loading and initializing modules.");
+        Availability.synthensisFeatures();
         Paths.detectRootPath();
         await Paths.retrieveAppPath();
         await ReOptions.load();

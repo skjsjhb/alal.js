@@ -7,7 +7,6 @@ import { Throttle } from "@/modules/util/Throttle";
 import { testJavaDownload } from "@/test/JavaGetTest";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
-import lzma from "lzma-native";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
 import { TestTools } from "./TestTools";
@@ -67,9 +66,6 @@ async function allTests() {
         pool.release();
         await prom;
         assertEquals(a, 1);
-    });
-    await test("LZMA Native Module", async () => {
-        assertNotEquals(lzma.versionString(), "");
     });
     await testJavaDownload();
     await saveSummary();

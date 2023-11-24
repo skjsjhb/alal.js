@@ -1,10 +1,8 @@
 import fs from "fs-extra";
 import path from "path";
 import { copyFileStream, isFileExist } from "../commons/FileUtil";
-import { getOSSpecificDataDir } from "./OSDirSupport";
 import { getBasePath } from "./PathSolve";
 
-const DATA_ROOT = path.resolve(getOSSpecificDataDir());
 export const DEFAULTS_ROOT = path.resolve(getBasePath(), "defaults");
 
 export async function loadData(dataPath: string): Promise<string> {
@@ -20,7 +18,7 @@ export function getPathInDefaults(pt: string): string {
 }
 
 export function getActualDataPath(pt: string): string {
-    return path.resolve(DATA_ROOT, pt);
+    throw "Not implemented";
 }
 
 export async function saveData(

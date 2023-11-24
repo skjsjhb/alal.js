@@ -1,18 +1,3 @@
-import path from "path";
-import { getOSSpecificDataDir } from "./OSDirSupport";
-import { getBasePath } from "./PathSolve";
-
-const CONFIG_FILE = path.resolve(getOSSpecificDataDir(), "alicorn.config.json");
-
-const DEFAULT_CONFIG_FILE = path.resolve(
-    getBasePath(),
-    "defaults",
-    "alicorn.config.json"
-);
-
-let cachedConfig = {};
-
-
 /**
  * @deprecated
  */

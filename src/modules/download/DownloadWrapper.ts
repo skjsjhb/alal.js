@@ -1,20 +1,13 @@
-import EventEmitter from "events";
 import { getModifiedDate, isFileExist } from "../commons/FileUtil";
 import { getNumber } from "../config/ConfigSupport";
-import { getAllContainers, getContainer } from "../container/ContainerUtil";
 import { deleteRecord, getLastValidateModified, updateRecord } from "../container/ValidateRecord";
 import { DownloadMeta, DownloadStatus } from "./AbstractDownloader";
-import { Concurrent } from "./Concurrent";
-import { MirrorChain } from "./Mirror";
-import { Serial } from "./Serial";
 import { validate } from "./Validate";
 
-let DOINGX = "";
 const DOING_X_SUBSCRIBES: Map<string, (d: string) => unknown> = new Map();
 
 export function addDoing(s: string): void {
     console.log(s);
-    DOINGX = s;
     for (const [_n, f] of DOING_X_SUBSCRIBES) {
         void requestIdleCallback(() => {
             return Promise.resolve(f(s));
@@ -22,62 +15,6 @@ export function addDoing(s: string): void {
     }
 }
 
-export function clearDoing(): void {
-    for (const [_n, f] of DOING_X_SUBSCRIBES) {
-        void requestIdleCallback(() => {
-            return Promise.resolve(f(""));
-        });
-    }
-    DOINGX = "";
-}
-
-export function getDoing(): string {
-    return DOINGX || "";
-}
-
-export function subscribeDoing(
-    name: string,
-    func: (d: string) => unknown
-): void {
-    DOING_X_SUBSCRIBES.set(name, func);
-}
-
-export function unsubscribeDoing(name: string): void {
-    DOING_X_SUBSCRIBES.delete(name);
-}
-
-const DOING: string[] = [];
-
-const PENDING_TASKS: DownloadMeta[] = [];
-const RUNNING_TASKS = new Set<DownloadMeta>();
-
-const MIRROR_CHAIN = new Map<DownloadMeta, MirrorChain>();
-const WAITING_RESOLVES_MAP = new Map<
-    string,
-    ((value: DownloadStatus | PromiseLike<DownloadStatus>) => void)[]
->();
-const FAILED_COUNT_MAP: Map<DownloadMeta, number> = new Map();
-const END_GATE = "END";
-let EMITTER: EventEmitter;
-
-export function initDownloadWrapper(): void {
-    EMITTER = new EventEmitter();
-    EMITTER.on(END_GATE, (m: DownloadMeta, s: DownloadStatus) => {
-        RUNNING_TASKS.delete(m);
-        FAILED_COUNT_MAP.delete(m);
-        const funcs = WAITING_RESOLVES_MAP.get(m.savePath);
-        if (funcs) {
-            for (const x of funcs) {
-                try {
-                    x(s);
-                } catch {
-                }
-            }
-            WAITING_RESOLVES_MAP.delete(m.savePath);
-        }
-        scheduleNextTask();
-    });
-}
 
 /**
  * @deprecated
@@ -87,28 +24,7 @@ export async function wrappedDownloadFile(
     noAutoLn = false,
     disableMirror = false
 ): Promise<DownloadStatus> {
-    const ou = meta.url;
-    // POST
-    if (meta.url.trim().length === 0 || meta.savePath.trim().length === 0) {
-        return DownloadStatus.RESOLVED;
-    }
-    if (!noAutoLn) {
-        const a = getAllContainers();
-        let targetContainer = "";
-        a.forEach((c) => {
-            if (meta.savePath.includes(getContainer(c).rootDir)) {
-                targetContainer = c;
-            }
-        });
-    }
-
-    if ((await _wrappedDownloadFile(meta, disableMirror)) === 1) {
-        MIRROR_CHAIN.delete(meta);
-        return DownloadStatus.RESOLVED;
-    } else {
-        MIRROR_CHAIN.delete(meta);
-        return DownloadStatus.FATAL;
-    }
+    throw "Not implemented";
 }
 
 async function existsAndValidate(meta: DownloadMeta): Promise<boolean> {
@@ -154,126 +70,6 @@ async function _existsAndValidate(
     return res;
 }
 
-function _wrappedDownloadFile(
-    meta: DownloadMeta,
-    disableMirror = false
-): Promise<DownloadStatus> {
-    return new Promise<DownloadStatus>((resolve) => {
-        void existsAndValidate(meta).then((b) => {
-            if (b) {
-                // addState(tr("ReadyToLaunch.Validated", `Url=${meta.url}`)); Huge outputs!
-                resolve(DownloadStatus.RESOLVED);
-            } else {
-                FAILED_COUNT_MAP.set(meta, getConfigOptn("tries-per-chunk", 3));
-                const pl = WAITING_RESOLVES_MAP.get(meta.savePath);
-                if (pl) {
-                    pl.push(resolve); // Another meta has already hooked on this file, wait till finish
-                    scheduleNextTask();
-                    return;
-                }
-                WAITING_RESOLVES_MAP.set(meta.savePath, [resolve]); // Start it
-                PENDING_TASKS.push(meta);
-                const chain = disableMirror
-                    ? MirrorChain.origin(meta.url)
-                    : new MirrorChain(meta.url);
-
-                MIRROR_CHAIN.set(meta, chain);
-                scheduleNextTask();
-            }
-        });
-    });
-}
-
-function scheduleNextTask(): void {
-    // An aggressive call! Clear the stack.
-    const CURRENT_MAX = getConfigOptn("max-tasks", 100);
-    while (RUNNING_TASKS.size < CURRENT_MAX && PENDING_TASKS.length > 0) {
-        const tsk = PENDING_TASKS.pop();
-        if (tsk !== undefined) {
-            RUNNING_TASKS.add(tsk);
-            downloadSingleFile(
-                tsk,
-                EMITTER,
-                MIRROR_CHAIN.get(tsk) || new MirrorChain(tsk.url)
-            );
-        } else {
-            break;
-        }
-    }
-}
-
-function downloadSingleFile(
-    meta: DownloadMeta,
-    emitter: EventEmitter,
-    chain: MirrorChain
-): void {
-    const du = new DownloadMeta(
-        chain.mirror(),
-        meta.savePath,
-        meta.sha1,
-        meta.size
-    );
-    void Concurrent.getInstance()
-        .downloadFile(du)
-        .then((s) => {
-            if (s === 1) {
-                FAILED_COUNT_MAP.delete(meta);
-                emitter.emit(END_GATE, meta, DownloadStatus.RESOLVED);
-                return;
-            } else if (s === 0 || s === -3) {
-                // Worth retry
-                const failed = FAILED_COUNT_MAP.get(meta) || 0;
-                if (failed <= 0) {
-                    // The last fight! Only once.
-                    // FAILED_COUNT_MAP.set(meta, getConfigOptn("tries-per-chunk", 3));
-                    void Serial.getInstance()
-                        .downloadFile(meta) // No Mirror
-                        .then((s) => {
-                            if (s === 1) {
-                                FAILED_COUNT_MAP.delete(meta);
-                                emitter.emit(END_GATE, meta, DownloadStatus.RESOLVED);
-                                return;
-                            } else {
-                                // Simply fatal, retry is meaningless
-                                FAILED_COUNT_MAP.delete(meta);
-                                emitter.emit(END_GATE, meta, DownloadStatus.FATAL);
-                                return;
-                            }
-                        });
-                    return;
-                } else {
-                    FAILED_COUNT_MAP.set(meta, failed - 1); // Again
-                    const mChain = MIRROR_CHAIN.get(meta) || new MirrorChain(meta.url);
-                    if (s === 0) {
-                        // Not Timeout
-                        mChain.markBad();
-                        mChain.next();
-                    }
-                    downloadSingleFile(meta, emitter, mChain);
-                }
-            } else {
-                // Do not retry
-                FAILED_COUNT_MAP.delete(meta);
-                emitter.emit(END_GATE, meta, DownloadStatus.FATAL);
-                return;
-            }
-        });
-}
-
-export interface WrapperStatus {
-    inStack: number;
-    pending: number;
-    doing: string;
-}
-
-export function getWrapperStatus(): WrapperStatus {
-    return {
-        inStack: RUNNING_TASKS.size || 0,
-        pending: PENDING_TASKS.length || 0,
-        doing: DOING[0] || ""
-    };
-}
-
 const PFF_FLAG = "Downloader.IsPff";
 
 export function getPffFlag(): string {
@@ -291,10 +87,3 @@ export function getConfigOptn(name: string, def: number): number {
     }
 }
 
-function addState(s: string): void {
-    addDoing(s);
-    DOING.unshift(s);
-    if (DOING.length > 3) {
-        DOING.pop();
-    }
-}

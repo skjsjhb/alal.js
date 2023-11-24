@@ -1,6 +1,5 @@
 import { zip } from "compressing";
 import fs from "fs-extra";
-import os from "os";
 import path from "path";
 import { isFileExist } from "../commons/FileUtil";
 import { buildMap, parseMap } from "../commons/MapUtil";
@@ -9,7 +8,6 @@ import { updateRecord } from "../container/ValidateRecord";
 import { existsAndValidateRaw } from "../download/DownloadWrapper";
 import { getHash } from "../download/Validate";
 import { ArtifactMeta, getCurrentOSNameAsMojang, LibraryMeta } from "../profile/Meta";
-import { insertARMPackage } from "./ARMChair";
 
 export const JAR_SUFFIX = ".jar";
 const META_INF = "META-INF";
@@ -48,10 +46,6 @@ export async function checkExtractTrimNativeLocal(
             ) {
                 await fs.remove(path.join(dest, f));
             }
-        }
-        if (os.arch() === "arm64" && os.platform() === "linux") {
-            // TODO: unchecked
-            await insertARMPackage(dest);
         }
         await saveLockFile(dest);
     } catch {

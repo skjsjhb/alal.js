@@ -1,6 +1,7 @@
 import Sources from "@/constra/sources.json";
 import { Files } from "@/modules/redata/Files";
 import { Paths } from "@/modules/redata/Paths";
+import { Registry } from "@/modules/redata/Registry";
 import { Downloader } from "@/modules/renet/Downloader";
 import { DownloadManager } from "@/modules/renet/DownloadManager";
 import { Mirrors } from "@/modules/renet/Mirrors";
@@ -16,6 +17,7 @@ import OSType = OSInfo.OSType;
 export namespace JavaGet {
     import DownloadProfile = Downloader.DownloadProfile;
     let jreStorePath: string;
+    let javaGetRegistryId = "java-get";
 
     // See https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json
     type MojangJavaPlatforms = "gamecore" | "linux" | "linux-i386" | "mac-os"
@@ -140,6 +142,12 @@ export namespace JavaGet {
             console.error("Some files failed to process for " + componentName);
             return false;
         }
+
+        // Add to registry
+        const jgt = Registry.getTable<string[]>(javaGetRegistryId, []);
+        if (!jgt.includes(componentName)) {
+            jgt.push(componentName);
+        }
         console.log("Installed " + componentName);
         return true;
     }
@@ -158,9 +166,16 @@ export namespace JavaGet {
         return path.join(jreStorePath, c, pathToJava);
     }
 
+    /**
+     * Check whether the specified component has installed (in records).
+     */
+    export function hasComponent(c: string): boolean {
+        return Registry.getTable<string[]>(javaGetRegistryId, []).includes(c);
+    }
+
     function generateDownloadProfile(componentName: string, fileName: string, profile: MojangJavaFileDownload): DownloadProfile | null {
         const originalPath = path.join(jreStorePath, componentName, fileName);
-        const archivePath = path.join(jreStorePath, componentName, fileName + ".lzma"); // Files are compressed
+        const archivePath = originalPath + ".lzma"; // Files are compressed
         if (!profile.downloads) {
             return null; // Directories are automatically created
         } else {
@@ -188,7 +203,7 @@ export namespace JavaGet {
 
     // Get Mojang used name for indexing the component.
     function getMojangNamedPlatform(): string {
-        let sys = "", arch = "";
+        let sys: string, arch = "";
         switch (os.platform()) {
             case "darwin":
                 sys = "mac-os";
@@ -218,7 +233,7 @@ export namespace JavaGet {
 
     async function postProcessFile(componentName: string, location: string, dl: MojangJavaFileDownload): Promise<boolean> {
         const originalPath = path.join(jreStorePath, componentName, location);
-        const archivePath = path.join(jreStorePath, componentName, location + ".lzma");
+        const archivePath = originalPath + ".lzma";
 
         // Decompress
         if (dl.downloads?.lzma) {

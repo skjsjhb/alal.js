@@ -68,8 +68,8 @@ export namespace ReInit {
         await ReOptions.load();
         await Locale.initLocale();
         await Registry.loadTables();
-        await Cacher.configure();
         DownloadManager.configure();
+        await Cacher.configure();
         await JavaGet.configure();
     }
 

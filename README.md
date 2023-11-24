@@ -165,4 +165,4 @@ Copyright (C) 2020 - 2022 Annie K Rarity Sparklight (ThatRarityEG). For Alicorn 
 
 Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). For Alicorn Again Launcher.
 
-#  
+ 

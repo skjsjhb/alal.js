@@ -103,6 +103,9 @@ export namespace JavaGet {
             try {
                 const matrix = await retrieveIndexManifest();
                 const platform = getMojangNamedPlatform();
+                if (!(platform in matrix)) {
+                    task.fail("Platform " + platform + " not supported by JavaGet.");
+                }
                 const componentProfile = matrix[platform as MojangJavaPlatforms][c];
                 if (!componentProfile || componentProfile.length == 0) {
                     task.fail("No JRE component named " + c + " for platform " + platform);
@@ -239,7 +242,7 @@ export namespace JavaGet {
 
     // Get Mojang used name for indexing the component.
     function getMojangNamedPlatform(): string {
-        let sys: string, arch = "";
+        let sys: string;
         switch (os.platform()) {
             case "darwin":
                 sys = "mac-os";
@@ -253,18 +256,13 @@ export namespace JavaGet {
                 break;
         }
 
-        switch (os.arch()) {
-            case "arm64":
-                arch = "arm64";
-                break;
-            case "ia32":
-                arch = sys == "windows" ? "x86" : "i386";
-                break;
-            case "x64":
-                arch = "x64";
-                break;
+        if (os.arch() == "arm64") {
+            sys += "-arm64";
         }
-        return sys + "-" + arch;
+        if (os.arch() == "x64" && sys == "windows") {
+            sys += "-x64";
+        }
+        return sys;
     }
 
     function postProcessFiles(componentName: string, manifest: MojangJavaDownloadManifest): Task<void> {

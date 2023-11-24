@@ -1,5 +1,4 @@
 import { ReOptions } from "@/modules/redata/ReOptions";
-import { ThemeOptions } from "@mui/material/styles";
 import SakuraKumoDark from "./SakuraKumoDark";
 import SakuraKumoLight from "./SakuraKumoLight";
 
@@ -11,7 +10,8 @@ import SakuraKumoLight from "./SakuraKumoLight";
  * is considered rare.
  */
 export namespace Themes {
-    const BUNDLED_THEMES: Record<string, ThemeOptions> = {
+    // TODO update type use theme-ui
+    const BUNDLED_THEMES: Record<string, any> = {
         SakuraKumoLight, SakuraKumoDark
     };
 
@@ -21,7 +21,7 @@ export namespace Themes {
      * This method returns the selected theme configured in `ui.theme` and chooses
      * SakuraKumoDark as the fallback.
      */
-    export function getTheme(): ThemeOptions {
+    export function getTheme(): any {
         return BUNDLED_THEMES[ReOptions.get().ui.theme] || SakuraKumoDark;
     }
 }

@@ -1,17 +1,15 @@
-import { ThemeOptions } from '@mui/material/styles';
-
-const themeOptions: ThemeOptions = {
+const themeOptions = {
     palette: {
-        mode: 'dark',
+        mode: "dark",
         primary: {
-            main: '#ffb6d4'
+            main: "#ffb6d4"
         },
         secondary: {
-            main: '#ffefb4'
+            main: "#ffefb4"
         }
     },
     typography: {
-        fontFamily: 'Noto Sans SC'
+        fontFamily: "Noto Sans SC"
     },
     components: {
         MuiButtonBase: {

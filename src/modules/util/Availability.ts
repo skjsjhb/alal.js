@@ -1,5 +1,5 @@
-import FeatureMatrix from "@/constra/feature-matrix.json";
 import os from "os";
+import FeatureMatrix from "R/build/feature-matrix.json";
 
 /**
  * Check for the availability of certain features.

@@ -10,6 +10,7 @@ import { Paths } from "@/modules/data/Paths";
 import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
 import { JavaGet } from "@/modules/jem/JavaGet";
+import { Aria2Addon } from "@/modules/net/Aria2Addon";
 import { Cacher } from "@/modules/net/Cacher";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { Mirrors } from "@/modules/net/Mirrors";
@@ -69,12 +70,13 @@ export namespace ReInit {
         await Locale.initLocale();
         await Registry.loadTables();
         DownloadManager.configure();
-        await Cacher.configure();
         await JavaGet.configure();
     }
 
     // Tasks to run after renderer initialization
     async function postInit() {
+        await Cacher.configure();
+        await Aria2Addon.configure();
         await Mirrors.updateRules();
     }
 
@@ -89,7 +91,6 @@ export namespace ReInit {
         }
         const root = createRoot(rootElement);
         root.render(React.createElement(App)); // Making this file pure TS
-
 
         console.log("All caught up! I'm now showing the window.");
         ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
@@ -109,5 +110,6 @@ export namespace ReInit {
     async function beforeClose() {
         await Options.save();
         await Registry.saveTables();
+        Aria2Addon.stopProc();
     }
 }

@@ -1,5 +1,5 @@
+import { JavaGet } from "@/modules/jem/JavaGet";
 import { execFile } from "child_process";
-import { JavaGet } from "../src/modules/jem/JavaGet";
 import { TestTools } from "./TestTools";
 import assertEquals = TestTools.assertEquals;
 import assertTrue = TestTools.assertTrue;

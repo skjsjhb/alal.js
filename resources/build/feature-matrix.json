@@ -5,5 +5,12 @@
     "value": [
       "lzma-native"
     ]
+  },
+  {
+    "enable": true,
+    "platform": "^(win32-x64)|(darwin-x64)$",
+    "value": [
+      "bundled-aria2c"
+    ]
   }
 ]

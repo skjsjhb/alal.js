@@ -4,6 +4,7 @@
     "overrides": {
       "https://launchermeta.mojang.com": null,
       "https://piston-meta.mojang.com": null,
+      "https://piston-data.mojang.com": null,
       "https://launcher.mojang.com": null,
       "https://resources.download.minecraft.net": null,
       "https://libraries.minecraft.net": null
@@ -14,6 +15,7 @@
     "overrides": {
       "https://launchermeta.mojang.com": "https://download.mcbbs.net",
       "https://piston-meta.mojang.com": "https://download.mcbbs.net",
+      "https://piston-data.mojang.com": "https://download.mcbbs.net",
       "https://launcher.mojang.com": "https://download.mcbbs.net",
       "https://resources.download.minecraft.net": "https://download.mcbbs.net/assets",
       "https://libraries.minecraft.net": "https://download.mcbbs.net/maven",

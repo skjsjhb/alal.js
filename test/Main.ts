@@ -1,7 +1,7 @@
 /**
  * The entry point of the new bootloader for autotest bundles.
  */
-import { BootLoader } from "../src/background/BootLoader";
+import { BootLoader } from "@/background/BootLoader";
 import { runMainTests } from "./MainTestHost";
 
 function main() {

@@ -120,6 +120,13 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
 ### Hints
 
+- There are some optional dependencies which can be bundled with ALAL at build time. They are not included in the source
+  tree. To include them, run:
+
+  ```shell
+  yarn addon
+  ```
+
 - `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially
   supported), as the
   library does not came with a valid prebuilt (either missing or malfunctioned). ALAL uses a JS-based implementation
@@ -133,7 +140,7 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
     2. Rebuild libraries using `@electron/rebuild` (`yarn electron-rebuild` will work).
 
-    3. Edit `src/constra/feature-matrix.json`, and add an entry:
+    3. Edit `resources/build/feature-matrix.json`, and add an entry:
 
        ```json5
        {

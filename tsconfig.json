@@ -16,11 +16,19 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "R/*": [
+        "./resources/*"
+      ],
+      "T/*": [
+        "./test/*"
       ]
     }
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./test/**/*",
+    "./resources/**/*"
   ],
   "exclude": [
     "node_modules",

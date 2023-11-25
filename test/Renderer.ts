@@ -1,8 +1,8 @@
 /**
  * Entry point of the new renderer for autotest bundles only.
  */
+import { ReInit } from "@/renderer/reinit/ReInit";
 import { ipcRenderer } from "electron";
-import { ReInit } from "../src/renderer/reinit/ReInit";
 import { runRendererTests } from "./RendererTestHost";
 import { SignalTest } from "./SignalTest";
 

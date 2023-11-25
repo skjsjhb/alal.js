@@ -28,7 +28,9 @@ const moduleResolution = {
     resolve: {
         extensions: [".ts", ".js", ".json", ".tsx"],
         alias: {
-            '@': path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src'),
+            'R': path.resolve(__dirname, 'resources'),
+            'T': path.resolve(__dirname, "test")
         }
     },
     externals: [

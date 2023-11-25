@@ -17,11 +17,11 @@ main.plugins = [
     })
 ];
 
-main.entry.main = "./src/background/MainWithTests.ts";
+main.entry.main = "./test/Main.ts";
 main.devtool = false;
 main.output.path = path.resolve(__dirname, "build/autotest");
 
-renderer.entry.renderer = "./src/renderer/MainWithTests.ts";
+renderer.entry.renderer = "./test/Renderer.ts";
 renderer.devtool = false;
 renderer.output.path = path.resolve(__dirname, "build/autotest");
 

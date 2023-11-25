@@ -46,6 +46,6 @@ jobs:
       - name: Setup Optional Dependencies
         run: sudo apt install aria2
       - name: Build
-        run: corepack enable && yarn && yarn addon && electron-rebuild && yarn bundle-autotest
+        run: corepack enable && yarn && yarn addon && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: xvfb-run yarn test

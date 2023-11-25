@@ -1,4 +1,6 @@
 (() => {
+    Object.defineProperty(globalThis.process.versions, "node", { writable: false, value: null });
+
     console.log("Native library loader for ALAL.");
     const path = require("path");
     const os = require("os");

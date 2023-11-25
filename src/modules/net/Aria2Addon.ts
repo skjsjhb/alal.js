@@ -104,7 +104,7 @@ export namespace Aria2Addon {
                 try {
                     console.log("Spawned aria2c process. Setting up connection.");
                     aria2 = new Aria2WS.Client({
-                        port: aria2Port as number, /* auth: {secret: aria2cSecret}, */ host: "localhost"
+                        port: aria2Port as number, host: "localhost"
                     });
                     const version = await aria2.getVersion();
                     bindListeners();

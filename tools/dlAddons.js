@@ -32,17 +32,6 @@ async function dlAria2() {
         await remove("build/addons/aria2-win32.zip");
         console.log("Downloaded aria2 addon.");
     }
-    if (os.platform() === "darwin" && os.arch() === "x64") {
-        console.log("Downloading aria2 for macOS.");
-        const aria2Url = "https://github.com/aria2/aria2/releases/download/release-1.35.0/aria2-1.35.0-osx-darwin.tar.bz2";
-        await download(aria2Url, "build/addons/aria2-mac.tar.bz2");
-        console.log("Decompressing archive.");
-        await decompress("build/addons/aria2-mac.tar.bz2", "build/addons/aria2-mac");
-        await copyFile("build/addons/aria2-mac/aria2-1.35.0/bin/aria2c", "build/addons/aria2c");
-        await remove("build/addons/aria2-mac");
-        await remove("build/addons/aria2-mac.tar.bz2");
-        console.log("Downloaded aria2 addon.");
-    }
 }
 
 async function main() {

@@ -1,6 +1,7 @@
 /**
  * Entry point of the new renderer for autotest bundles only.
  */
+import { Options } from "@/modules/data/Options";
 import { ReInit } from "@/renderer/reinit/ReInit";
 import { ipcRenderer } from "electron";
 import { runRendererTests } from "./RendererTestHost";
@@ -20,6 +21,7 @@ async function main() {
 
 
     await ReInit.initRenderer();
+    Options.get().dev = true;
 
     // Autotest modules entry
     console.warn("This is a test bundle built for automated tests. They are NOT intended for normal use.");

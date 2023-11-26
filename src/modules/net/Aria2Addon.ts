@@ -98,6 +98,16 @@ export namespace Aria2Addon {
                         ]);
                     aria2cProc.on("spawn", onAria2Spawn);
                     aria2cProc.once("exit", onAria2Exit);
+                    aria2cProc.stdout?.on("data", (d) => {
+                        if (Options.get().dev) {
+                            process.stdout.write("[Aria2c] " + d);
+                        }
+                    });
+                    aria2cProc.stderr?.on("data", (d) => {
+                        if (Options.get().dev) {
+                            process.stdout.write("[Aria2c] " + d);
+                        }
+                    });
                 } catch (e) {
                     console.error("Could not spawn aria2c process: " + e);
                     res(false);
@@ -110,25 +120,9 @@ export namespace Aria2Addon {
             async function onAria2Spawn() {
                 try {
                     console.log("Spawned aria2c process. Setting up connection.");
-                    aria2 = new WebSocket("ws://localhost:" + aria2Port + "/jsonrpc");
-                    bindListeners();
-                    aria2.addEventListener("open", async () => {
-                        const s = await sendRPCMessage({
-                            method: "aria2.getVersion"
-                        });
-                        clearTimeout(timeoutId);
-                        if (s?.result?.version) {
-                            console.log("Connected to aria2 version " + s?.result?.version);
-                            res(true);
-                        } else {
-                            console.error("Malformed result from aria2: " + s);
-                            res(false);
-                        }
-                    });
-
-                    aria2.addEventListener("error", (e) => {
-                        console.error("Error during WebSocket transmission: " + e);
-                    });
+                    clearTimeout(timeoutId);
+                    await openAria2Connection();
+                    res(true);
                 } catch (e) {
                     console.error("Could not connect to aria2: " + e);
                     aria2cProc?.removeAllListeners("exit");
@@ -145,6 +139,32 @@ export namespace Aria2Addon {
                 aria2 = null;
             }
         });
+    }
+
+    async function openAria2Connection(): Promise<void> {
+        return new Promise((res, rej) => {
+                aria2 = new WebSocket("ws://localhost:" + aria2Port + "/jsonrpc");
+                bindListeners();
+                aria2.addEventListener("open", async () => {
+                    const s = await sendRPCMessage({
+                        method: "aria2.getVersion"
+                    });
+                    if (s?.result?.version) {
+                        console.log("Connected to aria2 version " + s?.result?.version);
+                        res();
+                    } else {
+                        console.error("Malformed result from aria2: " + s);
+                        rej();
+                    }
+                });
+
+                aria2.addEventListener("error", (e) => {
+                    console.error("Error during WebSocket transmission: " + e.toString());
+                });
+            }
+        );
+
+
     }
 
     async function sendRPCMessage(data: any): Promise<any> {
@@ -255,13 +275,18 @@ export namespace Aria2Addon {
                         method: "aria2.tellStatus",
                         params: [gid, ["status"]]
                     });
+                    if (state == null) {
+                        clearInterval(polling);
+                        console.error("Connection to aria2 has lost!");
+                        res(false);
+                    }
                     const s = state?.result?.status;
                     if (s == "active" || s == "waiting") {
                         // This is acceptable
                         return;
                     }
-                    clearInterval(polling);
                     if (s == "complete") {
+                        clearInterval(polling);
                         res(true);
                     } else {
                         console.error("Invalid status for " + gid + ", aria2c status cannot be " + s);

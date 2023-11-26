@@ -1,4 +1,5 @@
 import { Options } from "@/modules/data/Options";
+import { ProfileDetector } from "@/modules/profile/ProfileDetector";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
 import { Files } from "../src/modules/data/Files";
@@ -81,6 +82,18 @@ async function allTests() {
         pool.release();
         await prom;
         assertEquals(a, 1);
+    });
+
+    await test("Profile Detection for Mojang", async () => {
+        console.log("Checking profiles.");
+        const profiles = await (await fetch("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json")).json();
+        console.log("Testing profiles.");
+        await Promise.all(profiles.versions.map(async (p: any) => {
+            console.log("Testing " + p.id);
+            const file = await (await fetch(p.url)).json();
+            const st = ProfileDetector.isMojang(file);
+            assertTrue(st);
+        }));
     });
     await testJavaDownload();
     await saveSummary();

@@ -1,0 +1,79 @@
+{
+  "vmArgs": [
+    {
+      "rules": [
+        {
+          "action": "allow",
+          "os": {
+            "name": "osx"
+          }
+        }
+      ],
+      "value": [
+        "-XstartOnFirstThread"
+      ]
+    },
+    {
+      "rules": [
+        {
+          "action": "allow",
+          "os": {
+            "arch": "x86"
+          }
+        }
+      ],
+      "value": "-Xss1M"
+    },
+    "-Djava.library.path=${natives_directory}",
+    "-Dminecraft.launcher.brand=${launcher_name}",
+    "-Dminecraft.launcher.version=${launcher_version}",
+    "-cp",
+    "${classpath}"
+  ],
+  "vmVersionMatrix": {
+    ">=1.19": {
+      "component": "java-runtime-gamma",
+      "majorVersion": 17
+    },
+    ">=1.18": {
+      "component": "java-runtime-beta",
+      "majorVersion": 17
+    },
+    ">=1.17": {
+      "component": "java-runtime-alpha",
+      "majorVersion": 16
+    },
+    "*": {
+      "component": "jre-legacy",
+      "majorVersion": 8
+    }
+  },
+  "profileDetection": {
+    "mainClasses": {
+      "mojang": [
+        "net.minecraft.client.main.Main",
+        "com.mojang.rubydung.RubyDung",
+        "net.minecraft.launchwrapper.Launch"
+      ],
+      "fabric": [
+        "net.fabricmc.loader.impl.launch.knot.KnotClient"
+      ]
+    },
+    "libraries": {
+      "mojang": [
+        "org.lwjgl:lwjgl",
+        "com.mojang:authlib"
+      ],
+      "forge": [
+        "net.minecraftforge"
+      ],
+      "quilt": [
+        "org.quiltmc"
+      ],
+      "fabric": [
+        "net.fabricmc",
+        "-org.quiltmc"
+      ]
+    }
+  }
+}

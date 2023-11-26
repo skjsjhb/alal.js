@@ -26,7 +26,6 @@ export namespace Aria2Addon {
             if (await checkExecutable()) {
                 await spawnProc();
             }
-            console.log("Successfully configured aria2c.");
         }
     }
 
@@ -100,7 +99,7 @@ export namespace Aria2Addon {
                             "--optimize-concurrent-downloads=true",
                             "--auto-file-renaming=false"
                         ]);
-                    aria2cProc.on("spawn", onAria2Spawn);
+                    aria2cProc.once("spawn", onAria2Spawn);
                     aria2cProc.once("exit", onAria2Exit);
                     aria2cProc.stdout?.on("data", (d) => {
                         if (Options.get().dev) {
@@ -152,11 +151,11 @@ export namespace Aria2Addon {
                         method: "aria2.getVersion"
                     });
                     if (s?.result?.version) {
-                        console.log("Connected to aria2 version " + s?.result?.version);
                         res();
+                        console.log("Connected to aria2 version " + s?.result?.version);
                     } else {
-                        console.error("Malformed result from aria2: " + s);
                         rej();
+                        console.error("Malformed result from aria2: " + s);
                     }
                 });
 

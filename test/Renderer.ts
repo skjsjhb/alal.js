@@ -4,6 +4,7 @@
 import { Options } from "@/modules/data/Options";
 import { ReInit } from "@/renderer/reinit/ReInit";
 import { ipcRenderer } from "electron";
+import os from "os";
 import { runRendererTests } from "./RendererTestHost";
 import { SignalTest } from "./SignalTest";
 
@@ -22,6 +23,9 @@ async function main() {
 
     await ReInit.initRenderer();
     Options.get().dev = true;
+    if (os.platform() != "win32") {
+        Options.get().download.aria2.enabled = false; // Unstable
+    }
 
     // Autotest modules entry
     console.warn("This is a test bundle built for automated tests. They are NOT intended for normal use.");

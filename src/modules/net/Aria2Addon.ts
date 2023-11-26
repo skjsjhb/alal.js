@@ -70,6 +70,8 @@ export namespace Aria2Addon {
         aria2cProc?.removeAllListeners("exit");
         aria2cProc?.kill();
         aria2cProc = null;
+        aria2 && (aria2.onclose = () => {});
+        aria2 = null;
     }
 
     const messageSubscribeMap: Map<string, (s: any) => void> = new Map();
@@ -125,10 +127,7 @@ export namespace Aria2Addon {
                     res(true);
                 } catch (e) {
                     console.error("Could not connect to aria2: " + e);
-                    aria2cProc?.removeAllListeners("exit");
-                    aria2cProc?.kill();
-                    aria2cProc = null;
-                    aria2 = null;
+                    stopProc();
                     res(false);
                 }
             }
@@ -159,8 +158,19 @@ export namespace Aria2Addon {
                 });
 
                 aria2.addEventListener("error", (e) => {
-                    console.error("Error during WebSocket transmission: " + e.toString());
+                    console.error("Error during WebSocket transmission: " + e.type);
                 });
+
+                aria2.onclose = async (e) => {
+                    console.error("Unexpected close of aria2c WebSocket: " + e.code + " " + e.reason);
+                    console.log("Trying to reopen connection.");
+                    try {
+                        await openAria2Connection();
+                    } catch (e) {
+                        console.error("Could not reopen connection. I'm closing.");
+                        stopProc();
+                    }
+                };
             }
         );
 

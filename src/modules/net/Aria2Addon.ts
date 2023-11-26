@@ -22,9 +22,11 @@ export namespace Aria2Addon {
 
     export async function configure() {
         if (Options.get().download.aria2.enabled) {
+            console.log("Configuring aria2c.");
             if (await checkExecutable()) {
                 await spawnProc();
             }
+            console.log("Successfully configured aria2c.");
         }
     }
 
@@ -122,13 +124,14 @@ export namespace Aria2Addon {
             async function onAria2Spawn() {
                 try {
                     console.log("Spawned aria2c process. Setting up connection.");
-                    clearTimeout(timeoutId);
                     await openAria2Connection();
                     res(true);
+                    clearTimeout(timeoutId);
                 } catch (e) {
                     console.error("Could not connect to aria2: " + e);
                     stopProc();
                     res(false);
+                    clearTimeout(timeoutId);
                 }
             }
 

@@ -5,7 +5,6 @@ import { Options } from "@/modules/data/Options";
 import { Paths } from "@/modules/data/Paths";
 import { ReInit } from "@/renderer/reinit/ReInit";
 import { ipcRenderer } from "electron";
-import os from "os";
 import { runRendererTests } from "./RendererTestHost";
 import { SignalTest } from "./SignalTest";
 
@@ -24,9 +23,6 @@ async function main() {
     Paths.detectRootPath();
     await Paths.retrieveAppPath();
     Options.get().dev = true;
-    if (os.platform() != "win32") {
-        Options.get().download.aria2.enabled = false; // Unstable
-    }
     await Options.save();
 
     await ReInit.initRenderer();

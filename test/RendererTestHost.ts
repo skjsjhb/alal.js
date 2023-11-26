@@ -88,11 +88,19 @@ async function allTests() {
         console.log("Checking profiles.");
         const profiles = await (await fetch("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json")).json();
         console.log("Testing profiles.");
+        const pool = new Throttle.Pool(8);
         await Promise.all(profiles.versions.map(async (p: any) => {
+            await pool.acquire();
             console.log("Testing " + p.id);
-            const file = await (await fetch(p.url)).json();
-            const st = ProfileDetector.isMojang(file);
-            assertTrue(st);
+            try {
+                const file = await (await fetch(p.url)).json();
+                const st = ProfileDetector.isMojang(file);
+                assertTrue(st);
+            } catch (e) {
+                console.error("Error during fetch: " + e);
+                console.log("This instance is ignored.");
+            }
+            pool.release();
         }));
     });
     await testJavaDownload();

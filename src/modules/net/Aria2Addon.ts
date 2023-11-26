@@ -3,6 +3,7 @@ import { Options } from "@/modules/data/Options";
 import { Paths } from "@/modules/data/Paths";
 import { DownloadProfile } from "@/modules/net/Downloader";
 import { Availability } from "@/modules/util/Availability";
+import { Throttle } from "@/modules/util/Throttle";
 import { ChildProcess, exec, spawn } from "child_process";
 import { remove } from "fs-extra";
 import getPort from "get-port";
@@ -219,6 +220,7 @@ export namespace Aria2Addon {
     }
 
     const pollingInterval = 1000;
+    const wsPoll = new Throttle.Pool(8);
 
     /**
      * Aria2 version of {@link Downloader.webGetFile}.
@@ -232,6 +234,7 @@ export namespace Aria2Addon {
                 }
                 console.log("Get: " + p.url);
                 await remove(p.location); // Preventing EEXIST
+                await wsPoll.acquire();
                 const s = await sendRPCMessage({
                     method: "aria2.addUri",
                     params: [[p.url], {
@@ -240,6 +243,7 @@ export namespace Aria2Addon {
                         "connect-timeout": (Options.get().download.timeout || 5000) / 1000
                     }]
                 });
+                wsPoll.release();
                 const gid = s.result;
                 if (!gid) {
                     console.error("Malformed GID returned by aria2: " + gid);

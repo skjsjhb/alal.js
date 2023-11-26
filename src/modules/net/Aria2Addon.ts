@@ -6,9 +6,9 @@ import { Availability } from "@/modules/util/Availability";
 import { ChildProcess, exec, spawn } from "child_process";
 import { remove } from "fs-extra";
 import getPort from "get-port";
-import { WebSocket as Aria2WS } from "libaria2";
 import os from "os";
 import path from "path";
+import * as uuid from "uuid";
 
 /**
  * A module to support aria2 downloading.
@@ -16,7 +16,7 @@ import path from "path";
 export namespace Aria2Addon {
     let aria2cExec: string;
     let aria2cProc: ChildProcess | null;
-    let aria2: Aria2WS.Client | null;
+    let aria2: WebSocket | null;
     let aria2Port: number | null;
 
     export async function configure() {
@@ -71,8 +71,14 @@ export namespace Aria2Addon {
         aria2cProc = null;
     }
 
+    const messageSubscribeMap: Map<string, (s: any) => void> = new Map();
+
     async function spawnProc(): Promise<boolean> {
         return new Promise(async (res) => {
+            const timeoutId = setTimeout(() => {
+                console.error("Spawn aria2c timed out!");
+                res(false);
+            }, 5000);
             if (aria2cExec) {
                 try {
                     aria2Port = await getPort();
@@ -103,13 +109,25 @@ export namespace Aria2Addon {
             async function onAria2Spawn() {
                 try {
                     console.log("Spawned aria2c process. Setting up connection.");
-                    aria2 = new Aria2WS.Client({
-                        port: aria2Port as number, host: "localhost"
-                    });
-                    const version = await aria2.getVersion();
+                    aria2 = new WebSocket("ws://localhost:" + aria2Port + "/jsonrpc");
                     bindListeners();
-                    console.log("Connected to aria2 version " + version.version);
-                    res(true);
+                    aria2.addEventListener("open", async () => {
+                        const s = await sendRPCMessage({
+                            method: "aria2.getVersion"
+                        });
+                        clearTimeout(timeoutId);
+                        if (s?.result?.version) {
+                            console.log("Connected to aria2 version " + s?.result?.version);
+                            res(true);
+                        } else {
+                            console.error("Malformed result from aria2: " + s);
+                            res(false);
+                        }
+                    });
+
+                    aria2.addEventListener("error", (e) => {
+                        console.error("Error during WebSocket transmission: " + e);
+                    });
                 } catch (e) {
                     console.error("Could not connect to aria2: " + e);
                     aria2cProc?.removeAllListeners("exit");
@@ -128,6 +146,29 @@ export namespace Aria2Addon {
         });
     }
 
+    async function sendRPCMessage(data: any): Promise<any> {
+        return new Promise((res) => {
+            if (!aria2) {
+                res(null);
+                return;
+            }
+            const timeout = setTimeout(() => {
+                console.error("Connect to aria2c timed out!");
+                res(null);
+            }, 5000);
+            const mid = uuid.v4();
+            messageSubscribeMap.set(mid, (s) => {
+                messageSubscribeMap.delete(mid);
+                clearTimeout(timeout);
+                res(s);
+            });
+            aria2.send(JSON.stringify(Object.assign({
+                jsonrpc: "2.0",
+                id: mid
+            }, data)));
+        });
+    }
+
 
     /**
      * Check for the existence of aria2c connection instance.
@@ -143,22 +184,41 @@ export namespace Aria2Addon {
             return;
         }
         console.log("Binding listeners for aria2c.");
-
-        aria2.on("aria2.onDownloadComplete", async (e) => {
-            const rsv = pendingResolvers.get(e.gid);
-            if (rsv) {
-                pendingResolvers.delete(e.gid);
-                rsv(true);
-            }
-        });
-        aria2.on("aria2.onDownloadError", async (e) => {
-            const rsv = pendingResolvers.get(e.gid);
-            if (rsv) {
-                pendingResolvers.delete(e.gid);
-                rsv(false);
+        aria2.addEventListener("message", (e) => {
+            try {
+                const obj = JSON.parse(e.data);
+                if (obj.id) {
+                    // Response
+                    const fn = messageSubscribeMap.get(obj.id);
+                    if (fn) {
+                        fn(obj);
+                    }
+                } else if (obj.method) {
+                    // Notification
+                    const gids: string[] = obj.params.map((o: any) => o?.gid || "");
+                    switch (obj.method) {
+                        case "aria2.onDownloadComplete":
+                            gids.forEach((gid) => {
+                                pendingResolvers.get(gid)?.(true);
+                                pendingResolvers.delete(gid);
+                            });
+                            break;
+                        case "aria2.onDownloadError":
+                        case "aria2.onDownloadStop":
+                            gids.forEach((gid) => {
+                                pendingResolvers.get(gid)?.(false);
+                                pendingResolvers.delete(gid);
+                            });
+                            break;
+                    }
+                }
+            } catch (e) {
+                console.error("Invalid aria2c incoming message received: " + e);
             }
         });
     }
+
+    const pollingInterval = 1000;
 
     /**
      * Aria2 version of {@link Downloader.webGetFile}.
@@ -172,14 +232,41 @@ export namespace Aria2Addon {
                 }
                 console.log("Get: " + p.url);
                 await remove(p.location); // Preventing EEXIST
-                const gid = await aria2.addUri(p.url, {
-                    dir: path.dirname(p.location),
-                    out: path.basename(p.location),
-                    "connect-timeout": (Options.get().download.timeout || 5000) / 1000
+                const s = await sendRPCMessage({
+                    method: "aria2.addUri",
+                    params: [[p.url], {
+                        dir: path.dirname(p.location),
+                        out: path.basename(p.location),
+                        "connect-timeout": (Options.get().download.timeout || 5000) / 1000
+                    }]
                 });
+                const gid = s.result;
+                if (!gid) {
+                    console.error("Malformed GID returned by aria2: " + gid);
+                    res(false);
+                    return;
+                }
+                const polling = setInterval(async () => {
+                    const state = await sendRPCMessage({
+                        method: "aria2.tellStatus",
+                        params: [gid, ["status"]]
+                    });
+                    const s = state?.result?.status;
+                    if (s == "active" || s == "waiting") {
+                        // This is acceptable
+                        return;
+                    }
+                    clearInterval(polling);
+                    if (s == "complete") {
+                        res(true);
+                    } else {
+                        console.error("Invalid status for " + gid + ", aria2c status cannot be " + s);
+                        res(false); // No paused, error or removed allowed
+                    }
+                }, pollingInterval);
                 pendingResolvers.set(gid, res);
             } catch (e) {
-                console.error("Unexpected error during aria2c request: " + e);
+                console.error("Error during aria2c request: " + e);
                 res(false);
             }
         });

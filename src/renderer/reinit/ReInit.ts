@@ -22,6 +22,8 @@ import pkg from "../../../package.json";
 import { App } from "../screen/App";
 
 export namespace ReInit {
+
+
     /**
      * Initialize the renderer environment.
      */

@@ -39,19 +39,6 @@ const moduleResolution = {
                 callback(null, "global node_gyp_build_lzma");
                 return;
             }
-            if (ctx.request === "isomorphic-ws") {
-                callback(null, "global WebSocket");
-                return;
-            }
-            if (ctx.request === "bufferutil") {
-                callback(null, "global bufferutil");
-                return;
-            }
-            if (ctx.request === "utf-8-validate") {
-                callback(null, "global utf-8-validate");
-                return;
-            }
-
             callback();
         }
     ]

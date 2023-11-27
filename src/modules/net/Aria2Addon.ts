@@ -101,16 +101,10 @@ export namespace Aria2Addon {
                         ]);
                     aria2cProc.once("spawn", onAria2Spawn);
                     aria2cProc.once("exit", onAria2Exit);
-                    aria2cProc.stdout?.on("data", (d) => {
-                        if (Options.get().dev) {
-                            process.stdout.write("[Aria2c] " + d);
-                        }
-                    });
-                    aria2cProc.stderr?.on("data", (d) => {
-                        if (Options.get().dev) {
-                            process.stdout.write("[Aria2c] " + d);
-                        }
-                    });
+                    if (Options.get().dev) {
+                        aria2cProc.stdout?.pipe(process.stdout);
+                        aria2cProc.stderr?.pipe(process.stderr);
+                    }
                 } catch (e) {
                     console.error("Could not spawn aria2c process: " + e);
                     res(false);

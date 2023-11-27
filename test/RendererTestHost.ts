@@ -1,4 +1,5 @@
 import { Options } from "@/modules/data/Options";
+import { fetchJSON } from "@/modules/net/FetchUtil";
 import { ProfileDetector } from "@/modules/profile/ProfileDetector";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
@@ -86,23 +87,33 @@ async function allTests() {
 
     await test("Profile Detection for Mojang", async () => {
         console.log("Checking profiles.");
-        const profiles = await (await fetch("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json")).json();
+        const profiles = await fetchJSON("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json");
         console.log("Testing profiles.");
         const pool = new Throttle.Pool(8);
         await Promise.all(profiles.versions.map(async (p: any) => {
             await pool.acquire();
             console.log("Testing " + p.id);
-            try {
-                const file = await (await fetch(p.url)).json();
-                const st = ProfileDetector.isMojang(file);
-                assertTrue(st);
-            } catch (e) {
-                console.error("Error during fetch: " + e);
+            const file = await fetchJSON(p.url);
+            if (!file) {
+                console.error("Error fetching " + p.id);
                 console.log("This instance is ignored.");
+            } else {
+                const st = ProfileDetector.isMojang(file);
+                if (!st) {
+                    console.error("WA: Not Mojang: " + p.id);
+                }
+                assertTrue(st);
+                const id = file.id;
+                const isVer = ProfileDetector.isLikelyMojangVersion(id);
+                if (!isVer) {
+                    console.error("WA: Not Mojang version: " + id);
+                }
+                assertTrue(isVer);
             }
             pool.release();
         }));
     });
+
     await testJavaDownload();
     await saveSummary();
 }

@@ -1,6 +1,7 @@
 import { MicrosoftBrowserLogin } from "@/modules/auth/MicrosoftBrowserLogin";
 import { Options } from "@/modules/data/Options";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
+import { FetchUtil } from "@/modules/net/FetchUtil";
 import { app, ipcMain } from "electron";
 import { Signals } from "./Signals";
 
@@ -14,7 +15,8 @@ export namespace Handlers {
         [Signals.RELOAD_OPTIONS]: reloadOptions,
         [Signals.GET_LOCALE]: getLocale,
         [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow,
-        [Signals.WEB_GET_FILE]: webGetFileMainProc
+        [Signals.WEB_GET_FILE]: webGetFileMainProc,
+        [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc
     };
 
     /**
@@ -44,5 +46,9 @@ export namespace Handlers {
     // Wrapper method for webGetFileMain
     function webGetFileMainProc(_e: IpcMainInvokeEvent, p: DownloadProfile) {
         return Downloader.webGetFileMain(p);
+    }
+
+    function fetchJSONMainProc(_e: IpcMainInvokeEvent, url: string, init?: RequestInit) {
+        return FetchUtil.fetchJSONMain(url, init);
     }
 }

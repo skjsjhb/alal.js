@@ -9,8 +9,6 @@ const PDRules = Defaults.profileDetection;
  * and libraries. This module detected specific information about a profile.
  */
 export namespace ProfileDetector {
-
-
     /**
      * Check if the specified profile is a Mojang profile.
      *
@@ -100,9 +98,9 @@ export namespace ProfileDetector {
      *
      * This method returns the most likely result. If it failed to find one, an empty string is returned.
      */
-    export function getGameVersion(profileSet: Record<string, any>): string {
+    export function getGameVersion(profiles: any[]): string {
         // First handle special cases
-        for (const p of Object.values(profileSet)) {
+        for (const p of profiles) {
             const vp = getVersionByPatches(p);
             if (vp) {
                 return vp;
@@ -110,24 +108,27 @@ export namespace ProfileDetector {
         }
 
         // Analyze the inherit chain
-        for (const prof of Object.values(profileSet)) {
+        for (const prof of profiles) {
             let current = prof;
-            while (typeof current.inheritsFrom == "string" && current.inheritsFrom in profileSet) {
-                current = profileSet[current.inheritsFrom];
+            while (typeof current.inheritsFrom == "string") {
+                current = profiles.find((p) => p.id == current.inheritsFrom);
+                if (!current) {
+                    break;
+                }
             }
-            if (isMojang(current) && isLikelyMojangVersion(current.id)) {
+            if (current && isMojang(current) && isLikelyMojangVersion(current.id)) {
                 return current.id;
             }
         }
 
         // Directly check all profiles
-        for (const [id, prof] of Object.entries(profileSet)) {
+        for (const prof of profiles) {
             if (isMojang(prof)) {
-                if (isLikelyMojangVersion(id)) {
-                    return id;
+                if (isLikelyMojangVersion(prof.id)) {
+                    return prof.id;
                 } else {
                     // Extract the most likely one
-                    const ev = extractMojangVersion(id);
+                    const ev = extractMojangVersion(prof.id);
                     if (ev) {
                         return ev;
                     }
@@ -136,7 +137,7 @@ export namespace ProfileDetector {
         }
 
         // Extract any
-        for (const id of Object.keys(profileSet)) {
+        for (const {id} of profiles) {
             const ev = extractMojangVersion(id);
             if (ev) {
                 return ev;

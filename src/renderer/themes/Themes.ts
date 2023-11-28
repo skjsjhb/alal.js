@@ -5,7 +5,7 @@ import SakuraKumoLight from "./SakuraKumoLight";
 /**
  * A collection of build-in theme entries.
  *
- * The theme system in ALAL has been redesigned and follow the strict styling standard. These are the
+ * The theme system in alal.js has been redesigned and follow the strict styling standard. These are the
  * built-in themes which can be loaded directly. Users can also load custom theme files, but this
  * is considered rare.
  */

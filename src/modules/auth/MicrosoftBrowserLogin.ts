@@ -16,7 +16,7 @@ export namespace MicrosoftBrowserLogin {
     /**
      * Login to Microsoft account using `BrowserWindow`.
      *
-     * ALAL detects the change of URL and extracts the authorization code once
+     * alal.js detects the change of URL and extracts the authorization code once
      * the login is success.
      *
      * The first returned Promise is fulfilled when the window loading has complete. The

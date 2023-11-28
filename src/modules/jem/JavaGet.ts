@@ -251,7 +251,7 @@ export namespace JavaGet {
                 sys = "windows";
                 break;
             case "linux":
-            default: // ALAL does not have releases on other platforms
+            default: // alal.js does not have releases on other platforms
                 sys = "linux";
                 break;
         }

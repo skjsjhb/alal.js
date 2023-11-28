@@ -36,7 +36,7 @@ export namespace WindowManager {
             show: false
         });
         mainWindow.setAspectRatio(1.92);
-        mainWindow.setTitle("ALAL");
+        mainWindow.setTitle("alal.js");
         mainWindow.setMenu(null);
 
         // Minimum event listeners

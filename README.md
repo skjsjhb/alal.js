@@ -1,46 +1,33 @@
-# ALAL (Alicorn Again Launcher)
+# alal.js
+
+![.](https://repository-images.githubusercontent.com/719530853/1966e2a0-d7a9-4273-8947-469dfe4ee2e7)
 
 ## Status
 
-[![Autotest](https://github.com/skjsjhb/ALAL/actions/workflows/test.yml/badge.svg)](https://github.com/skjsjhb/ALAL/actions/workflows/test.yml)
-[![Bundle Check](https://github.com/skjsjhb/ALAL/actions/workflows/bundle.yml/badge.svg)](https://github.com/skjsjhb/ALAL/actions/workflows/bundle.yml)
-[![Cross Packaging](https://github.com/skjsjhb/ALAL/actions/workflows/package.yml/badge.svg)](https://github.com/skjsjhb/ALAL/actions/workflows/package.yml)
-![GitHub License](https://img.shields.io/github/license/skjsjhb/ALAL)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/skjsjhb/ALAL)
+[![Autotest](https://github.com/skjsjhb/alal.js/actions/workflows/test.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/test.yml)
+[![Bundle Check](https://github.com/skjsjhb/alal.js/actions/workflows/bundle.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/bundle.yml)
+[![Cross Packaging](https://github.com/skjsjhb/alal.js/actions/workflows/package.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/package.yml)
+![GitHub License](https://img.shields.io/github/license/skjsjhb/alal.js)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/skjsjhb/alal.js)
 
-## This Is a Fork
+## What Is This?
 
-This is a fork of a the original [Alicorn](https://github.com/Andy-K-Sparklight/Alicorn) repository. See the original
-README there. The name **ALAL** stands for **AL**icorn **A**gain **L**auncher.
+**alal.js**, (i.e. **Al**icorn **A**gain **L**auncher **J**ava**S**cript Edition), is a successor of the
+unmaintained [Alicorn](https://github.com/Andy-K-Sparklight/Alicorn) laucher.
+
+We originally forked the repository and decide to refactor it, fix bugs and then republish. However, during the code
+review, we doubt the benefit of refactoring compared with restarting a standalone project. We selected the latter and
+created project alal.js here.
+
+Most modules and code are wiped and the code is written from scratch, but some build tools are continuing to be used.
+Though this project is now on a different road from Alicorn, it's heavily inspired by that and we're still crediting the
+original work by naming our project alal.js.
 
 ## Disclaimer
 
-**ALAL is not compatible with Alicorn Legacy.** The data file format is updated and containers have changed a lot. No
-backward compatibility is guaranteed.
-
-~~Many packages of the original author is not possible to update in a few commits, they might get updated soon to avoid
-vulnerabilities, but with no warranty.~~ All NPM packages are now up-to-date, though at the cost of considerable amount
-of breaking changes.
-
-The fork is made to keep the software alive, not a follow-up or series. The updates are made out of good intentions, but
-still, with no warranty.
-
-## Major Changes (Comparing To Alicorn)
-
-We attempt to make ALAL a modern launcher with latest features integrated. Therefore we've made several changes to the
-dependencies and code. Naming some:
-
-- No longer supports Windows 7, 8 and 8.1, macOS 10.13, 10.14.
-
-- No longer supports 32-bit OS.
-
-- Add support to aarch64 / arm64 architectures.
-
-- ~~Improve UI.~~ Redesign UI.
-
-- Improve performance.
-
-- Improve mod resolution system.
+**alal.js** is not an official follow-up project of Alicorn. It's made by a user of Alicorn for hobby and with good
+intends. However, apart of some common collaborators, alal.js is neither affiliated with Alicorn Launcher, nor Mojang
+Studios, Microsoft Corp. or other unmentioned individuals or organizations.
 
 ## Build
 
@@ -51,13 +38,13 @@ coverage. Run the following scripts with care and open an issue if they refuse t
 
 ### Targets
 
-We're continue using **webpack** for script bundling, but the distribution has changed to **electron-builder**. We've
-configured several targets for the new build system:
+alal.js uses **webpack** and **electron-builder** to build the app. We've pre-configured several targets for the
+following sceneraios:
 
-- Debug - Development build for realtime testing and running. Used actively during the code-and-test process. This
-  target contains source map for tracing.
+- Debug - Development build for realtime running. Used actively during the code-and-test process. This target contains
+  source map for tracing.
 
-- Autotest - Newly introduced build for automated testing. Test modules are embedded into the application by a specially
+- Autotest - Development build for automated testing. Test modules are embedded into the application by a specially
   designed test entry. The test system runs parallely with the application, reflects the most realistic and convincing
   test results. This target builds using development config, but without a source map.
 
@@ -66,7 +53,7 @@ configured several targets for the new build system:
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ with corepack
 
 - Git
 
@@ -82,7 +69,7 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 1. Clone the repository.
 
    ```shell
-   git clone https://github.com/skjsjhb/ALAL.git --depth 1
+   git clone https://github.com/skjsjhb/ala.js.git --depth 1
    ```
 
    If you're trying to contribute, please consider fork first, rather than cloning directly.
@@ -103,7 +90,7 @@ We've created seperated all-in-one scripts for the build. Below is an example of
    yarn bundle-autotest
    ```
 
-4. Run test with ALAL Test Tool:
+4. Run test with alal.js Test Tool:
 
    ```shell
    yarn test
@@ -122,7 +109,7 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
 - `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially
   supported), as the
-  library does not came with a valid prebuilt (either missing or malfunctioned). ALAL uses a JS-based implementation
+  library does not came with a valid prebuilt (either missing or malfunctioned). We use a JS-based implementation
   under this case. Usages of LZMA are also
   reduced.
 
@@ -163,6 +150,14 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
 ## Copying
 
-Copyright (C) 2020 - 2022 Annie K Rarity Sparklight (ThatRarityEG). For Alicorn Launcher.
+Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). alal.js is no longer affiliated with Alicorn Launcher.
 
-Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). For Alicorn Again Launcher.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.

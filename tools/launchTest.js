@@ -6,7 +6,7 @@ const fs = require("node:fs/promises");
 const fse = require("fs");
 const cp = require("node:child_process");
 
-console.log("======== ALAL AutoTest Tool ========");
+console.log("======== alal.js AutoTest Tool ========");
 
 const testRoot = path.resolve(__dirname, "../build/autotest");
 

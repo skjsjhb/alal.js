@@ -7,12 +7,12 @@ import { Handlers } from "./Handlers";
 import { WindowManager } from "./WindowManager";
 
 /**
- * The brand-new bootloader for ALAL.
+ * The brand-new bootloader for alal.js.
  */
 export namespace BootLoader {
 
     export async function bootloaderMain() {
-        console.log("This is ALAL bootloader. Newer bootloader brings better performance.");
+        console.log("This is alal.js bootloader. Newer bootloader brings better performance.");
         await prepareRun();
         await app.whenReady();
 
@@ -23,7 +23,7 @@ export namespace BootLoader {
         console.log("Electron is ready. Starting launch process.");
 
         console.log("Welcome to Alicorn Again!");
-        console.log(`ALAL with Electron ${process.versions["electron"]}, ` +
+        console.log(`alal.js with Electron ${process.versions["electron"]}, ` +
             `Node.js ${process.versions["node"]} and Chrome ${process.versions["chrome"]}`);
 
         // Initialize the main window and wait until it loads
@@ -35,7 +35,7 @@ export namespace BootLoader {
 
 
     async function prepareRun() {
-        console.log("ALAL backend is initializing, just a moment, hang tight...");
+        console.log("alal.js backend is initializing, just a moment, hang tight...");
         console.log("Creating backend bindings.");
         Handlers.createBindings();
 

@@ -6,21 +6,21 @@ import path from "path";
 /**
  * Module for file path resolving and file management.
  *
- * ALAL stores its data with them divided into the following sections:
+ * alal.js stores its data with them divided into the following sections:
  * - `user`: User selections and histories (aka. implicit preferences)
  * - `asr`: Shared room for application generated data.
  * - `pkg`: Downloaded software packages and daemons.
  * - `tmp`: Temp data storage.
  *
- * From ALAL (SakuraKumo) no data will be saved using the Web Storage API.
+ * From alal.js (SakuraKumo) no data will be saved using the Web Storage API.
  */
 export namespace Paths {
     let rootPath: string;
     let appPath: string;
 
     /**
-     * Automatically detect the root path of ALAL data folder.
-     * ALAL lookups the following locations:
+     * Automatically detect the root path of alal.js data folder.
+     * alal.js lookups the following locations:
      * - Windows: `%LOCALAPPDATA%/AlicornAgain`
      * - macOS: `~/Library/Application Support/AlicornAgain`
      * - Others: `~/.alicorn-again`

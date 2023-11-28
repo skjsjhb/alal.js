@@ -7,7 +7,7 @@ import { Objects } from "../util/Objects";
 import { Paths } from "./Paths";
 
 /**
- * ReOptions, aka. Config v2. The newly designed options system for ALAL.
+ * ReOptions, aka. Config v2. The newly designed options system for alal.js.
  *
  * This module is designed to solve major issues in Alicorn Config:
  * - Config handling is cumbersome for both main process and renderer process.

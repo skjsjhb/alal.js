@@ -20,7 +20,7 @@ export interface Container {
 
     /**
      * Enable shared container support. In these containers, assets and libraries are not installed, but
-     * are linked to files in the data root of ALAL.
+     * are linked to files in the data root of alal.js.
      *
      * - Libraries: `<root>/maven`
      * - Assets: `<root>/sharedAssets`

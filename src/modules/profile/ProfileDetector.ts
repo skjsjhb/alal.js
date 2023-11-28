@@ -5,7 +5,7 @@ import Defaults from "@/constra/defaults.json";
 const PDRules = Defaults.profileDetection;
 
 /**
- * ALAL supports multiple variants of profiles. These profiles vary by their structures, version string formatting
+ * alal.js supports multiple variants of profiles. These profiles vary by their structures, version string formatting
  * and libraries. This module detected specific information about a profile.
  */
 export namespace ProfileDetector {
@@ -81,7 +81,7 @@ export namespace ProfileDetector {
         return false;
     }
 
-    // Compatibility with patched profiles (https://github.com/skjsjhb/ALAL/issues/6)
+    // Compatibility with patched profiles (https://github.com/skjsjhb/alal.js/issues/6)
     function getVersionByPatches(src: any): string {
         if (src.patches instanceof Array) {
             for (const patch of src.patches) {

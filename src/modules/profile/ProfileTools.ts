@@ -91,7 +91,7 @@ export namespace ProfileTools {
     /**
      * Retrieves Mojang profile manifest.
      *
-     * ALAL uses manifest v2. The URL has been included in `sources.json`.
+     * alal.js uses manifest v2. The URL has been included in `sources.json`.
      */
     export async function getMojangManifest(): Promise<MojangProfileManifest | null> {
         if (!mojangManifest) {
@@ -148,7 +148,7 @@ export namespace ProfileTools {
 
     /**
      * By default, the launcher should unpack all native files without filtering.
-     * However, ALAL can optimize this process by only unpacking files that are required.
+     * However, alal.js can optimize this process by only unpacking files that are required.
      */
     export function isNativeRequired(l: Library): boolean {
         const libName = l.name.split(":")[3]; // Assume already checked

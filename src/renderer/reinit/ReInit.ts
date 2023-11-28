@@ -1,5 +1,5 @@
 /**
- * The newly-designed renderer initialization module for ALAL.
+ * The newly-designed renderer initialization module for alal.js.
  *
  * The original Alicorn Renderer entry is bloat and over-integrated. This module replace it
  * with focus on a clean and fast initialization process.
@@ -95,12 +95,10 @@ export namespace ReInit {
     }
 
     function printVersionInfo() {
-        console.log(`Alicorn Again (ALAL) ${pkg.versionName} ${pkg.version}`);
-        console.log("This is ReInit for ALAL. Leaving everything behind.");
-        console.log("%c❤ From Annie K Rarity Sparklight", "color:#df307f;font-weight:bold;");
-        console.log("%cALAL Forked and re-designed by skjsjhb", "color: #f8d854;font-weight:bold;");
-        console.log("Alicorn Launcher Copyright (C) 2021-2022 Annie K Rarity Sparklight");
-        console.log("Alicorn Again Launcher Copyright (C) 2023 Ted \"skjsjhb\" Gao");
+        console.log(`alal.js ${pkg.versionName} ${pkg.version}`);
+        console.log("This is ReInit for alal.js. Leaving everything behind.");
+        console.log("%calal.js Forked and re-designed by skjsjhb", "color: #f8d854;font-weight:bold;");
+        console.log("alal.js Copyright (C) 2023 Ted \"skjsjhb\" Gao");
         console.log("This program comes with ABSOLUTELY NO WARRANTY; for details, please see 'resources/app/LICENSE'.");
         console.log("This is free software, and you are welcome to redistribute it under certain conditions; see the license file for details.");
     }

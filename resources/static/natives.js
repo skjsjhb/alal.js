@@ -1,5 +1,5 @@
 (() => {
-    console.log("Native library loader for ALAL.");
+    console.log("Native library loader.");
     const path = require("path");
     const os = require("os");
 

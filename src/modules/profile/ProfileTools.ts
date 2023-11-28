@@ -161,7 +161,7 @@ export namespace ProfileTools {
         if (libName.includes("x64") && arch != "x64") {
             return false;
         }
-        if (libName.includes("arm64") && arch != "arm64") {
+        if ((libName.includes("arm") || libName.includes("aarch")) && arch != "arm64") {
             return false;
         }
         switch (OSInfo.getSelf()) {

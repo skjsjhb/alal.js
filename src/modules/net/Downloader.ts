@@ -63,7 +63,7 @@ export namespace Downloader {
             cache: cache ?? false, // Cache is not enabled by default
             size: size ?? -1,
             checksum: checksum ?? "",
-            validation: validation ?? Options.get().download.validation
+            validation: validation ?? "size"
         };
     }
 
@@ -117,7 +117,7 @@ export namespace Downloader {
             return true; // Always pass
         }
         if (p.validation == "size") {
-            if (p.size == 0) {
+            if (p.size <= 0) {
                 return true; // Size unknown, cannot check, assume pass
             }
             try {
@@ -126,6 +126,9 @@ export namespace Downloader {
                 console.error("Could not stat file: " + e);
                 return false;
             }
+        }
+        if (!p.checksum) {
+            return true; // No validation available
         }
         return await Files.checkIntegrity(p.location, p.checksum, p.validation);
     }
@@ -212,6 +215,7 @@ export namespace Downloader {
         }
     }
 
+    const meterInterval = 3000;
     // Creates a speed meter transform stream. The input chunk is simply forwarded to the output, but an error
     // is thrown if the speed is below the minimum.
     // The return value contains a created stream and a timer. The latter should be cancelled on pipe complete.
@@ -221,10 +225,12 @@ export namespace Downloader {
         }
         let size = 0;
         const tld = setInterval(() => {
-            if (size < minSpeed) {
+            if (size < minSpeed * meterInterval / 1000) {
                 tr.emit("error", new Error("Speed below minimum"));
+            } else {
+                size = 0;
             }
-        }, 1000);
+        }, meterInterval);
         const tr = new Transform({
             transform(chunk: any, _encoding: BufferEncoding, callback: TransformCallback) {
                 size += Buffer.from(chunk).length;

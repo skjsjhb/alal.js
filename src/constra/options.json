@@ -2,16 +2,10 @@
   "locale": "",
   "dev": false,
   "download": {
-    "aria2": {
-      "enabled": true,
-      "maxConcurrent": 32,
-      "minSplitSize": "10M"
-    },
     "timeout": 5000,
     "minSpeed": 8192,
     "tries": 5,
     "maxTasks": 32,
-    "validation": "size",
     "cache": true
   },
   "ui": {

@@ -10,9 +10,6 @@ import { SignalTest } from "./SignalTest";
 
 async function main() {
     // Redirect logs for renderer
-    console.log = (...args: any[]) => {
-        ipcRenderer.send(SignalTest.LOG_LOG, ...args);
-    };
     console.warn = (...args: any[]) => {
         ipcRenderer.send(SignalTest.LOG_WARN, ...args);
     };

@@ -2,11 +2,14 @@
 
 import Defaults from "@/constra/defaults.json";
 import Sources from "@/constra/sources.json";
+import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { fetchJSON } from "@/modules/net/FetchUtil";
+import { Rules } from "@/modules/profile/Rules";
 import { Argument, DownloadArtifact, Library, VersionProfile } from "@/modules/profile/VersionProfile";
 import { Objects } from "@/modules/util/Objects";
+import { OSInfo, OSType } from "@/modules/util/OSInfo";
 import { readJSON } from "fs-extra";
-import path from "path";
+import os from "os";
 
 export namespace ProfileTools {
     /**
@@ -111,20 +114,23 @@ export namespace ProfileTools {
             console.error("Could not retrieve profile manifest.");
             return null;
         }
-        return mm.versions.find((v) => v.id == id);
+        const index = mm.versions.find((v) => v.id == id);
+        if (!index || !index.url) {
+            console.error("No profile with such version: " + id);
+            return null;
+        }
+        return await fetchJSON(index.url);
     }
 
     /**
      * Loads and generates a profile with specified ID.
-     * @param rootDir Root of the game directory.
-     * @param id Profile ID.
      */
-    export async function loadProfile(rootDir: string, id: string): Promise<VersionProfile | null> {
-        const head = await readJSON(getProfilePath(rootDir, id));
+    export async function loadProfile(ct: Container, id: string): Promise<VersionProfile | null> {
+        const head = await readJSON(ContainerTools.getProfilePath(ct, id));
         const srcs = [head];
         let current = head;
         while (current.inheritsFrom) {
-            const dep = await readJSON(getProfilePath(rootDir, current.inheritsFrom));
+            const dep = await readJSON(ContainerTools.getProfilePath(ct, current.inheritsFrom));
             srcs.push(dep);
             current = dep;
         }
@@ -132,10 +138,42 @@ export namespace ProfileTools {
         return mergeProfiles(srcs);
     }
 
-
-    function getProfilePath(rootDir: string, id: string) {
-        return path.join(rootDir, "versions", id, id + ".json");
+    export function effectiveLibraries(p: VersionProfile): Library[] {
+        return p.libraries.filter((l) => Rules.resolveRules(l.rules));
     }
+
+    export function isNativeLibrary(l: Library): boolean {
+        return l.name.split(":").length == 4;
+    }
+
+    /**
+     * By default, the launcher should unpack all native files without filtering.
+     * However, ALAL can optimize this process by only unpacking files that are required.
+     */
+    export function isNativeRequired(l: Library): boolean {
+        const libName = l.name.split(":")[3]; // Assume already checked
+        const arch = os.arch();
+
+        // Caveat for arm devices
+        if (libName.includes("x86") && arch != "ia32") {
+            return false;
+        }
+        if (libName.includes("x64") && arch != "x64") {
+            return false;
+        }
+        if (libName.includes("arm64") && arch != "arm64") {
+            return false;
+        }
+        switch (OSInfo.getSelf()) {
+            case OSType.WINDOWS:
+                return /windows/i.test(libName);
+            case OSType.LINUX:
+                return /linux/i.test(libName);
+            case OSType.MACOS:
+                return /osx/i.test(libName) || /macos/.test(libName);
+        }
+    }
+
 
     /**
      * Merge profiles and generate an effective profile.

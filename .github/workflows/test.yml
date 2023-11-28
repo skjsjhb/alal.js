@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: "18"
       - name: Build
-        run: corepack enable && yarn && yarn addon && yarn electron-rebuild && yarn bundle-autotest
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: yarn test
 
@@ -28,10 +28,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - name: Setup Optional Dependencies
-        run: brew install aria2
       - name: Build
-        run: corepack enable && yarn && yarn addon && yarn electron-rebuild && yarn bundle-autotest
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: yarn test
 
@@ -45,9 +43,7 @@ jobs:
           node-version: "18"
       - name: Setup Xvfb
         run: sudo apt install xvfb
-      - name: Setup Optional Dependencies
-        run: sudo apt install aria2
       - name: Build
-        run: corepack enable && yarn && yarn addon && yarn electron-rebuild && yarn bundle-autotest
+        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
         run: xvfb-run yarn test

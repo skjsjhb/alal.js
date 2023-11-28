@@ -10,6 +10,15 @@ ms-browser-login:
 download:
   batch: "Downloading Files"
 
+install:
+  compound: "Installing ${id}"
+  resolve: "Fetching Profile: ${id}"
+  profile: "Writing Profile: ${id}"
+  client: "Downloading Client: ${id}"
+  libraries: "Downloading Libraries: ${id}"
+  assets: "Downloading Assets: ${assets}"
+  natives: "Extracting Natives: ${id}"
+
 java-get:
   get: "Installing Java Component: ${name}"
   download: "Fetching ${name}"

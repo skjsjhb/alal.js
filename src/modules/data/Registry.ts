@@ -35,7 +35,7 @@ export namespace Registry {
 
         const promos = [];
         for (const [k, t] of regTables.entries()) {
-            const targetPath = Paths.getDataPath(path.join(registryRoot, k + regFileSuffix));
+            const targetPath = Paths.getDataPath(registryRoot, k + regFileSuffix);
             promos.push(outputJSON(targetPath, t));
         }
         await Promise.all(promos);

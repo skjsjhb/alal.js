@@ -10,7 +10,6 @@ import { Paths } from "@/modules/data/Paths";
 import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
 import { JavaGet } from "@/modules/jem/JavaGet";
-import { Aria2Addon } from "@/modules/net/Aria2Addon";
 import { Cacher } from "@/modules/net/Cacher";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { Mirrors } from "@/modules/net/Mirrors";
@@ -22,8 +21,6 @@ import pkg from "../../../package.json";
 import { App } from "../screen/App";
 
 export namespace ReInit {
-
-
     /**
      * Initialize the renderer environment.
      */
@@ -78,7 +75,6 @@ export namespace ReInit {
     // Tasks to run after renderer initialization
     async function postInit() {
         await Cacher.configure();
-        await Aria2Addon.configure();
         await Mirrors.updateRules();
     }
 
@@ -112,6 +108,5 @@ export namespace ReInit {
     async function beforeClose() {
         await Options.save();
         await Registry.saveTables();
-        Aria2Addon.stopProc();
     }
 }

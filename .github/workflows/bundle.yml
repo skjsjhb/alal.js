@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: "18"
       - name: Install Dependencies
-        run: corepack enable && yarn && yarn addon
+        run: corepack enable && yarn
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build

@@ -13,9 +13,6 @@ function processArgs(args: any[]): any[] {
 export function runMainTests() {
     console.log("Automate tests for main process.");
 
-    ipcMain.on(SignalTest.LOG_LOG, (_event, ...args) => {
-        console.log(...processArgs(args));
-    });
     ipcMain.on(SignalTest.LOG_WARN, (_event, ...args) => {
         console.warn(...processArgs(args));
     });

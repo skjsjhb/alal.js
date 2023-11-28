@@ -33,7 +33,6 @@ export namespace DownloadManager {
                 } else {
                     task.addFailed();
                 }
-                console.log(task.getProgressString());
                 pool.release();
                 return res;
             }));

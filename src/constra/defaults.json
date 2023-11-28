@@ -72,5 +72,8 @@
         "optifine:OptiFine"
       ]
     }
+  },
+  "installer": {
+    "nativesRegex": "\\.(dll|dylib|so)$"
   }
 }

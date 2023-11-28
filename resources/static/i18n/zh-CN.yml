@@ -8,10 +8,19 @@ ms-browser-login:
     b-no: "继续登录"
 
 download:
-  batch: "正在下载并验证"
+  batch: "下载并验证"
+
+install:
+  compound: "正在安装游戏版本: ${id}"
+  resolve: "获取版本信息: ${id}"
+  profile: "写入版本列表: ${id}"
+  client: "下载游戏核心: ${id}"
+  libraries: "下载支持库: ${id}"
+  assets: "下载资源包: ${assets}"
+  natives: "提取运行库: ${id}"
 
 java-get:
   get: "正在安装 Java 组件: ${name}"
-  download: "正在下载并验证: ${name}"
-  resolve: "正在获取 Java 组件列表"
-  post-process: "正在提取: ${name}"
+  download: "下载 Java 文件: ${name}"
+  resolve: "获取 Java 组件列表"
+  post-process: "提取文件: ${name}"

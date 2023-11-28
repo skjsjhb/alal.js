@@ -4,7 +4,6 @@
   "versionName": "SakuraKumo",
   "version": "2.0.1",
   "scripts": {
-    "addon": "node tools/dlAddons.js",
     "bundle-debug": "yarn webpack --config webpack.config.debug.js",
     "bundle-release": "yarn webpack --config webpack.config.release.js",
     "bundle-autotest": "yarn webpack --config webpack.config.autotest.js",
@@ -27,6 +26,7 @@
     "@types/node": "^20.9.4",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
+    "@types/unzipper": "^0",
     "@types/uuid": "^9.0.7",
     "copy-webpack-plugin": "^11.0.0",
     "decompress": "^4.2.1",
@@ -52,6 +52,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "theme-ui": "^0.16.1",
+    "unzipper": "^0.10.14",
     "uuid": "^9.0.1",
     "yaml": "^2.3.4"
   },

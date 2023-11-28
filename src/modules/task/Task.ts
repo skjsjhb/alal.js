@@ -98,7 +98,7 @@ export class Task<T> {
      * Gets the progress as string.
      */
     getProgressString(): string {
-        if (this.progress === null) {
+        if (this.progress === null || this.progress.total == 0) {
             return "...";
         }
         if (this.progress.failed > 0) {
@@ -114,6 +114,9 @@ export class Task<T> {
     getProgressPercent(): number {
         if (this.progress === null) {
             return -1;
+        }
+        if (this.progress.total == 0) {
+            return 1;
         }
         return this.progress.success / this.progress.total;
     }

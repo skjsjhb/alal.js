@@ -1,8 +1,8 @@
-import { Options } from "@/modules/data/Options";
 import { fetchJSON } from "@/modules/net/FetchUtil";
 import { ProfileDetector } from "@/modules/profile/ProfileDetector";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
+import { testInstaller } from "T/InstallerTest";
 import { Files } from "../src/modules/data/Files";
 import { Registry } from "../src/modules/data/Registry";
 import { Locale } from "../src/modules/i18n/Locale";
@@ -39,8 +39,7 @@ async function allTests() {
         assertNotEquals(Registry.getTable("mirrors", []).length, 0);
     });
     const testFile = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json";
-    await test("Single File Download with Fetch", async () => {
-        Options.get().download.aria2.enabled = false; // Temporarily disable this
+    await test("Single File Download", async () => {
         await remove("file.json");
         await Downloader.downloadFile(Downloader.createProfile({
             url: testFile,
@@ -58,19 +57,6 @@ async function allTests() {
     await test("File Cache", async () => {
         await Cacher.applyCache(testFile, "cache.json");
         assertEquals((await readFile("cache.json")).toString(), (await readFile("file.json")).toString());
-    });
-    await test("Single File Download with aria2", async () => {
-        Options.get().download.aria2.enabled = true; // Enable it
-        await remove("file.json");
-        await Downloader.downloadFile(Downloader.createProfile({
-            url: testFile,
-            location: "file.json",
-            validation: "sha1",
-            checksum: "29c9d911cdf957f926e37c0216f052c9c02e0b2a",
-            cache: true
-        }));
-        const f = await readJSON("file.json");
-        assertEquals(f.variant, "temurin");
     });
     await test("Throttle Pool", async () => {
         let a = 0;
@@ -115,6 +101,7 @@ async function allTests() {
     });
 
     await testJavaDownload();
+    await testInstaller();
     await saveSummary();
 }
 

@@ -1,7 +1,6 @@
 import { Signals } from "@/background/Signals";
 import { Files } from "@/modules/data/Files";
 import { Options } from "@/modules/data/Options";
-import { Aria2Addon } from "@/modules/net/Aria2Addon";
 import { Cacher } from "@/modules/net/Cacher";
 import { Mirrors } from "@/modules/net/Mirrors";
 import { ipcRenderer } from "electron";
@@ -77,12 +76,7 @@ export namespace Downloader {
             if (!await checkCache(p)) {
                 usingCache = false;
                 // Download file since cache not found
-                let dlok: boolean;
-                if (Aria2Addon.isPresent()) {
-                    dlok = await Aria2Addon.webGetFile(p);
-                } else {
-                    dlok = await webGetFile(p);
-                }
+                const dlok = await webGetFile(p);
                 if (!dlok) {
                     console.log("Try: " + p.url);
                     continue; // Try again

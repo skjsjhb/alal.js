@@ -15,6 +15,7 @@ import { pipeline } from "stream/promises";
  */
 export interface DownloadProfile {
     url: string,
+    origin: string, // Original URL for fallbacks
     location: string,
     headerTimeout: number,
     minSpeed: number,
@@ -55,6 +56,7 @@ export namespace Downloader {
         }
         return {
             url: effectiveURL,
+            origin: url,
             location: location,
             headerTimeout: headerTimeout ?? Options.get().download.timeout,
             minSpeed: minSpeed ?? Options.get().download.minSpeed,
@@ -92,6 +94,7 @@ export namespace Downloader {
                     // This cache is invalid
                     await invalidateCache(p);
                 }
+                p.url = p.origin; // Disable mirrors
                 // Try again
                 console.log("Try: " + p.url);
             }

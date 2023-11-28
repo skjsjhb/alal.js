@@ -1334,6 +1334,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"alal.js@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "alal.js@workspace:."
+  dependencies:
+    "@electron/rebuild": "npm:^3.3.1"
+    "@emotion/react": "npm:^11.11.1"
+    "@types/decompress": "npm:^4"
+    "@types/fs-extra": "npm:^11.0.4"
+    "@types/lzma-native": "npm:^4.0.4"
+    "@types/node": "npm:^20.9.4"
+    "@types/react": "npm:^18.2.37"
+    "@types/react-dom": "npm:^18.2.15"
+    "@types/unzipper": "npm:^0"
+    "@types/uuid": "npm:^9.0.7"
+    copy-webpack-plugin: "npm:^11.0.0"
+    decompress: "npm:^4.2.1"
+    electron: "npm:^27.1.0"
+    electron-builder: "npm:^24.6.4"
+    electron-fetch: "npm:^1.9.1"
+    fs-extra: "npm:^11.1.1"
+    get-port: "npm:^7.0.0"
+    glob: "npm:^10.3.10"
+    global-agent: "npm:^3.0.0"
+    html-webpack-plugin: "npm:^5.5.3"
+    lzma: "npm:^2.3.2"
+    lzma-native: "npm:^8.0.6"
+    node-fetch: "npm:^3.3.2"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    rimraf: "npm:^5.0.5"
+    theme-ui: "npm:^0.16.1"
+    ts-loader: "npm:^9.5.1"
+    typescript: "npm:^5.2.2"
+    unzipper: "npm:^0.10.14"
+    uuid: "npm:^9.0.1"
+    webpack: "npm:^5.76.0"
+    webpack-cli: "npm:^5.1.4"
+    yaml: "npm:^2.3.4"
+  languageName: unknown
+  linkType: soft
+
 "ansi-regex@npm:^5.0.1":
   version: 5.0.1
   resolution: "ansi-regex@npm:5.0.1"
@@ -4983,47 +5024,6 @@ __metadata:
   checksum: 7d01d4c14513c461778dd673a8f9e53255221f8d04173aafeb8e11b23d8b659bb83f1c90cfe81af7f9c213b8084b404b918108fd792bda76678f555340cc64ec
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@electron/rebuild": "npm:^3.3.1"
-    "@emotion/react": "npm:^11.11.1"
-    "@types/decompress": "npm:^4"
-    "@types/fs-extra": "npm:^11.0.4"
-    "@types/lzma-native": "npm:^4.0.4"
-    "@types/node": "npm:^20.9.4"
-    "@types/react": "npm:^18.2.37"
-    "@types/react-dom": "npm:^18.2.15"
-    "@types/unzipper": "npm:^0"
-    "@types/uuid": "npm:^9.0.7"
-    copy-webpack-plugin: "npm:^11.0.0"
-    decompress: "npm:^4.2.1"
-    electron: "npm:^27.1.0"
-    electron-builder: "npm:^24.6.4"
-    electron-fetch: "npm:^1.9.1"
-    fs-extra: "npm:^11.1.1"
-    get-port: "npm:^7.0.0"
-    glob: "npm:^10.3.10"
-    global-agent: "npm:^3.0.0"
-    html-webpack-plugin: "npm:^5.5.3"
-    lzma: "npm:^2.3.2"
-    lzma-native: "npm:^8.0.6"
-    node-fetch: "npm:^3.3.2"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-    rimraf: "npm:^5.0.5"
-    theme-ui: "npm:^0.16.1"
-    ts-loader: "npm:^9.5.1"
-    typescript: "npm:^5.2.2"
-    unzipper: "npm:^0.10.14"
-    uuid: "npm:^9.0.1"
-    webpack: "npm:^5.76.0"
-    webpack-cli: "npm:^5.1.4"
-    yaml: "npm:^2.3.4"
-  languageName: unknown
-  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0

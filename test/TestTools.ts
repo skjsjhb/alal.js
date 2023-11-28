@@ -6,6 +6,7 @@ export namespace TestTools {
     let assertRecords: AssertRecord[];
 
     export async function test(name: string, todo: () => Promise<void> | void): Promise<void> {
+        console.debug("Now testing: " + name);
         currentTestName = name;
         assertRecords = [];
         try {
@@ -20,6 +21,7 @@ export namespace TestTools {
         } catch (e) {
             assertRaiseError(e);
         }
+        console.debug("Test " + name + " completed");
         const rc: TestSummary.SingleTest = {
             displayName: currentTestName,
             passed: assertRecords.every(r => r.ok),
@@ -33,43 +35,48 @@ export namespace TestTools {
             type: "error",
             ok: false,
             expected: null,
-            received: e.toString()
+            received: e.toString(),
+            expl: ""
         });
     }
 
-    export function assertTrue(what: any) {
+    export function assertTrue(what: any, why: string) {
         assertRecords.push({
             type: "true",
             ok: !!what,
             expected: true,
-            received: !!what
+            received: !!what,
+            expl: why
         });
     }
 
-    export function assertFalse(what: any) {
+    export function assertFalse(what: any, why: string) {
         assertRecords.push({
             type: "notTrue",
             ok: !what,
             expected: false,
-            received: !what
+            received: !what,
+            expl: why
         });
     }
 
-    export function assertEquals<T>(expected: T, received: T) {
+    export function assertEquals<T>(expected: T, received: T, why: string) {
         assertRecords.push({
             type: "equals",
             ok: expected == received || jsonEquals(expected, received),
             expected,
-            received
+            received,
+            expl: why
         });
     }
 
-    export function assertNotEquals<T>(expected: T, received: T) {
+    export function assertNotEquals<T>(expected: T, received: T, why: string) {
         assertRecords.push({
             type: "notEquals",
             ok: expected != received && !jsonEquals(expected, received),
             expected,
-            received
+            received,
+            expl: why
         });
     }
 

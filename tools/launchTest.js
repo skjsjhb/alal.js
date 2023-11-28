@@ -70,6 +70,9 @@ function displayTestSummaryAndExit(objs) {
                         case "error":
                             statusText += `${ar.received}`;
                     }
+                    if (ar.expl) {
+                        statusText += " (" + ar.expl + ")";
+                    }
                 }
             }
         }

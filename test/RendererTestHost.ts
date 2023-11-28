@@ -28,15 +28,15 @@ export async function runRendererTests() {
 
 async function allTests() {
     await test("Renderer Exists", () => {
-        assertTrue(ipcRenderer);
+        assertTrue(ipcRenderer, "Value ipcRenderer exists");
     });
     await test("Locale Loading", () => {
         Locale.setActiveLocale("en-US");
-        assertEquals(Locale.getTranslation("name"), "English (US)");
+        assertEquals(Locale.getTranslation("name"), "English (US)", "Translation key should match");
     });
     await test("Mirror Latency Test", () => {
         // This is executed after a full initialization. Mirrors should be usable.
-        assertNotEquals(Registry.getTable("mirrors", []).length, 0);
+        assertNotEquals(Registry.getTable("mirrors", []).length, 0, "Mirrors list not empty");
     });
     const testFile = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json";
     await test("Single File Download", async () => {
@@ -49,14 +49,16 @@ async function allTests() {
             cache: true
         }));
         const f = await readJSON("file.json");
-        assertEquals(f.variant, "temurin");
+        assertEquals(f.variant, "temurin", "File content is correct");
     });
     await test("File Integrity Check", async () => {
-        assertTrue(await Files.checkIntegrity("file.json", "29c9d911cdf957f926e37c0216f052c9c02e0b2a", "sha1"));
+        assertTrue(await Files.checkIntegrity("file.json",
+            "29c9d911cdf957f926e37c0216f052c9c02e0b2a", "sha1"), "File hash matches");
     });
     await test("File Cache", async () => {
         await Cacher.applyCache(testFile, "cache.json");
-        assertEquals((await readFile("cache.json")).toString(), (await readFile("file.json")).toString());
+        assertEquals((await readFile("cache.json")).toString(),
+            (await readFile("file.json")).toString(), "Cached content correctness");
     });
     await test("Throttle Pool", async () => {
         let a = 0;
@@ -64,37 +66,29 @@ async function allTests() {
         await Promise.all([pool.acquire(), pool.acquire()]);
         const prom = pool.acquire();
         prom.then(() => { a = 1;});
-        assertEquals(pool.getSize(), 2);
-        assertNotEquals(a, 1);
+        assertEquals(pool.getSize(), 2, "Pool is full");
+        assertNotEquals(a, 1, "Value changes blocked");
         pool.release();
         await prom;
-        assertEquals(a, 1);
+        assertEquals(a, 1, "Value is now changed");
     });
 
     await test("Profile Detection for Mojang", async () => {
-        console.log("Checking profiles.");
         const profiles = await fetchJSON("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json");
-        console.log("Testing profiles.");
         const pool = new Throttle.Pool(8);
         await Promise.all(profiles.versions.map(async (p: any) => {
             await pool.acquire();
-            console.log("Testing " + p.id);
+            console.debug("Testing " + p.id);
             const file = await fetchJSON(p.url);
             if (!file) {
                 console.error("Error fetching " + p.id);
-                console.log("This instance is ignored.");
+                console.warn("This instance is ignored.");
             } else {
                 const st = ProfileDetector.isMojang(file);
-                if (!st) {
-                    console.error("WA: Not Mojang: " + p.id);
-                }
-                assertTrue(st);
+                assertTrue(st, "Required Mojang structure test: " + p.id);
                 const id = file.id;
                 const isVer = ProfileDetector.isLikelyMojangVersion(id);
-                if (!isVer) {
-                    console.error("WA: Not Mojang version: " + id);
-                }
-                assertTrue(isVer);
+                assertTrue(isVer, "Required Mojang version test: " + p.id);
             }
             pool.release();
         }));

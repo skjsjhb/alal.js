@@ -13,6 +13,7 @@ export namespace TestSummary {
         ok: boolean;
         expected: any;
         received: any;
+        expl: string; // Explanation
     }
 
     export interface SingleTest {

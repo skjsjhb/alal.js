@@ -9,8 +9,8 @@ export async function testJavaDownload() {
     await test("JavaGet Installation", async () => {
         const task = JavaGet.installComponent("java-runtime-gamma");
         await task.whenFinish();
-        assertEquals(task.getProgressPercent(), 1);
-        assertTrue(JavaGet.hasComponent("java-runtime-gamma"));
+        assertEquals(task.getProgressPercent(), 1, "All files are downloaded");
+        assertTrue(JavaGet.hasComponent("java-runtime-gamma"), "Component added");
 
         const e = await new Promise((res) => {
             execFile(JavaGet.getJavaExecutable("java-runtime-gamma"), ["-version"],
@@ -18,6 +18,6 @@ export async function testJavaDownload() {
                     res(stderr);
                 });
         });
-        assertTrue(String(e).includes("openjdk"));
+        assertTrue(String(e).includes("openjdk"), "Exec output correctness");
     });
 }

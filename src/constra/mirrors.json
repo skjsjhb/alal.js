@@ -31,28 +31,28 @@
     }
   },
   "fabric": {
-    "test": "https://meta.fabricmc.net",
+    "test": "https://meta.fabricmc.net/v1/versions",
     "overrides": {
       "https://meta.fabricmc.net": null,
       "https://maven.fabricmc.net": null
     }
   },
   "forge": {
-    "test": "https://maven.minecraftforge.net",
+    "test": "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml",
     "overrides": {
       "https://maven.minecraftforge.net": null,
       "https://files.minecraftforge.net/maven": null
     }
   },
   "neoforged": {
-    "test": "https://maven.neoforged.net",
+    "test": "https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml",
     "overrides": {
       "https://maven.neoforged.net/releases/net/neoforged/forge": null,
       "https://maven.neoforged.net/releases/net/neoforged/neoforge": null
     }
   },
   "quilt": {
-    "test": "https://meta.quiltmc.org",
+    "test": "https://meta.quiltmc.org/v3/versions",
     "overrides": {
       "https://maven.quiltmc.org/repository/release": null,
       "https://meta.quiltmc.org": null

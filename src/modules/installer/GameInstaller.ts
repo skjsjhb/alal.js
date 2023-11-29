@@ -1,5 +1,5 @@
-import Defaults from "@/constra/defaults.json";
 import Sources from "@/constra/sources.json";
+import Strategies from "@/constra/strategies.json";
 import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { Locale } from "@/modules/i18n/Locale";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
@@ -18,12 +18,41 @@ import unzip from "unzipper";
  */
 export namespace GameInstaller {
     /**
+     * Prepare game files with version `id`. Installing all necessary components.
+     */
+    export function installVersionFull(ct: Container, id: string): Task<void> {
+        console.log("Full installing " + id + " at " + ct.rootDir);
+        if (ct.locked) {
+            console.warn("Installing on a locked container: " + ct.rootDir);
+        }
+        const taskName = Locale.getTranslation("install.compound", {id});
+        return new Task(taskName, 6, async (task) => {
+            try {
+                const profile = await installProfile(ct, id).linkTo(task).whenFinish();
+                task.addSuccess();
+                await installClient(ct, profile).linkTo(task).whenFinish();
+                task.addSuccess();
+                await installLibraries(ct, profile).linkTo(task).whenFinish();
+                task.addSuccess();
+                const ai = await installAssetIndex(ct, profile).linkTo(task).whenFinish();
+                task.addSuccess();
+                await installAssets(ct, id, ai).linkTo(task).whenFinish();
+                task.addSuccess();
+                await unpackNatives(ct, profile).whenFinish();
+                task.resolve();
+            } catch (e) {
+                task.fail("Failed to install " + id + ": " + e);
+            }
+        });
+    }
+
+    /**
      * Install a Mojang profile. This method resolves the profile, save it, then return the normalized profile
      * for further uses.
      *
      * This method doesn't check for the existence of the target. Duplicated profiles will be overridden.
      */
-    export function installProfile(ct: Container, id: string): Task<VersionProfile | null> {
+    export function installProfile(ct: Container, id: string): Task<VersionProfile> {
         console.log("Installing profile " + id);
         const taskName = Locale.getTranslation("install.profile", {id});
         return new Task(taskName, null, async (task) => {
@@ -78,7 +107,7 @@ export namespace GameInstaller {
     /**
      * Installs asset index.
      */
-    export function installAssetIndex(ct: Container, prof: VersionProfile): Task<AssetIndex | null> {
+    export function installAssetIndex(ct: Container, prof: VersionProfile): Task<AssetIndex> {
         const taskName = Locale.getTranslation("install.asset-index", {assets: prof.assetIndex.id});
         return new Task(taskName, null, async (task) => {
             const manifest = await fetchJSON(prof.assetIndex.url);
@@ -156,7 +185,7 @@ export namespace GameInstaller {
     }
 
     function filterAndExtractNatives(src: string, dest: string): Promise<void> {
-        const regex = new RegExp(Defaults.installer.nativesRegex);
+        const regex = new RegExp(Strategies.installer.nativesRegex);
         return new Promise(async (res, rej) => {
             let closed = false;
             const stream = createReadStream(src).pipe(unzip.Parse());

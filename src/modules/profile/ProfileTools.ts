@@ -1,7 +1,7 @@
 // noinspection JSUnresolvedReference
 
-import Defaults from "@/constra/defaults.json";
 import Sources from "@/constra/sources.json";
+import Strategies from "@/constra/strategies.json";
 import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { fetchJSON } from "@/modules/net/FetchUtil";
 import { Rules } from "@/modules/profile/Rules";
@@ -206,7 +206,7 @@ export namespace ProfileTools {
      * Checks if the passed name is a name of legacy index. (i.e. Could not be shared)
      */
     export function isLegacyAssets(name: string): boolean {
-        return new RegExp(Defaults.installer.legacyAssets).test(name);
+        return new RegExp(Strategies.installer.legacyAssets).test(name);
     }
 
     // Merge 'head' into 'base' in-place.
@@ -278,7 +278,7 @@ export namespace ProfileTools {
     // Creates default args for legacy profiles
     function createDefaultVMArguments(): Argument[] {
         console.log("Generating default arguments for VM.");
-        return Defaults.vmArgs as Argument[];
+        return Strategies.vmArgs as Argument[];
     }
 
     // Convert libraries with only `name` and `url`

@@ -12,7 +12,6 @@ download:
 
 install:
   compound: "Installing ${id}"
-  resolve: "Fetching Profile: ${id}"
   profile: "Writing Profile: ${id}"
   client: "Downloading Client: ${id}"
   libraries: "Downloading Libraries: ${id}"

@@ -1,8 +1,8 @@
 // noinspection JSUnresolvedReference
 
-import Defaults from "@/constra/defaults.json";
+import Strategies from "@/constra/strategies.json";
 
-const PDRules = Defaults.profileDetection;
+const PDRules = Strategies.profileDetection;
 
 /**
  * alal.js supports multiple variants of profiles. These profiles vary by their structures, version string formatting

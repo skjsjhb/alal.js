@@ -12,7 +12,6 @@ download:
 
 install:
   compound: "正在安装游戏版本: ${id}"
-  resolve: "获取版本信息: ${id}"
   profile: "写入版本列表: ${id}"
   client: "下载游戏核心: ${id}"
   libraries: "下载支持库: ${id}"

@@ -15,7 +15,7 @@ export async function testInstaller() {
         shared: false,
         isolated: false
     };
-    await test("Libraries Installation", async () => {
+    await test("Full Game Installation", async () => {
         const allVersions = await ProfileTools.getMojangManifest();
         if (!allVersions) {
             console.warn("Manifest not available. Skipped test.");
@@ -25,46 +25,9 @@ export async function testInstaller() {
         for (const v of allVersions.versions) {
             i++;
             console.debug(`Test installing ${v.id} (${i}/${allVersions.versions.length})`);
-            const vp = await GameInstaller.installProfile(ct, v.id).whenFinish();
-            assertTrue(vp != null, "Profile successfully got");
-            const t1 = GameInstaller.installLibraries(ct, vp!);
-            await t1.whenFinish();
-            if (v.type == "release") {
-                // Only test client installation for releases
-                // Or the test will take too long
-                const cl = GameInstaller.installClient(ct, vp!);
-                await cl.whenFinish();
-            }
-            const t2 = GameInstaller.unpackNatives(ct, vp!);
-            await t2.whenFinish();
-            const nat = ContainerTools.getNativesDirectory(ct, vp!.id);
-            const dirs = await readdir(nat);
+            await GameInstaller.installVersionFull(ct, v.id).whenFinish();
+            const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v.id));
             assertTrue(dirs.length > 0, "Natives dir is not empty");
-        }
-    });
-
-    await test("Assets Installation", async () => {
-        const testedAssetIndices = new Set();
-        const allVersions = await ProfileTools.getMojangManifest();
-        if (!allVersions) {
-            console.warn("Manifest not available. Skipped test.");
-            return;
-        }
-        for (const v of allVersions.versions) {
-            if (v.type == "release") {
-                const vp = await GameInstaller.installProfile(ct, v.id).whenFinish();
-                if (!vp) {
-                    console.warn("Profile not available: " + v.id);
-                    continue;
-                }
-                if (!testedAssetIndices.has(vp.assetIndex.id)) {
-                    console.debug("Testing assets " + vp.assetIndex.id);
-                    testedAssetIndices.add(vp.assetIndex.id);
-                    const ai = await GameInstaller.installAssetIndex(ct, vp).whenFinish();
-                    assertTrue(!!ai, "Asset index should not be null");
-                    await GameInstaller.installAssets(ct, vp.assetIndex.id, ai!).whenFinish();
-                }
-            }
         }
         const dirs = await readdir(path.join(ct.rootDir));
         assertTrue(dirs.includes("resources"), "Mapped assets should exist");

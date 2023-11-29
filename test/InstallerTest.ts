@@ -58,6 +58,7 @@ export async function testInstaller() {
                     continue;
                 }
                 if (!testedAssetIndices.has(vp.assetIndex.id)) {
+                    console.debug("Testing assets " + vp.assetIndex.id);
                     testedAssetIndices.add(vp.assetIndex.id);
                     const ai = await GameInstaller.installAssetIndex(ct, vp).whenFinish();
                     assertTrue(!!ai, "Asset index should not be null");

@@ -89,7 +89,7 @@ export namespace JavaGet {
     }
 
     async function retrieveDownloadManifest(u: string): Promise<MojangJavaDownloadManifest> {
-        const res = await fetchJSON(Sources.mojangJavaRuntimeManifest);
+        const res = await fetchJSON(u);
         if (!res) {
             console.error("Could not retrieve manifest: " + u);
         }

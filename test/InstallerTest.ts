@@ -29,6 +29,12 @@ export async function testInstaller() {
             assertTrue(vp != null, "Profile successfully got");
             const t1 = GameInstaller.installLibraries(ct, vp!);
             await t1.whenFinish();
+            if (v.type == "release") {
+                // Only test client installation for releases
+                // Or the test will take too long
+                const cl = GameInstaller.installClient(ct, vp!);
+                await cl.whenFinish();
+            }
             const t2 = GameInstaller.unpackNatives(ct, vp!);
             await t2.whenFinish();
             const nat = ContainerTools.getNativesDirectory(ct, vp!.id);

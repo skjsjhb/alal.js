@@ -56,6 +56,25 @@ export namespace GameInstaller {
     }
 
     /**
+     * Install client jar file.
+     */
+    export function installClient(ct: Container, prof: VersionProfile): Task<void> {
+        const taskName = Locale.getTranslation("install.client");
+        const dl = Downloader.createProfile({
+            url: prof.downloads.client.url,
+            checksum: prof.downloads.client.sha1,
+            validation: "sha1",
+            size: prof.downloads.client.size,
+            location: ContainerTools.getClientPath(ct, prof.id)
+        });
+        console.log("Installing client for " + prof.id);
+        const dlTask = DownloadManager.downloadBatched([dl]);
+        dlTask.setName(taskName);
+        return dlTask;
+    }
+
+
+    /**
      * Unpack native libraries for specified profile. The unpacked native libraries will be placed
      * at the same directory as the profile.
      */
@@ -125,6 +144,7 @@ export namespace GameInstaller {
         });
     }
 
+    // Convert a library artifact to download profile
     function createLibraryDownload(ct: Container, l: Library): DownloadProfile {
         const location = ContainerTools.getLibraryPath(ct, l.downloads.artifact.path);
         const url = l.downloads.artifact.url;

@@ -6,7 +6,7 @@ import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { DownloadManager } from "@/modules/net/DownloadManager";
-import { Mirrors } from "@/modules/net/Mirrors";
+import { fetchJSON } from "@/modules/net/FetchUtil";
 import { Task } from "@/modules/task/Task";
 import { Availability } from "@/modules/util/Availability";
 import { OSInfo, OSType } from "@/modules/util/OSInfo";
@@ -81,21 +81,19 @@ export namespace JavaGet {
 
     // Gets Mojang JRE manifest
     async function retrieveIndexManifest(): Promise<MojangJavaManifest> {
-        const url = Mirrors.apply(Sources.mojangJavaRuntimeManifest);
-        const res = await fetch(url);
-        if (!res.ok) {
-            console.error("Could not retrieve index manifest: " + res.status);
+        const res = await fetchJSON(Sources.mojangJavaRuntimeManifest);
+        if (!res) {
+            console.error("Could not retrieve index manifest!");
         }
-        return await res.json();
+        return res;
     }
 
     async function retrieveDownloadManifest(u: string): Promise<MojangJavaDownloadManifest> {
-        const url = Mirrors.apply(u);
-        const res = await fetch(url);
-        if (!res.ok) {
-            console.error("Could not retrieve manifest " + u + ": " + res.status);
+        const res = await fetchJSON(Sources.mojangJavaRuntimeManifest);
+        if (!res) {
+            console.error("Could not retrieve manifest: " + u);
         }
-        return await res.json();
+        return res;
     }
 
     function resolveComponentDownloadManifest(c: string): Task<MojangJavaDownloadManifest> {

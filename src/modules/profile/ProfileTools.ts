@@ -146,6 +146,7 @@ export namespace ProfileTools {
         return l.name.split(":").length == 4;
     }
 
+
     /**
      * By default, the launcher should unpack all native files without filtering.
      * However, alal.js can optimize this process by only unpacking files that are required.
@@ -198,6 +199,14 @@ export namespace ProfileTools {
             mergeProfileFrom(root, chain.pop());
         }
         return root; // TODO validate profile
+    }
+
+
+    /**
+     * Checks if the passed name is a name of legacy index. (i.e. Could not be shared)
+     */
+    export function isLegacyAssets(name: string): boolean {
+        return new RegExp(Defaults.installer.legacyAssets).test(name);
     }
 
     // Merge 'head' into 'base' in-place.

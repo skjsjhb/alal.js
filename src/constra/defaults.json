@@ -74,6 +74,7 @@
     }
   },
   "installer": {
-    "nativesRegex": "\\.(dll|dylib|so)$"
+    "nativesRegex": "\\.(dll|dylib|so)$",
+    "legacyAssets": "^(legacy|pre-1\\.6)$"
   }
 }

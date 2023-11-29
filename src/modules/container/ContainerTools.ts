@@ -1,4 +1,6 @@
 import { Paths } from "@/modules/data/Paths";
+import { ProfileTools } from "@/modules/profile/ProfileTools";
+import { AssetIndex } from "@/modules/profile/VersionProfile";
 import path from "path";
 
 export interface Container {
@@ -55,14 +57,45 @@ export namespace ContainerTools {
 
     /**
      * Gets the path to the asset file of this container. i.e. Shared path is returned for shared containers, and
-     * dedicated containers resolve their own paths.
+     * dedicated containers resolve their own paths. Automatically resolves legacy and resource-mapped assets.
      */
-    export function getAssetPath(c: Container, hash: string): string {
+    export function getAssetPath(c: Container, id: string, a: AssetIndex, fileName: string, hash: string): string {
+        if (a.map_to_resources) {
+            return getMappedAssetPath(c, fileName);
+        }
+        if (ProfileTools.isLegacyAssets(id)) {
+            return getLegacyAssetPath(c, fileName);
+        }
         if (c.shared) {
             return getGlobalAssetPath(hash);
         } else {
             return getLocalAssetPath(c, hash);
         }
+    }
+
+    /**
+     * Gets the path to this asset index. Automatically resolves for legacy assets.
+     */
+    export function getAssetIndexPath(c: Container, id: string, a: AssetIndex): string {
+        if (a.map_to_resources) {
+            // No shared
+            return path.join(c.rootDir, "resources", id + ".json");
+        } else {
+            if (!ProfileTools.isLegacyAssets(id) && c.shared) {
+                return Paths.getDataPath("sharedAssets", "assets", "indexes", id + ".json");
+            } else {
+                return path.join(c.rootDir, "assets", "indexes", id + ".json");
+            }
+        }
+    }
+
+    function getLegacyAssetPath(c: Container, fileName: string): string {
+        return path.join(c.rootDir, "assets", "virtual", "legacy", fileName);
+    }
+
+    // For 1.5.2 or earlier
+    function getMappedAssetPath(c: Container, fileName: string): string {
+        return path.join(c.rootDir, "resources", fileName);
     }
 
     /**

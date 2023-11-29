@@ -16,6 +16,7 @@ install:
   profile: "Writing Profile: ${id}"
   client: "Downloading Client: ${id}"
   libraries: "Downloading Libraries: ${id}"
+  asset-index: "Downloading Asset Index: ${assets}"
   assets: "Downloading Assets: ${assets}"
   natives: "Extracting Natives: ${id}"
 

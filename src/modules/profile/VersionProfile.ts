@@ -43,6 +43,11 @@ export interface VersionProfile {
     type: ProfileReleaseType;
 }
 
+export interface AssetIndex {
+    map_to_resources?: boolean,
+    objects: Record<string, { hash: string, size: number }>;
+}
+
 export type ProfileReleaseType = "release" | "snapshot" | "old_beta" | "old_alpha";
 
 export interface ProfileRule {

@@ -1,10 +1,12 @@
 import Defaults from "@/constra/defaults.json";
+import Sources from "@/constra/sources.json";
 import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { Locale } from "@/modules/i18n/Locale";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { DownloadManager } from "@/modules/net/DownloadManager";
+import { fetchJSON } from "@/modules/net/FetchUtil";
 import { ProfileTools } from "@/modules/profile/ProfileTools";
-import { Library, VersionProfile } from "@/modules/profile/VersionProfile";
+import { AssetIndex, Library, VersionProfile } from "@/modules/profile/VersionProfile";
 import { Task } from "@/modules/task/Task";
 import { createReadStream, createWriteStream, ensureDir, outputJSON } from "fs-extra";
 import path from "path";
@@ -23,7 +25,7 @@ export namespace GameInstaller {
      */
     export function installProfile(ct: Container, id: string): Task<VersionProfile | null> {
         console.log("Installing profile " + id);
-        const taskName = Locale.getTranslation("install.profile");
+        const taskName = Locale.getTranslation("install.profile", {id});
         return new Task(taskName, null, async (task) => {
             const prof = await ProfileTools.getMojangProfile(id);
             if (!prof) {
@@ -44,7 +46,7 @@ export namespace GameInstaller {
      * Install libraries. This method forwards a download task with its name set to libraries installation.
      */
     export function installLibraries(ct: Container, prof: VersionProfile): Task<void> {
-        const taskName = Locale.getTranslation("install.libraries");
+        const taskName = Locale.getTranslation("install.libraries", {id: prof.id});
         const dl = [];
         for (const l of ProfileTools.effectiveLibraries(prof)) {
             dl.push(createLibraryDownload(ct, l));
@@ -59,7 +61,7 @@ export namespace GameInstaller {
      * Install client jar file.
      */
     export function installClient(ct: Container, prof: VersionProfile): Task<void> {
-        const taskName = Locale.getTranslation("install.client");
+        const taskName = Locale.getTranslation("install.client", {id: prof.id});
         const dl = Downloader.createProfile({
             url: prof.downloads.client.url,
             checksum: prof.downloads.client.sha1,
@@ -73,6 +75,45 @@ export namespace GameInstaller {
         return dlTask;
     }
 
+    /**
+     * Installs asset index.
+     */
+    export function installAssetIndex(ct: Container, prof: VersionProfile): Task<AssetIndex | null> {
+        const taskName = Locale.getTranslation("install.asset-index", {assets: prof.assetIndex.id});
+        return new Task(taskName, null, async (task) => {
+            const manifest = await fetchJSON(prof.assetIndex.url);
+            if (!manifest) {
+                task.fail("Asset index file not available: " + prof.assetIndex.url);
+                return;
+            }
+            try {
+                const outPath = ContainerTools.getAssetIndexPath(ct, prof.assetIndex.id, manifest);
+                await outputJSON(outPath, manifest); // Few people read asset index so we won't pretty-print
+                task.resolve(manifest);
+            } catch (e) {
+                task.fail("Could not write asset index " + prof.assetIndex.id + ": " + e);
+            }
+        });
+    }
+
+    /**
+     * Installs asset files.
+     */
+    export function installAssets(ct: Container, id: string, ai: AssetIndex): Task<void> {
+        const taskName = Locale.getTranslation("install.assets", {assets: id});
+        const batch = [];
+        for (const [fileName, {hash, size}] of Object.entries(ai.objects)) {
+            // Generate location and URL
+            const location = ContainerTools.getAssetPath(ct, id, ai, fileName, hash);
+            const url = Sources.mojangResources + "/" + hash.substring(0, 2) + "/" + hash;
+            batch.push(Downloader.createProfile({
+                url, location, size, checksum: hash, validation: "sha1"
+            }));
+        }
+        const dlTask = DownloadManager.downloadBatched(batch);
+        dlTask.setName(taskName);
+        return dlTask;
+    }
 
     /**
      * Unpack native libraries for specified profile. The unpacked native libraries will be placed
@@ -85,7 +126,8 @@ export namespace GameInstaller {
         const elibs = ProfileTools.effectiveLibraries(prof)
             .filter(ProfileTools.isNativeLibrary)
             .filter(ProfileTools.isNativeRequired);
-        return new Task(Locale.getTranslation("install.natives"), elibs.length, async (task) => {
+        const taskName = Locale.getTranslation("install.natives", {id: prof.id});
+        return new Task(taskName, elibs.length, async (task) => {
             try {
                 await ensureDir(nativesDir);
             } catch (e) {
@@ -143,6 +185,7 @@ export namespace GameInstaller {
                 .on("end", res);
         });
     }
+
 
     // Convert a library artifact to download profile
     function createLibraryDownload(ct: Container, l: Library): DownloadProfile {

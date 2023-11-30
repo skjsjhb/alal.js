@@ -1,10 +1,9 @@
-name: Autotest
+name: Autotest Full
 
 on:
   push:
-    branches: [ '**' ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - '**'
 
 jobs:
   test-windows:
@@ -17,8 +16,6 @@ jobs:
           node-version: "18"
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
-      - name: Enable Simple Test
-        run: echo "ALAL_TEST_SIMPLE=1" >> $env:GITHUB_ENV
       - name: Test
         run: yarn test
 
@@ -33,7 +30,7 @@ jobs:
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
-        run: ALAL_TEST_SIMPLE=1 yarn test
+        run: yarn test
 
   test-linux:
     runs-on: ubuntu-latest
@@ -43,9 +40,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - name: Setup Xvfb
+      - name: Setup xvfb
         run: sudo apt install xvfb
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
-        run: ALAL_TEST_SIMPLE=1 xvfb-run yarn test
+        run: xvfb-run yarn test

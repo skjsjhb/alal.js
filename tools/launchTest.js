@@ -16,6 +16,10 @@ if (!fse.existsSync(testRoot)) {
     process.exit(1);
 }
 
+if (process.env["ALAL_TEST_SIMPLE"] === "1") {
+    console.log("Running simplified tests.");
+    console.log("Note: A full task must pass before a release.");
+}
 console.log("Starting Electron on test target: " + testRoot);
 
 process.chdir(testRoot);
@@ -38,6 +42,7 @@ proc.on("exit", async () => {
     }
 });
 
+// noinspection OverlyComplexFunctionJS
 function displayTestSummaryAndExit(objs) {
     console.log("\n\n======== TEST SUMMARY ========\n");
     let success = 0;

@@ -36,7 +36,7 @@ export namespace GameInstaller {
                 task.addSuccess();
                 const ai = await installAssetIndex(ct, profile).linkTo(task).whenFinish();
                 task.addSuccess();
-                await installAssets(ct, id, ai).linkTo(task).whenFinish();
+                await installAssets(ct, profile.assetIndex.id, ai).linkTo(task).whenFinish();
                 task.addSuccess();
                 await unpackNatives(ct, profile).whenFinish();
                 task.resolve();
@@ -128,12 +128,12 @@ export namespace GameInstaller {
     /**
      * Installs asset files.
      */
-    export function installAssets(ct: Container, id: string, ai: AssetIndex): Task<void> {
-        const taskName = Locale.getTranslation("install.assets", {assets: id});
+    export function installAssets(ct: Container, assetIndexId: string, ai: AssetIndex): Task<void> {
+        const taskName = Locale.getTranslation("install.assets", {assets: assetIndexId});
         const batch = [];
         for (const [fileName, {hash, size}] of Object.entries(ai.objects)) {
             // Generate location and URL
-            const location = ContainerTools.getAssetPath(ct, id, ai, fileName, hash);
+            const location = ContainerTools.getAssetPath(ct, assetIndexId, ai, fileName, hash);
             const url = Sources.mojangResources + "/" + hash.substring(0, 2) + "/" + hash;
             batch.push(Downloader.createProfile({
                 url, location, size, checksum: hash, validation: "sha1"

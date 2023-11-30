@@ -23,6 +23,7 @@ async function main() {
     Paths.detectRootPath();
     await Paths.retrieveAppPath();
     Options.get().dev = true;
+    Options.get().download.maxTasks = 5;
     await Options.save();
 
     await ReInit.initRenderer();

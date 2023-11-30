@@ -263,20 +263,21 @@ export namespace JavaGet {
     function postProcessFiles(componentName: string, manifest: MojangJavaDownloadManifest): Task<void> {
         const taskName = Locale.getTranslation("java-get.post-process", {name: componentName});
         return new Task(taskName, Object.keys(manifest.files).length, async (task) => {
-            const results = await Promise.all(Object.entries(manifest.files).map(async ([location, dl]) => {
+            const results: [boolean, string][] = await Promise.all(Object.entries(manifest.files).map(async ([location, dl]) => {
                 const state = await postProcessFile(componentName, location, dl);
                 if (state) {
                     task.success();
                 } else {
                     task.fail();
                 }
-                return state;
+                return [state, location];
             }));
 
-            if (results.every(r => r)) {
+            if (results.every(r => r[0])) {
                 task.resolve();
             } else {
-                task.reject("Some files failed to decompress | chmod.");
+                const [, p] = results.find(r => !r[0])!;
+                task.reject(`Some files failed to decompress | chmod. (e.g. ${p})`);
             }
         });
     }

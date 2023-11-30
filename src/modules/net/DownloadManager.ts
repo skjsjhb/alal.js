@@ -25,7 +25,7 @@ export namespace DownloadManager {
      */
     export function downloadBatched(batch: DownloadProfile[]): Task<void> {
         return new Task("download.batch", batch.length, async (task) => {
-            const results = await Promise.all(batch.map(async (p) => {
+            const results: [boolean, string][] = await Promise.all(batch.map(async (p) => {
                 await pool.acquire();
                 const res = await downloadSingleInBatched(p);
                 if (res) {
@@ -34,12 +34,13 @@ export namespace DownloadManager {
                     task.fail();
                 }
                 pool.release();
-                return res;
+                return [res, p.url];
             }));
-            if (results.every(r => r)) {
+            if (results.every(r => r[0])) {
                 task.resolve();
             } else {
-                task.reject("Some files failed to download.");
+                const [, url] = results.find(r => !r[0])!;
+                task.reject(`Some files failed to download. (e.g. ${url})`);
             }
             return results.every((r) => r);
         });

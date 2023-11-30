@@ -19,8 +19,10 @@ jobs:
           cache: pnpm
       - name: Build
         run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
+      - name: Set Environment Variable for Simple Tests
+        run: set ALAL_TEST_SIMPLE=1
       - name: Test
-        run: set ALAL_TEST_SIMPLE=1 && pnpm test
+        run: pnpm test
 
   test-macos:
     runs-on: macos-latest

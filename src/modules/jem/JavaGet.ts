@@ -8,7 +8,7 @@ import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { fetchJSON } from "@/modules/net/FetchUtil";
 import { Task } from "@/modules/task/Task";
-import { Availability } from "@/modules/util/Availability";
+import { Availa } from "@/modules/util/Availa";
 import { OSInfo, OSType } from "@/modules/util/OSInfo";
 import { chmod, ensureDir, remove } from "fs-extra";
 import os from "os";
@@ -102,17 +102,17 @@ export namespace JavaGet {
                 const matrix = await retrieveIndexManifest();
                 const platform = getMojangNamedPlatform();
                 if (!(platform in matrix)) {
-                    task.fail("Platform " + platform + " not supported by JavaGet.");
+                    task.reject("Platform " + platform + " not supported by JavaGet.");
                 }
                 const componentProfile = matrix[platform as MojangJavaPlatforms][c];
                 if (!componentProfile || componentProfile.length == 0) {
-                    task.fail("No JRE component named " + c + " for platform " + platform);
+                    task.reject("No JRE component named " + c + " for platform " + platform);
                 }
                 const component = componentProfile[0];
                 const manifest = await retrieveDownloadManifest(component.manifest.url);
                 task.resolve(manifest);
             } catch (e) {
-                task.fail(e);
+                task.reject(e);
             }
         });
 
@@ -141,8 +141,7 @@ export namespace JavaGet {
             try {
                 // Fetch manifest
                 console.log("Fetching JRE download manifest for " + componentName);
-                const dlManifest = await resolveComponentDownloadManifest(componentName).linkTo(task).whenFinish();
-                task.addSuccess();
+                const dlManifest = await resolveComponentDownloadManifest(componentName).link(task).whenFinish();
 
                 // Optimize files
                 console.log("Optimizing JRE files.");
@@ -153,13 +152,11 @@ export namespace JavaGet {
                 const downloadBatch = generateDownloadProfileList(componentName, dlManifest);
                 const downloadTask = DownloadManager.downloadBatched(downloadBatch);
                 downloadTask.setName(Locale.getTranslation("java-get.download", {name: componentName})); // Rename
-                await downloadTask.linkTo(task).whenFinish();
-                task.addSuccess();
+                await downloadTask.link(task).whenFinish();
 
                 // Post process
                 console.log("Processing files for " + componentName);
-                await postProcessFiles(componentName, dlManifest).linkTo(task).whenFinish();
-                task.addSuccess();
+                await postProcessFiles(componentName, dlManifest).link(task).whenFinish();
 
                 // Add to registry
                 const jgt = Registry.getTable<string[]>(javaGetRegistryId, []);
@@ -169,7 +166,7 @@ export namespace JavaGet {
                 console.log("Installed " + componentName);
                 task.resolve();
             } catch (e) {
-                task.fail(e);
+                task.reject(e);
             }
 
         });
@@ -216,7 +213,7 @@ export namespace JavaGet {
         if (!profile.downloads) {
             return null; // Directories are automatically created
         } else {
-            if (profile.downloads.lzma && Availability.supports("lzma-native")) {
+            if (profile.downloads.lzma && Availa.supports("lzma-native")) {
                 // Download LZMA
                 return Downloader.createProfile({
                     url: profile.downloads.lzma.url,
@@ -254,7 +251,7 @@ export namespace JavaGet {
                 break;
         }
 
-        if (os.arch() == "arm64") {
+        if (OSInfo.isARM()) {
             sys += "-arm64";
         }
         if (os.arch() == "x64" && sys == "windows") {
@@ -269,9 +266,9 @@ export namespace JavaGet {
             const results = await Promise.all(Object.entries(manifest.files).map(async ([location, dl]) => {
                 const state = await postProcessFile(componentName, location, dl);
                 if (state) {
-                    task.addSuccess();
+                    task.success();
                 } else {
-                    task.addFailed();
+                    task.fail();
                 }
                 return state;
             }));
@@ -279,7 +276,7 @@ export namespace JavaGet {
             if (results.every(r => r)) {
                 task.resolve();
             } else {
-                task.fail("Some files failed to decompress | chmod.");
+                task.reject("Some files failed to decompress | chmod.");
             }
         });
     }
@@ -289,7 +286,7 @@ export namespace JavaGet {
         const archivePath = originalPath + ".lzma";
 
         // Decompress
-        if (dl.downloads?.lzma && Availability.supports("lzma-native")) {
+        if (dl.downloads?.lzma && Availa.supports("lzma-native")) {
             if (!await Compressing.decompressLZMA(archivePath, originalPath)) {
                 return false; // Decompression failed
             }

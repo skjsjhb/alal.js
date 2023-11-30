@@ -13,6 +13,11 @@ export class Task<T> {
     children: Task<any>[] = [];
 
     /**
+     * Parent task
+     */
+    parents: Task<any>[] = [];
+
+    /**
      * Progress indicator. An object counts the number of completed / failed / total atomic tasks. `null` means that the
      * task has indeterminate progress.
      */
@@ -80,18 +85,20 @@ export class Task<T> {
         for (const [res] of this.listeners) {
             res(value);
         }
+        this.parents.forEach(p => p.success());
     }
 
     /**
-     * Fail this task with the specified error.
+     * Reject this task with the specified error.
      * @param error Reason why this task is destroyed, rather than resolved.
      */
-    fail(error?: any): void {
+    reject(error?: any): void {
         this.failed = true;
         this.error = error;
         for (const [, rej] of this.listeners) {
             rej(error);
         }
+        this.parents.forEach(p => p.fail());
     }
 
     /**
@@ -142,14 +149,14 @@ export class Task<T> {
         this.progress.failed = f;
     }
 
-    addSuccess() {
+    success() {
         if (!this.progress) {
             return;
         }
         this.progress.success++;
     }
 
-    addFailed() {
+    fail() {
         if (!this.progress) {
             return;
         }
@@ -158,17 +165,20 @@ export class Task<T> {
 
 
     /**
-     * Link this task to specified task.
+     * Link this task to specified task. Linked tasks will call `addSuccess` for parent when itself resolves and
+     * vice versa. If the task is already resolved before being added, this happens immediately.
      */
-    linkTo(t: Task<any>): Task<T> {
-        t.linkChild(this);
+    link(t: Task<any>): Task<T> {
+        this.parents.push(t);
+        t.children.push(this);
+        if (this.resolved) {
+            t.parents.forEach(p => p.success());
+        } else if (this.failed) {
+            t.parents.forEach(p => p.fail());
+        }
         return this;
     }
 
-    linkChild(t: Task<any>): this {
-        this.children.push(t);
-        return this;
-    }
 
     /**
      * Creates an indeterminate task with the specified promise object.
@@ -176,7 +186,7 @@ export class Task<T> {
     static fromPromise<T>(name: string, promo: Promise<T>): Task<T> {
         return new Task<T>(name, null, (task) => {
             promo.then(task.resolve.bind(task))
-                .catch(task.fail.bind(task));
+                .catch(task.reject.bind(task));
         });
     }
 }

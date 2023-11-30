@@ -2,6 +2,7 @@ import Sources from "@/constra/sources.json";
 import Strategies from "@/constra/strategies.json";
 import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { Locale } from "@/modules/i18n/Locale";
+import { JavaGet } from "@/modules/jem/JavaGet";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { fetchJSON } from "@/modules/net/FetchUtil";
@@ -26,22 +27,20 @@ export namespace GameInstaller {
             console.warn("Installing on a locked container: " + ct.rootDir);
         }
         const taskName = Locale.getTranslation("install.compound", {id});
-        return new Task(taskName, 6, async (task) => {
+        return new Task(taskName, 7, async (task) => {
             try {
-                const profile = await installProfile(ct, id).linkTo(task).whenFinish();
-                task.addSuccess();
-                await installClient(ct, profile).linkTo(task).whenFinish();
-                task.addSuccess();
-                await installLibraries(ct, profile).linkTo(task).whenFinish();
-                task.addSuccess();
-                const ai = await installAssetIndex(ct, profile).linkTo(task).whenFinish();
-                task.addSuccess();
-                await installAssets(ct, profile.assetIndex.id, ai).linkTo(task).whenFinish();
-                task.addSuccess();
-                await unpackNatives(ct, profile).whenFinish();
-                task.resolve();
+                const profile = await installProfile(ct, id).link(task).whenFinish();
+                const java = profile.javaVersion.component;
+                if (!JavaGet.hasComponent(java)) {
+                    await JavaGet.installComponent(java).link(task).whenFinish();
+                }
+                await installClient(ct, profile).link(task).whenFinish();
+                await installLibraries(ct, profile).link(task).whenFinish();
+                const ai = await installAssetIndex(ct, profile).link(task).whenFinish();
+                await installAssets(ct, profile.assetIndex.id, ai).link(task).whenFinish();
+                await unpackNatives(ct, profile).link(task).whenFinish();
             } catch (e) {
-                task.fail("Failed to install " + id + ": " + e);
+                task.reject("Failed to install " + id + ": " + e);
             }
         });
     }
@@ -58,7 +57,7 @@ export namespace GameInstaller {
         return new Task(taskName, null, async (task) => {
             const prof = await ProfileTools.getMojangProfile(id);
             if (!prof) {
-                task.fail("Unable to retrieve profile: " + id);
+                task.reject("Unable to retrieve profile: " + id);
                 return;
             }
             try {
@@ -66,7 +65,7 @@ export namespace GameInstaller {
                 ProfileTools.normalize(prof);
                 task.resolve(prof);
             } catch (e) {
-                task.fail("Could not write profile: " + e);
+                task.reject("Could not write profile: " + e);
             }
         });
     }
@@ -112,7 +111,7 @@ export namespace GameInstaller {
         return new Task(taskName, null, async (task) => {
             const manifest = await fetchJSON(prof.assetIndex.url);
             if (!manifest) {
-                task.fail("Asset index file not available: " + prof.assetIndex.url);
+                task.reject("Asset index file not available: " + prof.assetIndex.url);
                 return;
             }
             try {
@@ -120,7 +119,7 @@ export namespace GameInstaller {
                 await outputJSON(outPath, manifest); // Few people read asset index so we won't pretty-print
                 task.resolve(manifest);
             } catch (e) {
-                task.fail("Could not write asset index " + prof.assetIndex.id + ": " + e);
+                task.reject("Could not write asset index " + prof.assetIndex.id + ": " + e);
             }
         });
     }
@@ -154,7 +153,7 @@ export namespace GameInstaller {
         // Filter out libs
         const elibs = ProfileTools.effectiveLibraries(prof)
             .filter(ProfileTools.isNativeLibrary)
-            .filter(ProfileTools.isNativeRequired);
+            .filter(ProfileTools.isNativeLibraryAllowed);
         const taskName = Locale.getTranslation("install.natives", {id: prof.id});
         return new Task(taskName, elibs.length, async (task) => {
             try {
@@ -162,7 +161,7 @@ export namespace GameInstaller {
             } catch (e) {
                 const errMsg = "Could not create natives extraction directory " + nativesDir + ": " + e;
                 console.error(errMsg);
-                task.fail(errMsg);
+                task.reject(errMsg);
                 return;
             }
             for (const l of elibs) {
@@ -170,14 +169,14 @@ export namespace GameInstaller {
                 const src = ContainerTools.getLibraryPath(ct, l.downloads.artifact.path);
                 try {
                     await filterAndExtractNatives(src, nativesDir);
-                    task.addSuccess();
+                    task.success();
                 } catch (e) {
                     console.error("Could not unpack native library " + l.name + ": " + e);
-                    task.addFailed();
+                    task.fail();
                 }
             }
             if ((task.progress?.failed || 0) > 0) {
-                task.fail("Failed to unpack some native libraries.");
+                task.reject("Failed to unpack some native libraries.");
             } else {
                 task.resolve();
             }

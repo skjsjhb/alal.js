@@ -1,4 +1,4 @@
-import { Availability } from "@/modules/util/Availability";
+import { Availa } from "@/modules/util/Availa";
 import { createReadStream, createWriteStream, readFile, writeFile } from "fs-extra";
 import type LZMA from "lzma-native";
 import { pipeline } from "stream/promises";
@@ -19,7 +19,7 @@ export namespace Compressing {
      */
     export async function decompressLZMA(src: string, target: string): Promise<boolean> {
         try {
-            if (!Availability.supports("lzma-native")) {
+            if (!Availa.supports("lzma-native")) {
                 // Use a software implementation
                 if (!lzmaSoft) {
                     console.warn("Native implementation of LZMA is not available. A software implementation is used.");

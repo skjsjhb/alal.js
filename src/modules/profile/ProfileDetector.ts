@@ -99,51 +99,42 @@ export namespace ProfileDetector {
      * This method returns the most likely result. If it failed to find one, an empty string is returned.
      */
     export function getGameVersion(profiles: any[]): string {
+        let v: string;
+
         // First handle special cases
         for (const p of profiles) {
-            const vp = getVersionByPatches(p);
-            if (vp) {
-                return vp;
-            }
+            if ((v = getVersionByPatches(p))) return v;
         }
 
         // Analyze the inherit chain
-        for (const prof of profiles) {
-            let current = prof;
-            while (typeof current.inheritsFrom == "string") {
-                current = profiles.find((p) => p.id == current.inheritsFrom);
-                if (!current) {
-                    break;
-                }
-            }
-            if (current && isMojang(current) && isLikelyMojangVersion(current.id)) {
-                return current.id;
-            }
+        const root = findRootProfile(profiles);
+        if (root && isLikelyMojangVersion(root.id)) {
+            return root.id;
         }
 
         // Directly check all profiles
         for (const prof of profiles) {
-            if (isMojang(prof)) {
-                if (isLikelyMojangVersion(prof.id)) {
-                    return prof.id;
-                } else {
-                    // Extract the most likely one
-                    const ev = extractMojangVersion(prof.id);
-                    if (ev) {
-                        return ev;
-                    }
-                }
+            if (isLikelyMojangVersion(prof.id)) {
+                return prof.id;
             }
         }
 
         // Extract any
         for (const {id} of profiles) {
-            const ev = extractMojangVersion(id);
-            if (ev) {
-                return ev;
+            if ((v = extractMojangVersion(id))) return v;
+        }
+
+        // Cannot decide
+        return "";
+    }
+
+    function findRootProfile(profiles: any[]): any {
+        for (const prof of profiles) {
+            if (!prof.inheritsFrom) { // A valid chain only has one element without the field
+                return prof;
             }
         }
-        return ""; // I don't know
+        return null;
     }
 
     function extractMojangVersion(src: string): string {

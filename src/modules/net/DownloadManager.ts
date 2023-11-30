@@ -2,7 +2,7 @@ import { Files } from "@/modules/data/Files";
 import { Options } from "@/modules/data/Options";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { Task } from "@/modules/task/Task";
-import { Throttle } from "@/modules/util/Throttle";
+import { Pool } from "@/modules/util/Throttle";
 import { stat } from "fs-extra";
 
 /**
@@ -12,7 +12,7 @@ import { stat } from "fs-extra";
  * summary the download progress on the fly. The download manager also generates tasks for tracing.
  */
 export namespace DownloadManager {
-    const pool = new Throttle.Pool(32);
+    const pool = new Pool(32);
 
     export function configure() {
         const limit = Options.get().download.maxTasks;
@@ -29,9 +29,9 @@ export namespace DownloadManager {
                 await pool.acquire();
                 const res = await downloadSingleInBatched(p);
                 if (res) {
-                    task.addSuccess();
+                    task.success();
                 } else {
-                    task.addFailed();
+                    task.fail();
                 }
                 pool.release();
                 return res;
@@ -39,7 +39,7 @@ export namespace DownloadManager {
             if (results.every(r => r)) {
                 task.resolve();
             } else {
-                task.fail("Some files failed to download.");
+                task.reject("Some files failed to download.");
             }
             return results.every((r) => r);
         });

@@ -1,6 +1,7 @@
 import { Signals } from "@/background/Signals";
 import { Options } from "@/modules/data/Options";
 import { Paths } from "@/modules/data/Paths";
+import { Availa } from "@/modules/util/Availa";
 import { app, ipcRenderer } from "electron";
 import { readFile } from "fs-extra";
 import { glob } from "glob";
@@ -23,7 +24,7 @@ export namespace Locale {
         console.log("Loading locale.");
         await loadLocaleFromDir(Paths.getResourcePath(localeDirname));
         let userLocale;
-        if (ipcRenderer) {
+        if (Availa.isRemote()) {
             // Remote
             userLocale = Options.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
         } else {

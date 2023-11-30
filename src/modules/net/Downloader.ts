@@ -3,6 +3,7 @@ import { Files } from "@/modules/data/Files";
 import { Options } from "@/modules/data/Options";
 import { Cacher } from "@/modules/net/Cacher";
 import { Mirrors } from "@/modules/net/Mirrors";
+import { Availa } from "@/modules/util/Availa";
 import { ipcRenderer } from "electron";
 import fetch from "electron-fetch";
 import { createWriteStream, ensureDir, stat } from "fs-extra";
@@ -69,30 +70,34 @@ export namespace Downloader {
     }
 
     /**
-     * All-in-one bundle of {@link webGetFile}, {@link checkCache} and {@link validateFile}.
+     * Download a file with cache checking, checksum validating and retries.
      */
     export async function downloadFile(p: DownloadProfile): Promise<boolean> {
         let usingCache = true;
         const tries = p.tries;
         for (const _i of Array(tries)) {
-            if (!await checkCache(p)) {
+            if (!await checkDownloadCache(p)) {
                 usingCache = false;
                 // Download file since cache not found
-                const dlok = await webGetFile(p);
-                if (!dlok) {
+                const err = await webGetFile(p);
+                if (err) {
+                    // Caveat to skip retries for resources not found
+                    if (err == "404") {
+                        break;
+                    }
                     console.log("Try: " + p.url);
                     continue; // Try again
                 }
             }
             console.log("Chk: " + p.url);
-            if (await validateFile(p)) {
-                await saveCache(p);
+            if (await validateDownload(p)) {
+                await addDownloadCache(p);
                 console.log("Got: " + p.url);
                 return true;
             } else {
                 if (usingCache) {
                     // This cache is invalid
-                    await invalidateCache(p);
+                    await Cacher.removeCache(p.url);
                 }
                 p.url = p.origin; // Disable mirrors
                 // Try again
@@ -100,6 +105,7 @@ export namespace Downloader {
             }
         }
         // You failed!
+        console.log("Drp: " + p.url);
         return false;
     }
 
@@ -109,7 +115,7 @@ export namespace Downloader {
     // Empty: Do not check the file
     // Other: Treated as a hash algorithm name
     // This method is controlled by global settings.
-    async function validateFile(p: DownloadProfile): Promise<boolean> {
+    async function validateDownload(p: DownloadProfile): Promise<boolean> {
         if (!p.validation) {
             return true; // Always pass
         }
@@ -131,7 +137,7 @@ export namespace Downloader {
     }
 
     // Check the cache and apply if applicable
-    async function checkCache(p: DownloadProfile): Promise<boolean> {
+    async function checkDownloadCache(p: DownloadProfile): Promise<boolean> {
         if (!Options.get().download.cache || !p.cache) {
             return false; // Disabled by caller or global settings
         }
@@ -143,38 +149,34 @@ export namespace Downloader {
     }
 
     // Adds file to cache. This method is controlled by global settings.
-    async function saveCache(p: DownloadProfile): Promise<void> {
+    async function addDownloadCache(p: DownloadProfile): Promise<void> {
         if (!Options.get().download.cache || !p.cache) {
             return;
         }
         await Cacher.addCache(p.url, p.location);
     }
 
-    function invalidateCache(p: DownloadProfile): Promise<void> {
-        return Cacher.removeCache(p.url);
-    }
-
     /**
-     * Download a file.
+     * Download a file. Returns the error message (status code for non-ok requests and describing message for others).
      *
      * @returns Whether the operation is successful.
      * @param p Download profile.
      */
-    export async function webGetFile(p: DownloadProfile): Promise<boolean> {
+    export async function webGetFile(p: DownloadProfile): Promise<string | null> {
         const {url} = p;
         console.log("Get: " + url);
         let err;
-        if (ipcRenderer) {
+        if (Availa.isRemote()) {
             err = await webGetFileRemote(p);
         } else {
             err = await webGetFileMain(p);
         }
         if (err == null) {
             console.log("Res: " + url);
-            return true;
+            return null;
         } else {
             console.log(`Err: ${url} (${err})`);
-            return false;
+            return err;
         }
     }
 
@@ -196,7 +198,7 @@ export namespace Downloader {
                 signal: timeoutController.signal
             });
             if (!res.ok) {
-                return "Status " + res.status;
+                return res.status.toString();
             }
             if (!res.body) {
                 return "Empty body";

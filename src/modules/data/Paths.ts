@@ -1,4 +1,5 @@
 import { Signals } from "@/background/Signals";
+import { Availa } from "@/modules/util/Availa";
 import { app, ipcRenderer } from "electron";
 import os from "os";
 import path from "path";
@@ -51,7 +52,7 @@ export namespace Paths {
      * This method is a wrapper of {@link app.getAppPath}. This can only be called on the remote.
      */
     export async function retrieveAppPath() {
-        if (ipcRenderer) {
+        if (Availa.isRemote()) {
             appPath = await ipcRenderer.invoke(Signals.GET_APP_PATH);
         } else {
             appPath = app.getAppPath();

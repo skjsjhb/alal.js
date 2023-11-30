@@ -34,7 +34,7 @@ export namespace Mirrors {
             try {
                 await fetch(url, {method: "HEAD", signal: controller.signal, cache: "no-cache"});
                 clearTimeout(tid);
-            } catch (e) {
+            } catch {
                 return -1;
             }
             dat.push(Date.now() - start);

@@ -1,14 +1,14 @@
+import { Files } from "@/modules/data/Files";
+import { Registry } from "@/modules/data/Registry";
+import { Locale } from "@/modules/i18n/Locale";
+import { Cacher } from "@/modules/net/Cacher";
+import { Downloader } from "@/modules/net/Downloader";
 import { fetchJSON } from "@/modules/net/FetchUtil";
 import { ProfileDetector } from "@/modules/profile/ProfileDetector";
+import { Pool } from "@/modules/util/Throttle";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
 import { testInstaller } from "T/InstallerTest";
-import { Files } from "../src/modules/data/Files";
-import { Registry } from "../src/modules/data/Registry";
-import { Locale } from "../src/modules/i18n/Locale";
-import { Cacher } from "../src/modules/net/Cacher";
-import { Downloader } from "../src/modules/net/Downloader";
-import { Throttle } from "../src/modules/util/Throttle";
 import { testJavaDownload } from "./JavaGetTest";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
@@ -62,7 +62,7 @@ async function allTests() {
     });
     await test("Throttle Pool", async () => {
         let a = 0;
-        const pool = new Throttle.Pool(2);
+        const pool = new Pool(2);
         await Promise.all([pool.acquire(), pool.acquire()]);
         const prom = pool.acquire();
         prom.then(() => { a = 1;});
@@ -75,7 +75,7 @@ async function allTests() {
 
     await test("Profile Detection for Mojang", async () => {
         const profiles = await fetchJSON("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json");
-        const pool = new Throttle.Pool(8);
+        const pool = new Pool(8);
         await Promise.all(profiles.versions.map(async (p: any) => {
             await pool.acquire();
             console.debug("Testing " + p.id);

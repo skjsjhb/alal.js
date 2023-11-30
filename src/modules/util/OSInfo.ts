@@ -50,4 +50,20 @@ export namespace OSInfo {
                 return OSType.LINUX;
         }
     }
+
+    export function isWindows(): boolean {
+        return getSelf() == OSType.WINDOWS;
+    }
+
+    export function isMacOS(): boolean {
+        return getSelf() == OSType.MACOS;
+    }
+
+    export function isLinux(): boolean {
+        return getSelf() == OSType.LINUX;
+    }
+
+    export function isARM(): boolean {
+        return os.arch() == "arm64";
+    }
 }

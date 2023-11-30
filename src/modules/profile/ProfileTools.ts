@@ -139,19 +139,17 @@ export namespace ProfileTools {
     }
 
     export function effectiveLibraries(p: VersionProfile): Library[] {
-        return p.libraries.filter((l) => Rules.resolveRules(l.rules));
+        return p.libraries.filter((l) => Rules.resolveRules(l.rules)); // Libraries do not contain feature-based rules
     }
 
     export function isNativeLibrary(l: Library): boolean {
         return l.name.split(":").length == 4;
     }
 
-
     /**
-     * By default, the launcher should unpack all native files without filtering.
-     * However, alal.js can optimize this process by only unpacking files that are required.
+     * Check if the specified native library should be unpacked.
      */
-    export function isNativeRequired(l: Library): boolean {
+    export function isNativeLibraryAllowed(l: Library): boolean {
         const libName = l.name.split(":")[3]; // Assume already checked
         const arch = os.arch();
 
@@ -167,11 +165,11 @@ export namespace ProfileTools {
         }
         switch (OSInfo.getSelf()) {
             case OSType.WINDOWS:
-                return /windows/i.test(libName);
+                return /windows/i.test(libName) || (/win/i.test(libName) && !/darwin/.test(libName));
             case OSType.LINUX:
                 return /linux/i.test(libName);
             case OSType.MACOS:
-                return /osx/i.test(libName) || /macos/.test(libName);
+                return /osx/i.test(libName) || /macos/.test(libName) || /darwin/i.test(libName);
         }
     }
 

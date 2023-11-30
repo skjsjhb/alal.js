@@ -13,7 +13,7 @@ import { JavaGet } from "@/modules/jem/JavaGet";
 import { Cacher } from "@/modules/net/Cacher";
 import { DownloadManager } from "@/modules/net/DownloadManager";
 import { Mirrors } from "@/modules/net/Mirrors";
-import { Availability } from "@/modules/util/Availability";
+import { Availa } from "@/modules/util/Availa";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -62,7 +62,7 @@ export namespace ReInit {
     // Init renderer-side modules
     async function initModules() {
         console.log("Loading and initializing modules.");
-        Availability.synthensisFeatures();
+        Availa.synthensisFeatures();
         Paths.detectRootPath();
         await Paths.retrieveAppPath();
         await Options.load();

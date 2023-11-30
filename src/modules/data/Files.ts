@@ -35,7 +35,7 @@ export namespace Files {
         try {
             await access(loc);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }

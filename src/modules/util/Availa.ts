@@ -1,10 +1,11 @@
+import { ipcRenderer } from "electron";
 import os from "os";
 import FeatureMatrix from "R/build/feature-matrix.json";
 
 /**
  * Check for the availability of certain features.
  */
-export namespace Availability {
+export namespace Availa {
     const platform = os.platform() + "-" + os.arch();
     const featureSet: Set<string> = new Set();
 
@@ -36,5 +37,12 @@ export namespace Availability {
      */
     export function supports(name: string): boolean {
         return featureSet.has(name);
+    }
+
+    /**
+     * Check if the current process is a renderer process.
+     */
+    export function isRemote(): boolean {
+        return !!ipcRenderer;
     }
 }

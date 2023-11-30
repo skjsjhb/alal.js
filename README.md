@@ -4,6 +4,7 @@
 
 ## Status
 
+[![CodeQL](https://github.com/skjsjhb/alal.js/actions/workflows/codeql.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/codeql.yml)
 [![Autotest](https://github.com/skjsjhb/alal.js/actions/workflows/test.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/test.yml)
 [![Cross Packaging](https://github.com/skjsjhb/alal.js/actions/workflows/package.yml/badge.svg)](https://github.com/skjsjhb/alal.js/actions/workflows/package.yml)
 ![GitHub License](https://img.shields.io/github/license/skjsjhb/alal.js)
@@ -20,8 +21,7 @@ created project alal.js here.
 
 Most modules and code are wiped and the code is written from scratch, but some build tools are continuing to be used.
 Though this project is now on a different road from Alicorn, it's heavily inspired by that, and we're still crediting
-the
-original work by naming our project alal.js.
+the original work by naming our project alal.js.
 
 ## Disclaimer
 
@@ -61,8 +61,8 @@ following scenarios:
 
 ### How To
 
-We've created seperated all-in-one scripts for the build. Below is an example of running the **autotest** build, but *
-*debug** and **release** are also similar.
+We've created seperated all-in-one scripts for the build. Below is an example of running the **autotest** build, but
+**debug** and **release** are also similar.
 
 **Please note that this is not stable and may change at any time.**
 

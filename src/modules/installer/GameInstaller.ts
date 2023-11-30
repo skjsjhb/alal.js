@@ -18,6 +18,8 @@ import unzip from "unzipper";
  * Game installer is responsible for installing, checking and repairing game files.
  */
 export namespace GameInstaller {
+    const defaultJre = "jre-legacy";
+
     /**
      * Prepare game files with version `id`. Installing all necessary components.
      */
@@ -30,7 +32,7 @@ export namespace GameInstaller {
         return new Task(taskName, 7, async (task) => {
             try {
                 const profile = await installProfile(ct, id).link(task).whenFinish();
-                const java = profile.javaVersion.component;
+                const java = profile.javaVersion?.component || defaultJre;
                 if (!JavaGet.hasComponent(java)) {
                     await JavaGet.installComponent(java).link(task).whenFinish();
                 }

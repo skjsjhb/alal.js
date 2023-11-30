@@ -59,7 +59,7 @@ export namespace Launcher {
 
     // Gets the executable path
     function getJavaExecutable(prof: VersionProfile) {
-        const comp = JavaVersionMap.getJavaComponent(prof.id);
+        const comp = prof.javaVersion?.component || JavaVersionMap.getJavaComponent(prof.id);
         return JavaGet.getJavaExecutable(comp);
     }
 

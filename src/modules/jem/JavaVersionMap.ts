@@ -6,7 +6,7 @@ export namespace JavaVersionMap {
     /**
      * Gets the specified jre component for the specified profile.
      *
-     * Note: This method only supports Mojang profiles.
+     * Note: This method only supports Mojang profiles. Consider using the jre which the profile specified first.
      * @param id Profile ID.
      */
     export function getJavaComponent(id: string): string {

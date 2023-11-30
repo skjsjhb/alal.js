@@ -86,4 +86,14 @@ export namespace TestTools {
         }
         return false;
     }
+
+    /**
+     * Running all tests is a cumbersome task for both CI and dev machine.
+     *
+     * This method requests tests to only do a basic subset of all tests.
+     * Note: even simple tests are used for CI, a full test **MUST** pass before a release.
+     */
+    export function shouldSimpleTest() {
+        return process.env["ALAL_TEST_SIMPLE"] == "1";
+    }
 }

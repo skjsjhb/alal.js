@@ -11,39 +11,45 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: pnpm
       - name: Build
-        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
+        run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
       - name: Test
-        run: yarn test
+        run: pnpm test
 
   test-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: pnpm
       - name: Build
-        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
+        run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
       - name: Test
-        run: yarn test
+        run: pnpm test
 
   test-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - name: Setup Xvfb
+          cache: pnpm
+      - name: Setup xvfb
         run: sudo apt install xvfb
       - name: Build
-        run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
+        run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
       - name: Test
-        run: xvfb-run yarn test
+        run: xvfb-run pnpm test

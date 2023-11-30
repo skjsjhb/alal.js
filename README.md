@@ -53,7 +53,7 @@ following sceneraios:
 
 ### Prerequisites
 
-- Node.js 18+ with corepack
+- Node.js 18+ with pnpm
 
 - Git
 
@@ -74,10 +74,10 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
    If you're trying to contribute, please consider fork first, rather than cloning directly.
 
-2. Enable corepack and install deps:
+2. Install deps:
 
    ```shell
-   corepack enable && yarn
+   pnpm i
    ```
 
    You may encounter build failures for this step. If you see anything related to `lzma-native`, this is OK - Your
@@ -87,20 +87,20 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 3. Bundle scripts:
 
    ```shell
-   yarn bundle-autotest
+   pnpm bundle-autotest
    ```
 
 4. Run test with alal.js Test Tool:
 
    ```shell
-   yarn test
+   pnpm test
    ```
 
 5. Optionally pack the autotest build for distribution. Autotest and debug builds are not targeted towards users, but
    their bundles may have other particular usages.
 
    ```shell
-   yarn make-autotest
+   pnpm make-autotest
    ```
 
    Output files locates in `dist/<target>`.
@@ -116,9 +116,9 @@ We've created seperated all-in-one scripts for the build. Below is an example of
   However, the software version is comparably slow and (more importantly) unreliable due to the lack of maintenance of
   the package. You might want to enable `lzma-native` manually. To do that:
 
-    1. Confirm that `lzma-native` has been built successfully (`yarn` and check for any errors).
+    1. Confirm that `lzma-native` has been built successfully (`pnpm i` and check for any errors).
 
-    2. Rebuild libraries using `@electron/rebuild` (`yarn electron-rebuild` will work).
+    2. Rebuild libraries using `@electron/rebuild` (`pnpm electron-rebuild` will work).
 
     3. Edit `resources/build/feature-matrix.json`, and add an entry:
 
@@ -145,8 +145,6 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 
 - The package script only builds the same output as the runner's platform. i.e. On macOS only macOS packges are built,
   etc. However, architecture of the host does not matter. (x64 packages can be built on arm64 and vice versa)
-
-- If you're using yarn v1, do not run `yarn` directly. It will refuse to install.
 
 ## Copying
 

@@ -5,19 +5,19 @@
   "versionName": "SakuraKumo",
   "version": "2.0.1",
   "scripts": {
-    "bundle-debug": "yarn webpack --config webpack.config.debug.js",
-    "bundle-release": "yarn webpack --config webpack.config.release.js",
-    "bundle-autotest": "yarn webpack --config webpack.config.autotest.js",
-    "bundle": "yarn bundle-debug && yarn bundle-release && yarn bundle-autotest",
-    "make-autotest": "yarn electron-builder -c electron-builder.autotest.yml --publish=never",
-    "make-release": "yarn electron-builder -c electron-builder.release.yml --publish=never",
-    "make-debug": "yarn electron-builder -c electron-builder.debug.yml --publish=never",
-    "make": "yarn make-debug && yarn make-release && yarn make-autotest",
-    "launch-debug": "cd build/debug && npx electron .",
-    "launch-release": "cd build/release && npx electron .",
-    "launch-autotest": "cd build/autotest && npx electron .",
+    "bundle-debug": "pnpm webpack --config webpack.config.debug.js",
+    "bundle-release": "pnpm webpack --config webpack.config.release.js",
+    "bundle-autotest": "pnpm webpack --config webpack.config.autotest.js",
+    "bundle": "pnpm bundle-debug && pnpm bundle-release && pnpm bundle-autotest",
+    "make-autotest": "pnpm electron-builder -c electron-builder.autotest.yml --publish=never",
+    "make-release": "pnpm electron-builder -c electron-builder.release.yml --publish=never",
+    "make-debug": "pnpm electron-builder -c electron-builder.debug.yml --publish=never",
+    "make": "pnpm make-debug && pnpm make-release && pnpm make-autotest",
+    "launch-debug": "cd build/debug && pnpm electron .",
+    "launch-release": "cd build/release && pnpm electron .",
+    "launch-autotest": "cd build/autotest && pnpm electron .",
     "test": "node tools/launchTest.js",
-    "clean": "yarn rimraf build dist"
+    "clean": "pnpm rimraf build dist"
   },
   "devDependencies": {
     "@electron/rebuild": "^3.3.1",
@@ -57,5 +57,5 @@
     "uuid": "^9.0.1",
     "yaml": "^2.3.4"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "pnpm@8.11.0"
 }

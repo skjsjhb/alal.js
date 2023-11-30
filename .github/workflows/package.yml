@@ -9,16 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: pnpm
       - name: Install Dependencies
-        run: corepack enable && yarn
+        run: pnpm i
       - name: Rebuild Natives
-        run: yarn electron-rebuild
+        run: pnpm electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -l
+        run: pnpm bundle-release && pnpm make-release -l
       - name: List Files
         run: ls ./dist/release
 
@@ -26,16 +28,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: pnpm
       - name: Install Dependencies
-        run: corepack enable && yarn
+        run: pnpm i
       - name: Rebuild Natives
-        run: yarn electron-rebuild
+        run: pnpm electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -w
+        run: pnpm bundle-release && pnpm make-release -w
       - name: List Files
         run: ls ./dist/release
 
@@ -43,15 +47,17 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+          cache: pnpm
       - name: Install Dependencies
-        run: corepack enable && yarn
+        run: pnpm i
       - name: Rebuild Natives
-        run: yarn electron-rebuild
+        run: pnpm electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -m
+        run: pnpm bundle-release && pnpm make-release -m
       - name: List Files
         run: ls ./dist/release

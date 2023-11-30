@@ -65,11 +65,7 @@ export namespace Paths {
      * @param pt Relative path parts.
      */
     export function getDataPath(...pt: string[]): string {
-        if (!rootPath) {
-            console.warn("Paths used with root uninitialized.");
-            console.warn("This is completed on-demand this time. Check the code.");
-            detectRootPath();
-        }
+        rootPath || detectRootPath();
         return path.resolve(rootPath, ...pt);
     }
 

@@ -18,22 +18,14 @@ export namespace ProfileDetector {
      * @param src Parsed profile source.
      */
     export function isMojang(src: any): boolean {
-        if (!src?.minimumLauncherVersion) {
-            return false;
-        }
-        if (!src?.assets || !src?.assetIndex) {
-            return false;
-        }
-        if (!src?.downloads?.client) {
-            return false;
-        }
-        if (src?.inheritsFrom) {
-            return false;
-        }
-        if (isModLoader(src)) {
-            return false;
-        }
-        return checkLibraries(src, PDRules.libraries.mojang);
+        return !!src &&
+            !!src.minimumLauncherVersion &&
+            !!src.assets &&
+            !!src.assetIndex &&
+            !!src.downloads.client &&
+            !src.inheritsFrom &&
+            !isModLoader(src) &&
+            checkLibraries(src, PDRules.libraries.mojang);
     }
 
     function isModLoader(src: any): boolean {

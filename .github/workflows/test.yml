@@ -20,7 +20,7 @@ jobs:
       - name: Build
         run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
       - name: Set Environment Variable for Simple Tests
-        run: echo "ALAL_TEST_SIMPLE" >> "$GITHUB_ENV"
+        run: echo "ALAL_TEST_SIMPLE=1" >> $env:GITHUB_ENV
       - name: Test
         run: pnpm test
 

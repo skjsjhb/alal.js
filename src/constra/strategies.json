@@ -76,5 +76,17 @@
   "installer": {
     "nativesRegex": "\\.(dll|dylib|so)$",
     "legacyAssets": "^(legacy|pre-1\\.6)$"
+  },
+  "launch": {
+    "launcherName": "alal.js",
+    "vmArgsAddon": [
+      "-XX:+IgnoreUnrecognizedVMOptions",
+      "-XX:+UnlockExperimentalVMOptions",
+      "-showversion",
+      "-Dfile.encoding=UTF-8",
+      "-Dlog4j2.formatMsgNoLookups=true",
+      "-Dcom.sun.jndi.rmi.object.trustURLCodebase=false",
+      "-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=false"
+    ]
   }
 }

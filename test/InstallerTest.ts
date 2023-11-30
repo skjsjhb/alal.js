@@ -23,8 +23,8 @@ export async function testInstaller() {
                 console.warn("Manifest not available. Skipped test.");
                 return;
             }
-            // Test major versions: latest-release, 1.6.4, 1.5.2
-            const versions = [allVersions.latest.release, "1.6.4", "1.5.2"];
+            // Test major versions: 1.20.2, 1.6.4, 1.5.2
+            const versions = ["1.20.2", "1.6.4", "1.5.2"];
             let i = 0;
             for (const v of versions) {
                 i++;
@@ -56,8 +56,10 @@ export async function testInstaller() {
 
     async function checkContainerContents() {
         const dirs = await readdir(path.join(ct.rootDir));
+        assertTrue(dirs.includes("libraries"), "Libraries should exist");
         assertTrue(dirs.includes("resources"), "Mapped assets should exist");
         assertTrue(dirs.includes("assets"), "Assets folder should exist");
+        assertTrue(dirs.includes("client-1.12.xml"), "Log config should exist");
         const assets = await readdir(path.join(ct.rootDir, "assets"));
         assertTrue(assets.includes("virtual"), "Legacy assets should exist");
         assertTrue(assets.includes("indexes"), "Asset indexes should exist");

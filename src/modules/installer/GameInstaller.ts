@@ -29,7 +29,7 @@ export namespace GameInstaller {
             console.warn("Installing on a locked container: " + ct.rootDir);
         }
         const taskName = Locale.getTranslation("install.compound", {id});
-        return new Task(taskName, 7, async (task) => {
+        return new Task(taskName, 8, async (task) => {
             try {
                 const profile = await installProfile(ct, id).link(task).whenFinish();
                 const java = profile.javaVersion?.component || defaultJre;
@@ -40,6 +40,11 @@ export namespace GameInstaller {
                 await installLibraries(ct, profile).link(task).whenFinish();
                 const ai = await installAssetIndex(ct, profile).link(task).whenFinish();
                 await installAssets(ct, profile.assetIndex.id, ai).link(task).whenFinish();
+                if (ProfileTools.hasLogConfig(profile)) {
+                    await installLogConfig(ct, profile).link(task).whenFinish();
+                } else {
+                    task.success();
+                }
                 await unpackNatives(ct, profile).link(task).whenFinish();
                 task.resolve();
             } catch (e) {
@@ -118,13 +123,30 @@ export namespace GameInstaller {
                 return;
             }
             try {
-                const outPath = ContainerTools.getAssetIndexPath(ct, prof.assetIndex.id, manifest);
-                await outputJSON(outPath, manifest); // Few people read asset index so we won't pretty-print
+                const outPath = ContainerTools.getAssetIndexInstallPaths(ct, prof.assetIndex.id, manifest);
+                for (const p of outPath) {
+                    await outputJSON(p, manifest);
+                }
                 task.resolve(manifest);
             } catch (e) {
                 task.reject("Could not write asset index " + prof.assetIndex.id + ": " + e);
             }
         });
+    }
+
+    export function installLogConfig(ct: Container, prof: VersionProfile): Task<void> {
+        const taskName = Locale.getTranslation("install.logging", {id: prof.id});
+        const artifact = prof.logging.client.file;
+        const profile = Downloader.createProfile({
+            url: prof.logging.client.file.url,
+            location: ContainerTools.getLogConfigPath(ct, artifact.id),
+            size: artifact.size,
+            checksum: artifact.sha1,
+            validation: "sha1"
+        });
+        const dlTask = DownloadManager.downloadBatched([profile]);
+        dlTask.setName(taskName);
+        return dlTask;
     }
 
     /**

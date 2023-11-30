@@ -9,6 +9,7 @@ import { Pool } from "@/modules/util/Throttle";
 import { ipcRenderer } from "electron";
 import { readFile, readJSON, remove } from "fs-extra";
 import { testInstaller } from "T/InstallerTest";
+import { testLaunch } from "T/LaunchTest";
 import { testJavaDownload } from "./JavaGetTest";
 import { SignalTest } from "./SignalTest";
 import { TestSummary } from "./TestSummary";
@@ -103,6 +104,7 @@ async function allTests() {
 
     await testJavaDownload();
     await testInstaller();
+    await testLaunch();
     await saveSummary();
 }
 

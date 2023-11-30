@@ -3,7 +3,6 @@
  * Note that this cannot be used for build directly.
  */
 const path = require("path");
-const webpack = require("webpack");
 const fs = require("fs");
 const os = require("os");
 const resources = fs.readFileSync("resources/build/resource-map.json");

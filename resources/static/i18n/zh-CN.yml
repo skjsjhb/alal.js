@@ -17,6 +17,7 @@ install:
   libraries: "下载支持库: ${id}"
   asset-index: "获取资源列表: ${assets}"
   assets: "下载资源包: ${assets}"
+  logging: "下载日志配置: ${id}"
   natives: "提取运行库: ${id}"
 
 java-get:

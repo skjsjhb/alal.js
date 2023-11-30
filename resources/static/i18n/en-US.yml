@@ -17,6 +17,7 @@ install:
   libraries: "Downloading Libraries: ${id}"
   asset-index: "Downloading Asset Index: ${assets}"
   assets: "Downloading Assets: ${assets}"
+  logging: "Downloading Logging Config: ${id}"
   natives: "Extracting Natives: ${id}"
 
 java-get:

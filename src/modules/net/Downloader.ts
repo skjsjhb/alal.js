@@ -76,33 +76,28 @@ export namespace Downloader {
         let usingCache = true;
         const tries = p.tries;
         for (const _i of Array(tries)) {
+            let err = null;
             if (!await checkDownloadCache(p)) {
                 usingCache = false;
                 // Download file since cache not found
-                const err = await webGetFile(p);
-                if (err) {
-                    // Caveat to skip retries for resources not found
-                    if (err == "404") {
-                        break;
-                    }
-                    console.log("Try: " + p.url);
-                    continue; // Try again
+                err = await webGetFile(p);
+            }
+            if (!err) {
+                console.log("Chk: " + p.url);
+                if (await validateDownload(p)) {
+                    await addDownloadCache(p);
+                    console.log("Got: " + p.url);
+                    return true;
                 }
             }
-            console.log("Chk: " + p.url);
-            if (await validateDownload(p)) {
-                await addDownloadCache(p);
-                console.log("Got: " + p.url);
-                return true;
-            } else {
-                if (usingCache) {
-                    // This cache is invalid
-                    await Cacher.removeCache(p.url);
-                }
-                p.url = p.origin; // Disable mirrors
-                // Try again
-                console.log("Try: " + p.url);
+            // Has error
+            if (usingCache) {
+                // This cache is invalid
+                await Cacher.removeCache(p.url);
             }
+            p.url = p.origin; // Disable mirrors
+            // Try again
+            console.log("Try: " + p.url);
         }
         // You failed!
         console.log("Drp: " + p.url);

@@ -13,5 +13,8 @@
   },
   "jem": {
     "optimize": true
+  },
+  "launch": {
+    "showLauncherName": true
   }
 }

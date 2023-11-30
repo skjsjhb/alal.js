@@ -5,7 +5,7 @@ import Strategies from "@/constra/strategies.json";
 import { Container, ContainerTools } from "@/modules/container/ContainerTools";
 import { fetchJSON } from "@/modules/net/FetchUtil";
 import { Rules } from "@/modules/profile/Rules";
-import { Argument, DownloadArtifact, Library, VersionProfile } from "@/modules/profile/VersionProfile";
+import { Argument, AssetIndex, DownloadArtifact, Library, VersionProfile } from "@/modules/profile/VersionProfile";
 import { Objects } from "@/modules/util/Objects";
 import { OSInfo, OSType } from "@/modules/util/OSInfo";
 import { readJSON } from "fs-extra";
@@ -205,6 +205,20 @@ export namespace ProfileTools {
      */
     export function isLegacyAssets(name: string): boolean {
         return new RegExp(Strategies.installer.legacyAssets).test(name);
+    }
+
+    /**
+     * Loads asset index file for given profile.
+     */
+    export async function loadAssetIndex(ct: Container, prof: VersionProfile): Promise<AssetIndex> {
+        return await readJSON(ContainerTools.getAssetIndexPath(ct, prof.assetIndex.id));
+    }
+
+    /**
+     * Check if the given profile has log config.
+     */
+    export function hasLogConfig(prof: VersionProfile): boolean {
+        return !!prof.logging?.client?.file?.id;
     }
 
     // Merge 'head' into 'base' in-place.

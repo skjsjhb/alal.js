@@ -75,18 +75,44 @@ export namespace ContainerTools {
 
     /**
      * Gets the path to this asset index. Automatically resolves for legacy assets.
+     * This method returns an array since under some scenarios asset index file must be saved
+     * to multiple locations.
      */
-    export function getAssetIndexPath(c: Container, id: string, a: AssetIndex): string {
+    export function getAssetIndexInstallPaths(c: Container, id: string, a: AssetIndex): string[] {
+        const dedicatedPath = getLocalAssetIndexPath(c, id);
+        const sharedPath = getGlobalAssetIndexPath(id);
         if (a.map_to_resources) {
-            // No shared
-            return path.join(c.rootDir, "resources", id + ".json");
+            // The mapped files cannot be shared. We left a copy for indexing.
+            return [path.join(c.rootDir, "resources", id + ".json"), c.shared ? sharedPath : dedicatedPath];
         } else {
             if (!ProfileTools.isLegacyAssets(id) && c.shared) {
-                return Paths.getDataPath("sharedAssets", "assets", "indexes", id + ".json");
+                return [sharedPath];
             } else {
-                return path.join(c.rootDir, "assets", "indexes", id + ".json");
+                return [dedicatedPath];
             }
         }
+    }
+
+    /**
+     * Similar to {@link getAssetIndexInstallPaths}, except that this method resolves to the dedicated copy only.
+     */
+    export function getAssetIndexPath(ct: Container, aid: string): string {
+        return ct.shared ? getGlobalAssetIndexPath(aid) : getLocalAssetIndexPath(ct, aid);
+    }
+
+    /**
+     * Gets the path to log config.
+     */
+    export function getLogConfigPath(ct: Container, id: string): string {
+        return path.join(ct.rootDir, id); // This file is rather small
+    }
+
+    function getLocalAssetIndexPath(c: Container, aid: string): string {
+        return path.join(c.rootDir, "assets", "indexes", aid + ".json");
+    }
+
+    function getGlobalAssetIndexPath(aid: string): string {
+        return Paths.getDataPath("sharedAssets", "assets", "indexes", aid + ".json");
     }
 
     function getLegacyAssetPath(c: Container, fileName: string): string {

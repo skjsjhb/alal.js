@@ -35,7 +35,7 @@ jobs:
           node-version: "18"
           cache: pnpm
       - name: Build
-        run: pnpm i && pnpm electron-rebuild && pnpm bundle-autotest
+        run: pnpm i --shamefully-hoist && pnpm electron-rebuild && pnpm bundle-autotest
       - name: Test
         run: ALAL_TEST_SIMPLE=1 pnpm test
 

@@ -7,7 +7,7 @@ import FeatureMatrix from "R/build/feature-matrix.json";
  */
 export namespace Availa {
     const platform = os.platform() + "-" + os.arch();
-    const featureSet: Set<string> = new Set();
+    let featureSet: Set<string>;
 
     interface FeatureMatrixItem {
         enable: boolean,
@@ -15,7 +15,25 @@ export namespace Availa {
         value: string[]
     }
 
-    export function synthensisFeatures() {
+    /**
+     * Check whether certain feature is enabled.
+     */
+    export function supports(name: string): boolean {
+        if (!featureSet) {
+            featureSet = new Set();
+            synthensisFeatures();
+        }
+        return featureSet.has(name);
+    }
+
+    /**
+     * Check if the current process is a renderer process.
+     */
+    export function isRemote(): boolean {
+        return !!ipcRenderer;
+    }
+
+    function synthensisFeatures() {
         for (const i of FeatureMatrix as FeatureMatrixItem[]) {
             if (new RegExp(i.platform).test(platform)) {
                 if (i.enable) {
@@ -30,19 +48,5 @@ export namespace Availa {
             }
 
         }
-    }
-
-    /**
-     * Check whether certain feature is enabled.
-     */
-    export function supports(name: string): boolean {
-        return featureSet.has(name);
-    }
-
-    /**
-     * Check if the current process is a renderer process.
-     */
-    export function isRemote(): boolean {
-        return !!ipcRenderer;
     }
 }

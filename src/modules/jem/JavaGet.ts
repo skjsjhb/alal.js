@@ -141,7 +141,7 @@ export namespace JavaGet {
             try {
                 // Fetch manifest
                 console.log("Fetching JRE download manifest for " + componentName);
-                const dlManifest = await resolveComponentDownloadManifest(componentName).link(task).whenFinish();
+                const dlManifest = await resolveComponentDownloadManifest(componentName).link(task).wait();
 
                 // Optimize files
                 console.log("Optimizing JRE files.");
@@ -152,11 +152,11 @@ export namespace JavaGet {
                 const downloadBatch = generateDownloadProfileList(componentName, dlManifest);
                 const downloadTask = DownloadManager.downloadBatched(downloadBatch);
                 downloadTask.setName(Locale.getTranslation("java-get.download", {name: componentName})); // Rename
-                await downloadTask.link(task).whenFinish();
+                await downloadTask.link(task).wait();
 
                 // Post process
                 console.log("Processing files for " + componentName);
-                await postProcessFiles(componentName, dlManifest).link(task).whenFinish();
+                await postProcessFiles(componentName, dlManifest).link(task).wait();
 
                 // Add to registry
                 const jgt = Registry.getTable<string[]>(javaGetRegistryId, []);

@@ -63,7 +63,7 @@ export class Task<T> {
     /**
      * Gets a Promise which resolves when the task completes.
      */
-    whenFinish(): Promise<T> {
+    wait(): Promise<T> {
         if (this.resolved) {
             return Promise.resolve(this.value as T);
         }

@@ -10,7 +10,7 @@ export async function testJavaDownload() {
     if (!shouldSimpleTest()) {
         await test("JavaGet Installation", async () => {
             const task = JavaGet.installComponent("java-runtime-gamma");
-            await task.whenFinish();
+            await task.wait();
             assertEquals(task.getProgressPercent(), 1, "All files are downloaded");
             assertTrue(JavaGet.hasComponent("java-runtime-gamma"), "Component added");
 

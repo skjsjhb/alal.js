@@ -31,21 +31,21 @@ export namespace GameInstaller {
         const taskName = Locale.getTranslation("install.compound", {id});
         return new Task(taskName, 8, async (task) => {
             try {
-                const profile = await installProfile(ct, id).link(task).whenFinish();
+                const profile = await installProfile(ct, id).link(task).wait();
                 const java = profile.javaVersion?.component || defaultJre;
                 if (!JavaGet.hasComponent(java)) {
-                    await JavaGet.installComponent(java).link(task).whenFinish();
+                    await JavaGet.installComponent(java).link(task).wait();
                 }
-                await installClient(ct, profile).link(task).whenFinish();
-                await installLibraries(ct, profile).link(task).whenFinish();
-                const ai = await installAssetIndex(ct, profile).link(task).whenFinish();
-                await installAssets(ct, profile.assetIndex.id, ai).link(task).whenFinish();
+                await installClient(ct, profile).link(task).wait();
+                await installLibraries(ct, profile).link(task).wait();
+                const ai = await installAssetIndex(ct, profile).link(task).wait();
+                await installAssets(ct, profile.assetIndex.id, ai).link(task).wait();
                 if (ProfileTools.hasLogConfig(profile)) {
-                    await installLogConfig(ct, profile).link(task).whenFinish();
+                    await installLogConfig(ct, profile).link(task).wait();
                 } else {
                     task.success();
                 }
-                await unpackNatives(ct, profile).link(task).whenFinish();
+                await unpackNatives(ct, profile).link(task).wait();
                 task.resolve();
             } catch (e) {
                 task.reject("Failed to install " + id + ": " + e);

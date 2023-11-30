@@ -29,7 +29,7 @@ export async function testInstaller() {
             for (const v of versions) {
                 i++;
                 console.debug(`Test installing ${v} (${i}/${versions.length})`);
-                await GameInstaller.installVersionFull(ct, v).whenFinish();
+                await GameInstaller.installVersionFull(ct, v).wait();
                 const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v));
                 assertTrue(dirs.length > 0, "Natives dir is not empty");
             }
@@ -46,7 +46,7 @@ export async function testInstaller() {
             for (const v of allVersions.versions) {
                 i++;
                 console.debug(`Test installing ${v.id} (${i}/${allVersions.versions.length})`);
-                await GameInstaller.installVersionFull(ct, v.id).whenFinish();
+                await GameInstaller.installVersionFull(ct, v.id).wait();
                 const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v.id));
                 assertTrue(dirs.length > 0, "Natives dir is not empty");
             }

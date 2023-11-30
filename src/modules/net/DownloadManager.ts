@@ -12,18 +12,13 @@ import { stat } from "fs-extra";
  * summary the download progress on the fly. The download manager also generates tasks for tracing.
  */
 export namespace DownloadManager {
-    const pool = new Pool(32);
-
-    export function configure() {
-        const limit = Options.get().download.maxTasks;
-        console.log("Max tasks for download: " + limit);
-        pool.setLimit(limit);
-    }
+    let pool: Pool;
 
     /**
      * Resolves a batch of download profiles, with an optional progress signal.
      */
     export function downloadBatched(batch: DownloadProfile[]): Task<void> {
+        pool || configure();
         return new Task("download.batch", batch.length, async (task) => {
             const results: [boolean, string][] = await Promise.all(batch.map(async (p) => {
                 await pool.acquire();
@@ -45,6 +40,13 @@ export namespace DownloadManager {
             return results.every((r) => r);
         });
 
+    }
+
+    function configure() {
+        pool = new Pool(32);
+        const limit = Options.get().download.maxTasks;
+        console.log("Max tasks for download: " + limit);
+        pool.setLimit(limit);
     }
 
     async function downloadSingleInBatched(p: DownloadProfile): Promise<boolean> {

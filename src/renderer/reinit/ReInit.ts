@@ -11,9 +11,7 @@ import { Registry } from "@/modules/data/Registry";
 import { Locale } from "@/modules/i18n/Locale";
 import { JavaGet } from "@/modules/jem/JavaGet";
 import { Cacher } from "@/modules/net/Cacher";
-import { DownloadManager } from "@/modules/net/DownloadManager";
 import { Mirrors } from "@/modules/net/Mirrors";
-import { Availa } from "@/modules/util/Availa";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -62,13 +60,10 @@ export namespace ReInit {
     // Init renderer-side modules
     async function initModules() {
         console.log("Loading and initializing modules.");
-        Availa.synthensisFeatures();
-        Paths.detectRootPath();
         await Paths.retrieveAppPath();
         await Options.load();
         await Locale.initLocale();
         await Registry.loadTables();
-        DownloadManager.configure();
         await JavaGet.configure();
     }
 

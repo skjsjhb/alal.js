@@ -41,10 +41,7 @@ export namespace MicrosoftBrowserLogin {
                     closeWindowHard(window);
                     res(code);
                 } else {
-                    if (!window.isVisible()) {
-                        console.log("Login page has stopped loading but no code is present. Showing window.");
-                        window.show();
-                    }
+                    window.isVisible() || window.show();
                 }
             }
 

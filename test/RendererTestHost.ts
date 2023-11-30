@@ -16,6 +16,7 @@ import { TestTools } from "./TestTools";
 import assertEquals = TestTools.assertEquals;
 import assertNotEquals = TestTools.assertNotEquals;
 import assertTrue = TestTools.assertTrue;
+import shouldSimpleTest = TestTools.shouldSimpleTest;
 import test = TestTools.test;
 
 export async function runRendererTests() {
@@ -77,6 +78,12 @@ async function allTests() {
         const profiles = await fetchJSON("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json");
         const pool = new Pool(8);
         await Promise.all(profiles.versions.map(async (p: any) => {
+            if (shouldSimpleTest()) {
+                const simpleVersions = [profiles.latest.release, "1.12.2", "1.6.4"];
+                if (!simpleVersions.includes(p.id)) {
+                    return;
+                }
+            }
             await pool.acquire();
             console.debug("Testing " + p.id);
             const file = await fetchJSON(p.url);

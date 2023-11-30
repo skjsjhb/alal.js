@@ -39,6 +39,7 @@ export namespace GameInstaller {
                 const ai = await installAssetIndex(ct, profile).link(task).whenFinish();
                 await installAssets(ct, profile.assetIndex.id, ai).link(task).whenFinish();
                 await unpackNatives(ct, profile).link(task).whenFinish();
+                task.resolve();
             } catch (e) {
                 task.reject("Failed to install " + id + ": " + e);
             }

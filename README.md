@@ -31,10 +31,11 @@ Studios, Microsoft Corp. or other unmentioned individuals or organizations.
 
 ## Build
 
-### Brief
+### In Short - If You've Done This Kind of Thing Before
 
-The following build steps should work for most targets. They are already tested on local machine, but with only a little
-coverage. Run the following scripts with care and open an issue if they refuse to work.
+```shell
+yarn && yarn bundle-release && yarn make-release
+```
 
 ### Targets
 
@@ -61,18 +62,16 @@ following scenarios:
 
 ### How To
 
-We've created seperated all-in-one scripts for the build. Below is an example of running the **autotest** build, but
-**debug** and **release** are also similar.
-
-**Please note that this is not stable and may change at any time.**
+We've created seperated all-in-one scripts for the build. Below is an example of running the **release** build, but *
+*debug** and **autotest** are also similar.
 
 1. Clone the repository.
 
    ```shell
-   git clone https://github.com/skjsjhb/ala.js.git --depth 1
+   git clone https://github.com/skjsjhb/alal.js.git --depth 1
    ```
 
-   If you're trying to contribute, please consider fork first, rather than cloning directly.
+   If you're trying to contribute, please consider forking over cloning directly.
 
 2. Enable corepack and install deps:
 
@@ -87,31 +86,29 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 3. Bundle scripts:
 
    ```shell
-   yarn bundle-autotest
+   yarn bundle-release
    ```
 
-4. Run test with alal.js Test Tool:
+4. Pack the application output:
 
    ```shell
-   yarn test
+   yarn make-release
    ```
 
-5. Optionally pack the autotest build for distribution. Autotest and debug builds are not targeted towards users, but
-   their bundles may have other particular usages.
-
-   ```shell
-   yarn make-autotest
-   ```
-
-   Output files locates in `dist/<target>`.
+   Output files locates at `dist/<target>`.
 
 ### Hints
 
+- We maintain a file `jre-map.json` to keep up-to-date with the latest Mojang JRE manifests. This file should be updated
+  once a new profile releases. To do that, run the following command before build:
+
+  ```shell
+  node tools/syncJreVerMap.js
+  ```
+
 - `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially
-  supported), as the
-  library does not come with a valid prebuilt (either missing or malfunctioned). We use a JS-based implementation
-  under this case. Usages of LZMA are also
-  reduced.
+  supported), as the library does not come with a valid prebuilt (either missing or malfunctioned). We use a JS-based
+  implementation under this case. Usages of LZMA are also reduced.
 
   However, the software version is comparably slow and (more importantly) unreliable due to the lack of maintenance of
   the package. You might want to enable `lzma-native` manually. To do that:
@@ -123,13 +120,16 @@ We've created seperated all-in-one scripts for the build. Below is an example of
     3. Edit `resources/build/feature-matrix.json`, and add an entry:
 
        ```json5
-       {
-         "enable": true,
-         "platform": "^win32-arm64$", // Or your platform name
-         "value": [
-           "lzma-native"
-         ]
-       }
+       [
+           //... Other rules
+           {
+             "enable": true,
+             "platform": "^win32-arm64$", // Or your platform name
+             "value": [
+               "lzma-native"
+             ]
+           }
+       ]
        ```
 
     4. Edit `resource/build/resource-map.json`, and add a field:
@@ -142,7 +142,7 @@ We've created seperated all-in-one scripts for the build. Below is an example of
        ```
 
        Where `<source/to/your/build>` should be the path to the rebuilt binaries **for electron**. If there are any
-       dependencies (e.g. `liblzma.dll`), add extra entries to make the copy plugin realize them.
+       dependencies (e.g. `liblzma.dll`), add extra entries to make the copy plugin realize their existence.
 
     5. Run to check whether these modifications work.
 
@@ -156,11 +156,11 @@ We've created seperated all-in-one scripts for the build. Below is an example of
 Copyright (C) 2023 Ted "skjsjhb" Gao (skjsjhb). alal.js is no longer affiliated with Alicorn Launcher.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with this program. If not,
+see <https://www.gnu.org/licenses/>.

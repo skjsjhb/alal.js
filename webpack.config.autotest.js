@@ -1,28 +1,63 @@
 /*
- * This config generates the so-called 'autotest' output.
- * An autotest bundle is an extended version of debug bundle, with the capability of
- * self-launching and self-testing. It's not designated for user interactions. Instead,
- * it runs a series of tests and generate a report of the tests.
+ * This config generates debug build output.
+ * Debug outputs are used during development. They builds fast, but are not optimized nor packed.
  */
-const [main, renderer] = require("./webpack.config.debug");
-const [, , , genConfig] = require("./webpack.config.base");
+const [baseMain, baseRenderer, rendererOptimization, genConfig] = require("./webpack.config.base");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { DefinePlugin } = require("webpack");
 
-main.plugins = [
-    new CopyWebpackPlugin({
-        patterns: [
-            ...genConfig(path.resolve(__dirname, "build/autotest"))
-        ]
-    })
-];
+const devCommon = {
+    devtool: false,
+    mode: "development"
+};
 
-main.entry.main = "./test/Main.ts";
-main.devtool = false;
-main.output.path = path.resolve(__dirname, "build/autotest");
+const main = {
+    ...baseMain,
+    ...devCommon,
+    entry: {
+        main: "./test/Main.ts"
+    },
+    output: {
+        filename: "[name].js",
+        pathinfo: false,
+        path: path.resolve(__dirname, "build/autotest")
+    },
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                ...genConfig(path.resolve(__dirname, "build/autotest"))
+            ]
+        }),
+        new DefinePlugin({
+            "process.env.MODE": "'autotest'"
+        })
+    ]
+};
 
-renderer.entry.renderer = "./test/Renderer.ts";
-renderer.devtool = false;
-renderer.output.path = path.resolve(__dirname, "build/autotest");
+
+const renderer = {
+    ...baseRenderer,
+    ...devCommon,
+    ...rendererOptimization,
+    entry: {
+        renderer: "./test/Renderer.ts"
+    },
+    output: {
+        filename: "[name].js",
+        pathinfo: false,
+        path: path.resolve(__dirname, "build/autotest")
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, "resources/build/template.html"),
+            filename: "renderer.html"
+        }),
+        new DefinePlugin({
+            "process.env.MODE": "'autotest'"
+        })
+    ]
+};
 
 module.exports = [main, renderer];

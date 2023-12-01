@@ -6,7 +6,7 @@ const [baseMain, baseRenderer, rendererOptimization, genConfig] = require("./web
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { BannerPlugin } = require("webpack");
+const { BannerPlugin, DefinePlugin } = require("webpack");
 
 const copyrightText =
     "@license\nCopyright (C) 2021-2022 Andy K Rarity Sparklight\nCopyright (C) 2023 Ted \"skjsjhb\" Gao" +
@@ -42,6 +42,9 @@ const main = {
         new BannerPlugin({
             banner: copyrightText,
             entryOnly: true
+        }),
+        new DefinePlugin({
+            "process.env.MODE": "'release'"
         })
     ]
 };
@@ -66,6 +69,9 @@ const renderer = {
         new BannerPlugin({
             banner: copyrightText,
             entryOnly: true
+        }),
+        new DefinePlugin({
+            "process.env.MODE": "'release'"
         })
     ]
 };

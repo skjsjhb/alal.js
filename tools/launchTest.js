@@ -18,7 +18,7 @@ if (!fse.existsSync(testRoot)) {
 
 if (process.env["ALAL_TEST_SIMPLE"] === "1") {
     console.log("Running simplified tests.");
-    console.log("Note: A full task must pass before a release.");
+    console.log("Note: A full test still must pass before a release.");
 }
 console.log("Starting Electron on test target: " + testRoot);
 

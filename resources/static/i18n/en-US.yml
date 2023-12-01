@@ -25,3 +25,22 @@ java-get:
   download: "Fetching ${name}"
   resolve: "Fetching Java Component Manifest"
   post-process: "Post Processing ${name}"
+
+
+portal:
+  title: Welcome to alal.js
+  start: Click to Start
+
+alicorn-again:
+  title: "This Will Be Different."
+  body: |
+    Welcome to alal.js, a non-official successor of Alicorn Launcher.<br/><br/>
+    Having crossed the sky and the starlight, alal.js stands here, from scratch, from the very beginning.<br/><br/>
+    In the following guides we'll make a brief introduction.<br/><br/>
+    Please press the button on the right.
+  next: Next
+  skip: Skip Intro
+  skip-popup:
+    body: Skip intro and use default settings?
+    accept: Yes
+    reject: No

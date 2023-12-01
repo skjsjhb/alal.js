@@ -25,3 +25,21 @@ java-get:
   download: "下载 Java 文件: ${name}"
   resolve: "获取 Java 组件列表"
   post-process: "提取文件: ${name}"
+
+portal:
+  title: 欢迎使用 alal.js
+  start: 单击此处以开始
+
+alicorn-again:
+  title: "这次会有所不同。"
+  body: |
+    欢迎使用 alal.js，这是 Alicorn 的非官方后继项目。<br/><br/>
+    穿越星空与雾海，踏遍樱云与夜咲，优雅地来到你的面前。alal.js 完全从头开始，重新设计，再度新生。<br/><br/>
+    在接下来的向导中，我们会做一个简短的介绍，并带你重新认识 Alicorn。<br/><br/>
+    请按右侧的按钮。
+  next: 下一步
+  skip: 跳过初始化设置
+  skip-popup:
+    body: 使用默认设置，确定？
+    accept: 好
+    reject: 取消

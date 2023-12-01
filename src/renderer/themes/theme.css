@@ -9,7 +9,7 @@
     --text-color-secondary: rgba(255, 255, 255, 0.6);
     --primary-color: #fff1b7;
     --primary-color-text: #1c2127;
-    --font-family: Nunito, Noto Sans SC;
+    --font-family: Nunito, Resource Han Rounded SC, sans-serif;
     --surface-0: #040d19;
     --surface-50: #1d2530;
     --surface-100: #363d47;
@@ -52,7 +52,7 @@
 }
 
 .p-component {
-    font-family: Nunito, "Noto Sans SC";
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
     font-size: 1rem;
     font-weight: normal
 }
@@ -85,7 +85,7 @@
 
 .p-link {
     font-size: 1rem;
-    font-family: Nunito, "Noto Sans SC";
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
     border-radius: 6px
 }
 
@@ -272,7 +272,7 @@
 }
 
 .p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token input {
-    font-family: Nunito, "Noto Sans SC";
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
     font-size: 1rem;
     color: rgba(255, 255, 255, .87);
     padding: 0;
@@ -805,7 +805,7 @@
 }
 
 .p-chips .p-chips-multiple-container .p-chips-input-token input {
-    font-family: Nunito, "Noto Sans SC";
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
     font-size: 1rem;
     color: rgba(255, 255, 255, .87);
     padding: 0;
@@ -1205,7 +1205,7 @@
 }
 
 .p-inputtext {
-    font-family: Nunito, "Noto Sans SC";
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
     font-size: 1rem;
     color: rgba(255, 255, 255, .87);
     background: #040d19;
@@ -7084,7 +7084,7 @@
 
 .p-terminal .p-terminal-input {
     font-size: 1rem;
-    font-family: Nunito, "Noto Sans SC"
+    font-family: Nunito, "Resource Han Rounded SC", sans-serif;
 }
 
 .p-badge {

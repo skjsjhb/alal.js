@@ -17,7 +17,7 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
         </div>
         <div className={"flex justify-content-end mt-5"}>
             <Button
-                className={"mr-5 p-0"}
+                className={"mr-5 p-1"}
                 severity={"secondary"}
                 label={tr("skip")}
                 text

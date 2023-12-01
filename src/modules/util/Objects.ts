@@ -1,7 +1,7 @@
 export namespace Objects {
 
     function isObject(item: any) {
-        return (item && typeof item === 'object' && !Array.isArray(item));
+        return (item && typeof item === "object" && !Array.isArray(item));
     }
 
     /**
@@ -54,5 +54,16 @@ export namespace Objects {
             }
         }
         return current;
+    }
+
+    export function upsertKeyValue(obj: any, key: string, value: any) {
+        key = key.toLowerCase();
+        for (const k of Object.keys(obj)) {
+            if (k.toLowerCase() == key) {
+                obj[k] = value;
+                return;
+            }
+        }
+        obj[key] = value;
     }
 }

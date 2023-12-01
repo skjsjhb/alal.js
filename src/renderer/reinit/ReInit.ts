@@ -103,3 +103,9 @@ export namespace ReInit {
         await Registry.saveTables();
     }
 }
+
+if (process.env.MODE == "debug") {
+    console.log("Enabling HMR.");
+    // @ts-ignore
+    if (module.hot) { module.hot.accept(); }
+}

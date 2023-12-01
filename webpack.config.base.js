@@ -21,6 +21,10 @@ const moduleResolution = {
                     }
                 ],
                 exclude: /node_modules/
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"]
             }
         ]
     },

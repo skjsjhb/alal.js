@@ -1,4 +1,5 @@
 import { Options } from "@/modules/data/Options";
+import { Objects } from "@/modules/util/Objects";
 import { app, BrowserWindow, Event, ipcMain, screen } from "electron";
 import os from "os";
 import path from "path";
@@ -57,8 +58,15 @@ export namespace WindowManager {
             mainWindow.webContents.openDevTools();
         }
 
-        // Load content
-        await mainWindow.loadFile(path.resolve(app.getAppPath(), "renderer.html"));
+        if (process.env.MODE == "debug") {
+            // Use dev server
+            console.warn("Debug mode detected. I'll try to load from local dev server.");
+            console.warn("This brings sever risks if used in production!");
+            await mainWindow.loadURL("http://localhost:9000/renderer.html");
+        } else {
+            // Use local
+            await mainWindow.loadFile(path.resolve(app.getAppPath(), "renderer.html"));
+        }
     }
 
     /**
@@ -127,21 +135,23 @@ export namespace WindowManager {
 
 
     function unblockCORS(window: BrowserWindow) {
-        console.log("Unblocking CORS for window " + window.getTitle());
+        console.log("Unblocking CORS.");
+
+        window.webContents.session.webRequest.onBeforeSendHeaders(
+            (details, callback) => {
+                const {requestHeaders} = details;
+                Objects.upsertKeyValue(requestHeaders, "Access-Control-Allow-Origin", ["*"]);
+                callback({requestHeaders});
+            }
+        );
 
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-            if (!window || window.isDestroyed()) {
-                callback(details);
-                return;
-            }
-            // The session object can be shared, check for ID first
-            if (details.id == window.webContents.id) {
-                if (!details.responseHeaders) {
-                    details.responseHeaders = {};
-                }
-                details.responseHeaders["Access-Control-Allow-Origin"] = ["*"];
-            }
-            callback(details);
+            const {responseHeaders} = details;
+            Objects.upsertKeyValue(responseHeaders, "Access-Control-Allow-Origin", ["*"]);
+            Objects.upsertKeyValue(responseHeaders, "Access-Control-Allow-Headers", ["*"]);
+            callback({
+                responseHeaders
+            });
         });
     }
 }

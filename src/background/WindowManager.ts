@@ -35,7 +35,7 @@ export namespace WindowManager {
             },
             show: false
         });
-        mainWindow.setAspectRatio(1.92);
+        mainWindow.setAspectRatio(1.60);
         mainWindow.setTitle("alal.js");
         mainWindow.setMenu(null);
 
@@ -73,8 +73,8 @@ export namespace WindowManager {
      */
     export function getPreferredWindowSize() {
         const size = screen.getPrimaryDisplay().workAreaSize;
-        const height = Math.floor(size.height * 0.55);
-        const width = Math.floor(height * 1.92);
+        const height = Math.floor(size.height * 0.75);
+        const width = Math.floor(height * 1.60);
         return [width, height];
     }
 
@@ -130,6 +130,10 @@ export namespace WindowManager {
         console.log("Unblocking CORS for window " + window.getTitle());
 
         window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+            if (!window || window.isDestroyed()) {
+                callback(details);
+                return;
+            }
             // The session object can be shared, check for ID first
             if (details.id == window.webContents.id) {
                 if (!details.responseHeaders) {

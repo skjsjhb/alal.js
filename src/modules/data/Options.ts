@@ -54,7 +54,7 @@ export namespace Options {
      */
     export async function save() {
         try {
-            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options);
+            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options, {spaces: 4});
         } catch (e) {
             console.error("Failed to save options file: " + e);
         }

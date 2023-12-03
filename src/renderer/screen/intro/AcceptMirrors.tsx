@@ -1,9 +1,11 @@
 import { Options } from "@/modules/data/Options";
 import { Locale } from "@/modules/i18n/Locale";
 import { Mirrors } from "@/modules/net/Mirrors";
+import { useMounted } from "@/renderer/util/Mount";
+import { Radio } from "@/renderer/widgets/Radio";
+import { WarningText } from "@/renderer/widgets/Texts";
 import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
-import { RadioButton } from "primereact/radiobutton";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,19 +15,12 @@ import { useNavigate } from "react-router-dom";
 export function AcceptMirrors(): React.ReactElement {
     const tr = Locale.getSection("accept-mirrors");
     const [allowMirrors, setAllowMirrors] = useState(true);
+    const userSelected = useRef(false);
     const [mirrorLatency, setMirrorLatency] = useState<number | null>(null);
     const [originLatency, setOriginLatency] = useState<number | null>(null);
-    const allowName = "accept-mirrors-allow";
-    const denyName = "accept-mirrors-deny";
+    const [suggestMirror, setSuggestMirror] = useState(false);
     const nav = useNavigate();
-    const mounted = useRef(false);
-
-    useEffect(() => {
-        mounted.current = true;
-        return () => {
-            mounted.current = false;
-        };
-    }, []);
+    const mounted = useMounted();
 
     useEffect(() => {
         (async () => {
@@ -34,12 +29,18 @@ export function AcceptMirrors(): React.ReactElement {
             if (mounted.current) {
                 setOriginLatency(ogl);
                 setMirrorLatency(mil);
+                const sm = mil != null && mil != -1 && mil < (ogl ?? 0);
+                setSuggestMirror(sm);
+                if (!userSelected.current) {
+                    // User hasn't changed, we can change it
+                    setAllowMirrors(sm);
+                }
             }
         })();
     }, []);
 
     useEffect(() => {
-        Options.get().download.allowMirror = allowMirrors;
+        Options.get().download.allowMirror = allowMirrors ?? true;
     }, [allowMirrors]);
 
     function toReadableLatencyText(l: number | null): string {
@@ -49,7 +50,6 @@ export function AcceptMirrors(): React.ReactElement {
     }
 
     // Color the latency test as success if suggested, otherwise warning
-    const suggestMirror = mirrorLatency != null && mirrorLatency != -1 && mirrorLatency < (originLatency ?? 0);
 
     return <div className={"ml-4 mr-4"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
@@ -69,35 +69,27 @@ export function AcceptMirrors(): React.ReactElement {
             <div className={"flex flex-column gap-3"}>
 
                 {/* Accept */}
-                <div className={"flex align-items-center"}>
-                    <RadioButton inputId={allowName}
-                                 onChange={(e) => setAllowMirrors(!!e.checked)}
-                                 checked={allowMirrors}/>
-                    <label htmlFor={allowName}
-                           className={"ml-2 cursor-pointer" + (allowMirrors ? "" : " text-color-secondary")}
-                    >{tr("choices.accept")}</label>
-                </div>
+                <Radio checked={allowMirrors}
+                       onChange={(e) => {
+                           setAllowMirrors(!!e.checked);
+                           userSelected.current = true;
+                       }}
+                       label={tr("choices.accept")}/>
 
                 {/* Deny */}
-                <div className={"flex align-items-center"}>
-                    <RadioButton inputId={denyName}
-                                 onChange={(e) => setAllowMirrors(!e.checked)}
-                                 checked={!allowMirrors}/>
-                    <label htmlFor={denyName}
-                           className={"ml-2 cursor-pointer" + (allowMirrors ? " text-color-secondary" : "")}
-                    >{tr("choices.deny")}</label>
-                </div>
+                <Radio checked={!allowMirrors}
+                       onChange={(e) => {
+                           setAllowMirrors(!e.checked);
+                           userSelected.current = true;
+                       }}
+                       label={tr("choices.deny")}/>
+
             </div>
         </Panel>
 
         {/* Disclaimer and Trivia */}
         <div className={"mt-4"}>
-            {allowMirrors &&
-                <p className={"text-warning flex align-items-center"}>
-                    <i className={"pi pi-exclamation-triangle mr-2"}/>
-                    {tr("disclaimer")}
-                </p>
-            }
+            {allowMirrors && <WarningText text={tr("disclaimer")}/>}
         </div>
 
         {/* Next page */}

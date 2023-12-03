@@ -1,5 +1,6 @@
 import { Options } from "@/modules/data/Options";
 import { AcceptMirrors } from "@/renderer/screen/intro/AcceptMirrors";
+import { AddDefaultContainer } from "@/renderer/screen/intro/AddDefaultContainer";
 import { Portal } from "@/renderer/screen/intro/Portal";
 import { SelectMode } from "@/renderer/screen/intro/SelectMode";
 import { SelectTheme } from "@/renderer/screen/intro/SelectTheme";
@@ -75,6 +76,7 @@ export function AppRoutes(): React.ReactElement {
                 <Route path={"/Intro/SelectMode"} element={<SelectMode/>}/>
                 <Route path={"/Intro/AcceptMirrors"} element={<AcceptMirrors/>}/>
                 <Route path={"/Intro/SelectTheme"} element={<SelectTheme/>}/>
+                <Route path={"/Intro/AddDefaultContainer"} element={<AddDefaultContainer/>}/>
             </Routes>
         </div>
     </span>;

@@ -1,5 +1,6 @@
 import { Locale } from "@/modules/i18n/Locale";
 import { ThemeManager } from "@/renderer/themes/ThemeManager";
+import { InfoText } from "@/renderer/widgets/Texts";
 import { Button } from "primereact/button";
 import { SelectButton } from "primereact/selectbutton";
 import React, { useEffect, useState } from "react";
@@ -30,15 +31,12 @@ export function SelectTheme(): React.ReactElement {
         </div>
 
         {/* Hint */}
-        <p className={"text-color-secondary flex align-items-center"}>
-            <i className={"pi pi-info-circle mr-2"}/>
-            {tr("hint")}
-        </p>
+        <InfoText text={tr("hint")}/>
 
         {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>
             <Button icon={"pi pi-arrow-right"} label={tr("next")}
-                    onClick={() => nav("") /* TODO */}
+                    onClick={() => nav("/Intro/AddDefaultContainer")}
             />
         </div>
     </div>;

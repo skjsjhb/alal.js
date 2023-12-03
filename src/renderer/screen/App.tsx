@@ -25,6 +25,11 @@ export function App(): React.ReactElement {
       & .p-card-body, & .p-card-content {
         height: 100%;
       }
+
+      & code {
+        font-family: "JetBrains Mono", monospace;
+        color: var(--primary-color);
+      }
     `;
 
     useEffect(() => {

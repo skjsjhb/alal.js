@@ -61,7 +61,7 @@ accept-mirrors:
   title: BMCLAPI Speeds up the Download
   body: |
     Download faster with BMCLAPI. Please note that file synchronization might be delayed.
-  latency: "Latency of: BMCLAPI ${m1} / Mojang Official ${m2}"
+  latency: "Latency: BMCLAPI ${m1} / Mojang Official ${m2}"
   latency-testing: Testing...
   latency-invalid: UNREACHABLE
   choices:
@@ -82,4 +82,18 @@ select-theme:
   hint: |
     As a special theme for this version, SakuraKumo will be replaced with Standard Light on the next release. SakiAkumu
     will stay.
+  next: Next
+
+
+add-default-container:
+  title: There Is Something...
+  body: |
+    We've found a Minecraft folder on your PC, at <code>${path}</code><br/>
+    By using this we can skip the installation process.
+  choices:
+    title: Use this folder?
+    use: Just use it!
+    ignore: Emm... Not now.
+  disclaimer: alal.js supports most launcher but we can't guarantee a 100% success.
+  hint: You'll be able to create a new folder, or import an existed one later.
   next: Next

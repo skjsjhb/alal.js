@@ -70,3 +70,14 @@ accept-mirrors:
   disclaimer: |
     BMCLAPI 是社区组建的服务，不保证可靠。部分文件仍需从源站点下载。
   next: 下一步
+
+select-theme:
+  title: 这个主题合适吗？
+  body: |
+    你可以在<b>夜咲（深色模式）</b>和<b>樱云（浅色模式）</b>之间切换。修改立刻生效。
+  choices:
+    light: 樱云（浅色）
+    dark: 夜咲（深色）
+  hint: |
+    作为本版本的特别主题，樱云将在下个版本替换为标准亮色主题。夜咲将作为常驻主题保留。
+  next: 下一步

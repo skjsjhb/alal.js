@@ -28,7 +28,13 @@ const moduleResolution = {
             },
             {
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"]
+                use: [
+                    {
+                        loader: "style-loader",
+                        options: { injectType: "lazyStyleTag" }
+                    },
+                    "css-loader"
+                ]
             }
         ]
     },
@@ -66,11 +72,12 @@ const rendererOptimization = {
     optimization: {
         splitChunks: {
             cacheGroups: {
+                /*
                 reactVendor: {
                     test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
                     name: 'vendor-react',
                     chunks: 'all'
-                }
+                } */
             }
         }
     }

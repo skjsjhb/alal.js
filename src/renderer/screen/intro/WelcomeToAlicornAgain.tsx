@@ -11,12 +11,11 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
 
     return <div className={"ml-4 mr-4"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
-        <br/>
         <p dangerouslySetInnerHTML={{__html: tr("body")}}/>
 
         {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>
-            <Button icon={"pi pi-arrow-right"} className={"mr-5"} label={tr("next")}
+            <Button icon={"pi pi-arrow-right"} label={tr("next")}
                     onClick={() => nav("/Intro/SelectMode")}
             />
         </div>
@@ -24,7 +23,7 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
         {/* Skip setup*/}
         <div className={"flex justify-content-end mt-5"}>
             <Button
-                className={"mr-5 p-1"}
+                className={"p-1"}
                 severity={"secondary"}
                 label={tr("skip")}
                 text

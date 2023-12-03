@@ -1,15 +1,15 @@
 import { Locale } from "@/modules/i18n/Locale";
 import { AppRoutes } from "@/renderer/screen/AppRoutes";
-import "@/renderer/themes/theme.css";
+import { ThemeManager } from "@/renderer/themes/ThemeManager";
 import { Board } from "@/renderer/widgets/Board";
 import { MenuBar } from "@/renderer/widgets/MenuBar";
 import { VersionFooter } from "@/renderer/widgets/VersionFooter";
 import { css } from "@emotion/react";
-import "primeflex/primeflex.css";
-import "primeicons/primeicons.css";
+import primeflex from "primeflex/primeflex.css";
+import primeicons from "primeicons/primeicons.css";
 import { PrimeReactProvider } from "primereact/api";
 import { Card } from "primereact/card";
-import React from "react";
+import React, { useEffect } from "react";
 import { HashRouter } from "react-router-dom";
 
 const cjkIconCorrectionList = ["zh-CN"];
@@ -27,11 +27,21 @@ export function App(): React.ReactElement {
       }
     `;
 
+    useEffect(() => {
+        ThemeManager.setDefaultColorMode();
+        primeflex.use();
+        primeicons.use();
+        return () => {
+            primeflex.unuse();
+            primeicons.unuse();
+        };
+    }, []);
+
     const needCJKIconCorrection = cjkIconCorrectionList.includes(Locale.getLocale());
 
     return (
         <PrimeReactProvider>
-            <Board colorMode={"dark"}/>
+            <Board/>
             <MenuBar/>
             <Card css={appCardStyle} className={needCJKIconCorrection ? "cjk-icon-correction" : ""}>
                 <HashRouter>

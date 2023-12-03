@@ -71,3 +71,15 @@ accept-mirrors:
   disclaimer: |
     BMCLAPI is maintained by the community and is not guaranteed to be 100% reliable.
   next: Next
+
+select-theme:
+  title: Does This Theme Looks Good?
+  body: |
+    You can switch between <b>SakiAkumu (Dark)</b> and <b>SakuraKumo (Light)</b>. Changes apply immediately.
+  choices:
+    light: SakuraKumo - Light
+    dark: SakiAkumu - Dark
+  hint: |
+    As a special theme for this version, SakuraKumo will be replaced with Standard Light on the next release. SakiAkumu
+    will stay.
+  next: Next

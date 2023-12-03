@@ -53,7 +53,6 @@ export function AcceptMirrors(): React.ReactElement {
 
     return <div className={"ml-4 mr-4"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
-        <br/>
         <p>{tr("body")}</p>
         <p className={suggestMirror ? "text-success" : "text-warning"}>
             {
@@ -104,7 +103,7 @@ export function AcceptMirrors(): React.ReactElement {
         {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>
             <Button icon={"pi pi-arrow-right"} label={tr("next")}
-                    onClick={() => nav("") /* TODO next page */}
+                    onClick={() => nav("/Intro/SelectTheme")}
             />
         </div>
     </div>;

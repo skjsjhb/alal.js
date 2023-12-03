@@ -1,6 +1,8 @@
+import { Options } from "@/modules/data/Options";
 import { AcceptMirrors } from "@/renderer/screen/intro/AcceptMirrors";
 import { Portal } from "@/renderer/screen/intro/Portal";
 import { SelectMode } from "@/renderer/screen/intro/SelectMode";
+import { SelectTheme } from "@/renderer/screen/intro/SelectTheme";
 import { WelcomeToAlicornAgain } from "@/renderer/screen/intro/WelcomeToAlicornAgain";
 import { css } from "@emotion/react";
 import { classNames } from "primereact/utils";
@@ -62,14 +64,17 @@ export function AppRoutes(): React.ReactElement {
       }
     `;
 
+    const startPage = Options.get().ui.playIntro ? "/Intro/Portal" : "/Home"; // TODO implement HOME
+
     return <span css={appTransitions}>
         <div className={classNames(transitionStage, "h-full p-0")}>
             <Routes location={displayLocation}>
-                <Route index element={<Navigate to={"/Intro/Portal"} replace/>}/>
+                <Route index element={<Navigate to={startPage} replace/>}/>
                 <Route path={"/Intro/Portal"} element={<Portal/>}/>
                 <Route path={"/Intro/WelcomeToAlicornAgain"} element={<WelcomeToAlicornAgain/>}/>
                 <Route path={"/Intro/SelectMode"} element={<SelectMode/>}/>
                 <Route path={"/Intro/AcceptMirrors"} element={<AcceptMirrors/>}/>
+                <Route path={"/Intro/SelectTheme"} element={<SelectTheme/>}/>
             </Routes>
         </div>
     </span>;

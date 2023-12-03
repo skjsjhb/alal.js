@@ -19,7 +19,6 @@ export function SelectMode(): React.ReactElement {
 
     return <div className={"ml-4 mr-4"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
-        <br/>
 
         {/* Selection Radio Group */}
         <Panel header={tr("choices.title")} className={"mt-4"}>

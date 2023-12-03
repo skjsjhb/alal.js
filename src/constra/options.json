@@ -11,7 +11,8 @@
   },
   "ui": {
     "easyMode": true,
-    "theme": "SakuraKumoDark"
+    "colorMode": "dark",
+    "playIntro": true
   },
   "jem": {
     "optimize": true

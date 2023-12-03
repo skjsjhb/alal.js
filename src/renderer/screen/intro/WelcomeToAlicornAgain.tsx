@@ -2,19 +2,26 @@ import { Locale } from "@/modules/i18n/Locale";
 import { Button } from "primereact/button";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function WelcomeToAlicornAgain(): React.ReactNode {
     const tr = Locale.getSection("alicorn-again");
-
+    const nav = useNavigate();
     const [confirmPopupVisible, setConfirmPopupVisible] = useState(false);
 
-    return <div className={"ml-4"}>
+    return <div className={"ml-4 mr-4"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
         <br/>
         <p dangerouslySetInnerHTML={{__html: tr("body")}}/>
+
+        {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>
-            <Button icon={"pi pi-arrow-right"} className={"mr-5"} label={tr("next")}/>
+            <Button icon={"pi pi-arrow-right"} className={"mr-5"} label={tr("next")}
+                    onClick={() => nav("/Intro/SelectMode")}
+            />
         </div>
+
+        {/* Skip setup*/}
         <div className={"flex justify-content-end mt-5"}>
             <Button
                 className={"mr-5 p-1"}
@@ -34,7 +41,7 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
             acceptClassName={"p-button-secondary"}
             rejectClassName={"p-button-text p-button-secondary"}
             accept={() => {
-                // TODO go to next page
+                // TODO skip
             }}
         />
     </div>;

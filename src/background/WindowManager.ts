@@ -1,6 +1,6 @@
 import { Options } from "@/modules/data/Options";
 import { Objects } from "@/modules/util/Objects";
-import { app, BrowserWindow, Event, ipcMain, screen } from "electron";
+import { app, BrowserWindow, Event, ipcMain, screen, shell } from "electron";
 import os from "os";
 import path from "path";
 import { Signals } from "./Signals";
@@ -49,6 +49,9 @@ export namespace WindowManager {
         mainWindow.on("resized", pushMainWindowResizeEvent);
         app.once("before-quit", onUserQuitReq); // This is done by WM to prevent early quit
 
+        // Open in browser
+        openNewWindowInBrowser(mainWindow);
+
         // Network setup
         unblockCORS(mainWindow);
 
@@ -90,7 +93,6 @@ export namespace WindowManager {
         mainWindow?.webContents.send(Signals.WINDOW_RESIZE, mainWindow?.getSize());
     }
 
-
     // Called when the renderer is ready for closing gently. i.e. Hide on macOS and close on others.
     function closeWindowSoft() {
         if (os.platform() == "darwin") {
@@ -104,6 +106,14 @@ export namespace WindowManager {
             app.removeAllListeners("before-quit");
             app.quit();
         }
+    }
+
+    // Open new window in browser
+    function openNewWindowInBrowser(window: BrowserWindow) {
+        window.webContents.setWindowOpenHandler(({url}) => {
+            void shell.openExternal(url);
+            return {action: "deny"};
+        });
     }
 
     // For response to app quit event. This indicates that the renderer is ready for an app-level quit.

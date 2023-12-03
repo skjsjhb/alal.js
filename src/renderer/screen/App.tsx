@@ -1,3 +1,4 @@
+import { Locale } from "@/modules/i18n/Locale";
 import { AppRoutes } from "@/renderer/screen/AppRoutes";
 import "@/renderer/themes/theme.css";
 import { Board } from "@/renderer/widgets/Board";
@@ -10,6 +11,8 @@ import { PrimeReactProvider } from "primereact/api";
 import { Card } from "primereact/card";
 import React from "react";
 import { HashRouter } from "react-router-dom";
+
+const cjkIconCorrectionList = ["zh-CN"];
 
 export function App(): React.ReactElement {
     const appCardStyle = css`
@@ -24,11 +27,13 @@ export function App(): React.ReactElement {
       }
     `;
 
+    const needCJKIconCorrection = cjkIconCorrectionList.includes(Locale.getLocale());
+
     return (
         <PrimeReactProvider>
             <Board colorMode={"dark"}/>
             <MenuBar/>
-            <Card css={appCardStyle}>
+            <Card css={appCardStyle} className={needCJKIconCorrection ? "cjk-icon-correction" : ""}>
                 <HashRouter>
                     <AppRoutes/>
                 </HashRouter>

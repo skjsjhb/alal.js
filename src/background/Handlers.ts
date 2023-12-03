@@ -3,6 +3,7 @@ import { Options } from "@/modules/data/Options";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { FetchUtil } from "@/modules/net/FetchUtil";
 import { app, ipcMain } from "electron";
+import fetch from "electron-fetch";
 import { Signals } from "./Signals";
 
 /**
@@ -16,7 +17,8 @@ export namespace Handlers {
         [Signals.GET_LOCALE]: getLocale,
         [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow,
         [Signals.WEB_GET_FILE]: webGetFileMainProc,
-        [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc
+        [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc,
+        [Signals.TEST_LATENCY]: testLatency
     };
 
     /**
@@ -50,5 +52,24 @@ export namespace Handlers {
 
     function fetchJSONMainProc(_e: IpcMainInvokeEvent, url: string, init?: RequestInit) {
         return FetchUtil.fetchJSONMain(url, init);
+    }
+
+    const latencyTestTries = 3;
+    const latencyTestTimeout = 3000; // 3s is long enough for a HEAD request
+    async function testLatency(_e: IpcMainInvokeEvent, url: string): Promise<number> {
+        const dat = [];
+        for (const _i of Array(latencyTestTries)) {
+            const start = Date.now();
+            const controller = new AbortController();
+            const tid = setTimeout(() => controller.abort("Timeout"), latencyTestTimeout);
+            try {
+                await fetch(url, {method: "HEAD", signal: controller.signal});
+                clearTimeout(tid);
+            } catch {
+                return -1;
+            }
+            dat.push(Date.now() - start);
+        }
+        return Math.round(dat.reduce((a, b) => a + b) / dat.length);
     }
 }

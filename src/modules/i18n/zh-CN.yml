@@ -43,3 +43,30 @@ alicorn-again:
     body: 使用默认设置，确定？
     accept: 好
     reject: 取消
+
+select-mode:
+  title: "开始之前..."
+  choices:
+    title: 下面哪一项描述你最合适？
+    easy: 我是萌新（不了解 Minecraft 和启动器）
+    advanced: 我是老玩家（我，无所不知）
+  trivia:
+    easy: 界面简洁，操作简化，以及更详细的引导。
+    advanced: 显示所有功能 —— 看我操作！
+  hint: 你可以稍后在设置中更改。
+  next: 下一步
+
+accept-mirrors:
+  title: "你的下载由 BMCLAPI 加速"
+  body: |
+    BMCLAPI 可以大幅提升下载速度，不过也请注意，它的数据更新可能存在延迟。
+  latency: 实时延迟：BMCLAPI ${m1} / Mojang 官方 ${m2}
+  latency-testing: 正在测定...
+  latency-invalid: 不可达
+  choices:
+    title: 使用 BMCLAPI 吗？
+    accept: 使用 BMCLAPI（加快下载速度）
+    deny: 不使用（速度较慢）
+  disclaimer: |
+    BMCLAPI 是社区组建的服务，不保证可靠。部分文件仍需从源站点下载。
+  next: 下一步

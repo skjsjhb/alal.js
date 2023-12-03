@@ -15,4 +15,5 @@ export namespace Signals {
     export const MICROSOFT_LOGIN = "msLogin";
     export const WEB_GET_FILE = "webGetFile";
     export const FETCH_JSON_MAIN = "fetchJSONMain";
+    export const TEST_LATENCY = "testLatency";
 }

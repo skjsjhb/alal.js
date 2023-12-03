@@ -1,5 +1,8 @@
+import { Signals } from "@/background/Signals";
 import OriginalRulesRaw from "@/constra/mirrors.json";
+import { Options } from "@/modules/data/Options";
 import { Registry } from "@/modules/data/Registry";
+import { ipcRenderer } from "electron";
 
 /**
  * Mirrors latency test, resolve and management module.
@@ -17,29 +20,22 @@ export namespace Mirrors {
 
     const mirrorsRegId = "mirrors";
     const originalRules = OriginalRulesRaw as Record<string, SourceRuleSet>;
-    const latencyTestTries = 3;
-    const latencyTestTimeout = 3000; // 3s is long enough for a HEAD request
+
+    /**
+     * Tests the latency of specified mirror.
+     */
+    export function testMirrorLatency(name: string): Promise<number> {
+        return testLatency(originalRules[name].test);
+    }
 
     // Synthesized rules with priority applied
     let synthRules: Map<string, string | null>;
 
     // Tests the header latency and returns in ms.
     // This method also considers stability - an error will cause latency test to fail.
-    async function testLatency(url: string): Promise<number> {
-        const dat = [];
-        for (const _i of Array(latencyTestTries)) {
-            const start = Date.now();
-            const controller = new AbortController();
-            const tid = setTimeout(() => controller.abort("Timeout"), latencyTestTimeout);
-            try {
-                await fetch(url, {method: "HEAD", signal: controller.signal, cache: "no-cache"});
-                clearTimeout(tid);
-            } catch {
-                return -1;
-            }
-            dat.push(Date.now() - start);
-        }
-        return Math.round(dat.reduce((a, b) => a + b) / dat.length);
+    // Can only be called on the renderer process.
+    function testLatency(url: string): Promise<number> {
+        return ipcRenderer.invoke(Signals.TEST_LATENCY, url);
     }
 
     async function sortRulesByLatency(ruleSet: Record<string, SourceRuleSet>): Promise<GeneratedRuleSet[]> {
@@ -67,6 +63,7 @@ export namespace Mirrors {
     /**
      * Update the mirror rules by testing the latency and set the table value.
      * Note that this method will clear any previously set rules and use the new one.
+     * Mirrors are updates regardless of whether it's enabled.
      */
     export async function updateRules() {
         const res = await sortRulesByLatency(originalRules);
@@ -88,6 +85,9 @@ export namespace Mirrors {
      * Applies mirrors to the specified url. If the url does not match any rules, the original version is returned.
      */
     export function apply(url: string): string {
+        if (!Options.get().download.allowMirror) {
+            return url;
+        }
         if (!synthRules) {
             synthesizeRules();
         }
@@ -101,5 +101,4 @@ export namespace Mirrors {
         }
         return url; // No rule found
     }
-
 }

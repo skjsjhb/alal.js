@@ -70,6 +70,13 @@ export namespace Locale {
         return (k, v) => getTranslation(rootKey + "." + k, v);
     }
 
+    /**
+     * Gets the active locale.
+     */
+    export function getLocale(): string {
+        return currentLocale;
+    }
+
 
     // Put values into the template.
     function applyVars(str: string, vars?: Record<string, any>) {

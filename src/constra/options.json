@@ -2,6 +2,7 @@
   "locale": "",
   "dev": false,
   "download": {
+    "allowMirror": true,
     "timeout": 5000,
     "minSpeed": 8192,
     "tries": 5,
@@ -9,6 +10,7 @@
     "cache": true
   },
   "ui": {
+    "easyMode": true,
     "theme": "SakuraKumoDark"
   },
   "jem": {

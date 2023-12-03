@@ -44,3 +44,30 @@ alicorn-again:
     body: Skip intro and use default settings?
     accept: Yes
     reject: No
+
+select-mode:
+  title: "Before It Begins..."
+  choices:
+    title: Which one describes you best?
+    easy: I'm a new player - What's a launcher, anyway?
+    advanced: I'm experienced
+  trivia:
+    easy: Simplified UI and actions with detailed guide.
+    advanced: Display advanced features.
+  hint: You can change this in Settings.
+  next: Next
+
+accept-mirrors:
+  title: BMCLAPI Speeds up the Download
+  body: |
+    Download faster with BMCLAPI. Please note that file synchronization might be delayed.
+  latency: "Latency of: BMCLAPI ${m1} / Mojang Official ${m2}"
+  latency-testing: Testing...
+  latency-invalid: UNREACHABLE
+  choices:
+    title: Use BMCLAPI?
+    accept: Yes - Will be faster
+    deny: No - Regular speed
+  disclaimer: |
+    BMCLAPI is maintained by the community and is not guaranteed to be 100% reliable.
+  next: Next

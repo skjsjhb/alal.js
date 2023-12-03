@@ -1,4 +1,6 @@
+import { AcceptMirrors } from "@/renderer/screen/intro/AcceptMirrors";
 import { Portal } from "@/renderer/screen/intro/Portal";
+import { SelectMode } from "@/renderer/screen/intro/SelectMode";
 import { WelcomeToAlicornAgain } from "@/renderer/screen/intro/WelcomeToAlicornAgain";
 import { css } from "@emotion/react";
 import { classNames } from "primereact/utils";
@@ -13,7 +15,7 @@ export function AppRoutes(): React.ReactElement {
     const [displayLocation, setDisplayLocation] = useState(routeLocation);
     const [transitionStage, setTransitionStage] = useState<"fadeIn" | "fadeOut">("fadeIn");
 
-    const animationTimeout = 200;
+    const animationTimeout = 190;
 
     useEffect(() => {
         let t: any;
@@ -66,6 +68,8 @@ export function AppRoutes(): React.ReactElement {
                 <Route index element={<Navigate to={"/Intro/Portal"} replace/>}/>
                 <Route path={"/Intro/Portal"} element={<Portal/>}/>
                 <Route path={"/Intro/WelcomeToAlicornAgain"} element={<WelcomeToAlicornAgain/>}/>
+                <Route path={"/Intro/SelectMode"} element={<SelectMode/>}/>
+                <Route path={"/Intro/AcceptMirrors"} element={<AcceptMirrors/>}/>
             </Routes>
         </div>
     </span>;

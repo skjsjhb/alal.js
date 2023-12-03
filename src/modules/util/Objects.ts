@@ -66,4 +66,18 @@ export namespace Objects {
         }
         obj[key] = value;
     }
+
+    /**
+     * Checks if two arrays overlaps with each other (at least one element is equal as JSON)
+     */
+    export function overlaps<T>(a: T[], b: T[]): boolean {
+        for (const i of a) {
+            for (const j of b) {
+                if (a == b || JSON.stringify(i) == JSON.stringify(j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

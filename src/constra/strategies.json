@@ -88,5 +88,14 @@
       "-Dcom.sun.jndi.rmi.object.trustURLCodebase=false",
       "-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=false"
     ]
+  },
+  "containerDetection": {
+    "isolatedTraits": [
+      "saves",
+      "mods",
+      "resourcepacks",
+      "texturepacks",
+      "shaderpacks"
+    ]
   }
 }

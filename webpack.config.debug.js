@@ -17,8 +17,12 @@ const ReactRefreshTypeScript = require('react-refresh-typescript');
 const { DefinePlugin } = require("webpack");
 
 const devCommon = {
-    devtool: "inline-cheap-module-source-map",
-    mode: "development"
+    devtool: "eval-cheap-module-source-map",
+    mode: "development",
+    cache: {
+        type: "filesystem",
+        cacheDirectory: path.resolve(__dirname, 'build/.debug_cache')
+    }
 };
 
 const main = {
@@ -59,7 +63,7 @@ const renderer = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "resources/build/template.html"),
+            template: path.resolve(__dirname, "resources/build/template-dev.html"),
             filename: "renderer.html"
         }),
         new ReactRefreshWebpackPlugin(),

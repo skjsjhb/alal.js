@@ -10,7 +10,11 @@ const { DefinePlugin } = require("webpack");
 
 const devCommon = {
     devtool: false,
-    mode: "development"
+    mode: "development",
+    cache: {
+        type: "filesystem",
+        cacheDirectory: path.resolve(__dirname, 'build/.autotest_cache')
+    }
 };
 
 const main = {
@@ -51,7 +55,7 @@ const renderer = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "resources/build/template.html"),
+            template: path.resolve(__dirname, "resources/build/template-dev.html"),
             filename: "renderer.html"
         }),
         new DefinePlugin({

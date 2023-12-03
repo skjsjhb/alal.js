@@ -12,6 +12,7 @@ const moduleResolution = {
         rules: [
             {
                 test: /\.tsx?$/,
+                include: [path.resolve(__dirname, "src"), path.resolve(__dirname, "test")],
                 use: [
                     {
                         loader: 'ts-loader',
@@ -24,6 +25,7 @@ const moduleResolution = {
             },
             {
                 test: /\.ya?ml$/,
+                include: path.resolve(__dirname, "src"),
                 use: "yaml-loader"
             },
             {
@@ -39,6 +41,7 @@ const moduleResolution = {
         ]
     },
     resolve: {
+        symlinks: false,
         extensions: [".ts", ".js", ".json", ".tsx"],
         alias: {
             '@': path.resolve(__dirname, 'src'),
@@ -72,12 +75,16 @@ const rendererOptimization = {
     optimization: {
         splitChunks: {
             cacheGroups: {
-                /*
                 reactVendor: {
-                    test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+                    test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom|react-router)[\\/]/,
                     name: 'vendor-react',
                     chunks: 'all'
-                } */
+                },
+                primereactVendor: {
+                    test: /[\\/]node_modules[\\/](primereact|primeicons|primeflex)[\\/]/,
+                    name: 'vendor-primereact',
+                    chunks: 'all'
+                }
             }
         }
     }

@@ -10,11 +10,7 @@ const { DefinePlugin } = require("webpack");
 
 const devCommon = {
     devtool: false,
-    mode: "development",
-    cache: {
-        type: "filesystem",
-        cacheDirectory: path.resolve(__dirname, 'build/.autotest_cache')
-    }
+    mode: "development"
 };
 
 const main = {

@@ -18,11 +18,7 @@ const { DefinePlugin } = require("webpack");
 
 const devCommon = {
     devtool: "eval-cheap-module-source-map",
-    mode: "development",
-    cache: {
-        type: "filesystem",
-        cacheDirectory: path.resolve(__dirname, 'build/.debug_cache')
-    }
+    mode: "development"
 };
 
 const main = {

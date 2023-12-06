@@ -16,7 +16,7 @@ export function SelectMode(): React.ReactElement {
         Options.get().ui.easyMode = easyMode;
     }, [easyMode]);
 
-    return <div className={"ml-4 mr-4"}>
+    return <div className={"ml-4 mr-4 mt-2"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
 
         {/* Selection Radio Group */}

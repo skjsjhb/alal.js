@@ -1,6 +1,6 @@
 import { Locale } from "@/modules/i18n/Locale";
 import { ThemeManager } from "@/renderer/themes/ThemeManager";
-import { InfoText } from "@/renderer/widgets/Texts";
+import { HTMLText, InfoText } from "@/renderer/widgets/Texts";
 import { Button } from "primereact/button";
 import { SelectButton } from "primereact/selectbutton";
 import React, { useEffect, useState } from "react";
@@ -19,9 +19,9 @@ export function SelectTheme(): React.ReactElement {
         ThemeManager.applyColorMode(colorMode == colorNameDark ? "dark" : "light");
     }, [colorMode]);
 
-    return <div className={"ml-4 mr-4"}>
+    return <div className={"ml-4 mr-4 mt-2"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
-        <p dangerouslySetInnerHTML={{__html: tr("body")}}/>
+        <HTMLText html={tr("body")}/>
 
         {/* Select Button */}
         <div className="card flex justify-content-center">
@@ -36,7 +36,7 @@ export function SelectTheme(): React.ReactElement {
         {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>
             <Button icon={"pi pi-arrow-right"} label={tr("next")}
-                    onClick={() => nav("/Intro/AddDefaultContainer")}
+                    onClick={() => nav("/Intro/AddContainer")}
             />
         </div>
     </div>;

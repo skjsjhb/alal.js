@@ -1,4 +1,5 @@
 import { Locale } from "@/modules/i18n/Locale";
+import { HTMLText } from "@/renderer/widgets/Texts";
 import { Button } from "primereact/button";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import React, { useState } from "react";
@@ -9,9 +10,9 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
     const nav = useNavigate();
     const [confirmPopupVisible, setConfirmPopupVisible] = useState(false);
 
-    return <div className={"ml-4 mr-4"}>
+    return <div className={"ml-4 mr-4 mt-2"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
-        <p dangerouslySetInnerHTML={{__html: tr("body")}}/>
+        <HTMLText html={tr("body")}/>
 
         {/* Next page */}
         <div className={"flex justify-content-end mt-5"}>

@@ -18,17 +18,24 @@ export function App(): React.ReactElement {
     const appCardStyle = css`
       position: fixed;
       left: 8em;
-      right: 3em;
-      top: 3em;
-      bottom: 3em;
+      right: 2em;
+      top: 2.5em;
+      bottom: 2.5em;
 
       & .p-card-body, & .p-card-content {
         height: 100%;
       }
 
+      & > .p-card-body {
+        padding: 1rem !important;
+      }
+
+      & > .p-card-body > .p-card-content {
+        padding: 0 !important;
+      }
+
       & code {
         font-family: "JetBrains Mono", monospace;
-        color: var(--primary-color);
       }
     `;
 

@@ -51,7 +51,7 @@ export function AcceptMirrors(): React.ReactElement {
 
     // Color the latency test as success if suggested, otherwise warning
 
-    return <div className={"ml-4 mr-4"}>
+    return <div className={"ml-4 mr-4 mt-2"}>
         <div className={"text-5xl font-bold"}>{tr("title")}</div>
         <p>{tr("body")}</p>
         <p className={suggestMirror ? "text-success" : "text-warning"}>

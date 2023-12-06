@@ -56,6 +56,21 @@ export namespace Objects {
         return current;
     }
 
+    /**
+     * Merge multiple arrays together without modifying any.
+     */
+    export function mergeArrays(a: any[], ...b: any[][]): any[] {
+        const o = a.concat();
+        for (const arr of b) {
+            for (const i of arr) {
+                if (!a.includes(i)) {
+                    o.push(i);
+                }
+            }
+        }
+        return o;
+    }
+
     export function upsertKeyValue(obj: any, key: string, value: any) {
         key = key.toLowerCase();
         for (const k of Object.keys(obj)) {

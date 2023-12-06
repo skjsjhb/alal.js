@@ -1,10 +1,10 @@
-import { Options } from "@/modules/data/Options";
 import { AcceptMirrors } from "@/renderer/screen/intro/AcceptMirrors";
-import { AddDefaultContainer } from "@/renderer/screen/intro/AddDefaultContainer";
+import { AddContainer } from "@/renderer/screen/intro/AddContainer";
 import { Portal } from "@/renderer/screen/intro/Portal";
 import { SelectMode } from "@/renderer/screen/intro/SelectMode";
 import { SelectTheme } from "@/renderer/screen/intro/SelectTheme";
 import { WelcomeToAlicornAgain } from "@/renderer/screen/intro/WelcomeToAlicornAgain";
+import { TaskList } from "@/renderer/screen/TaskList";
 import { css } from "@emotion/react";
 import { classNames } from "primereact/utils";
 import React, { useEffect, useState } from "react";
@@ -65,18 +65,23 @@ export function AppRoutes(): React.ReactElement {
       }
     `;
 
-    const startPage = Options.get().ui.playIntro ? "/Intro/Portal" : "/Home"; // TODO implement HOME
+    const startPage = "/Intro/Portal"; // TODO test code
+    // const startPage = Options.get().ui.playIntro ? "/Intro/Portal" : "/TaskList";
 
-    return <span css={appTransitions}>
-        <div className={classNames(transitionStage, "h-full p-0")}>
+    return <span css={appTransitions} className={"h-full p-0 m-0"}>
+        <div className={classNames(transitionStage, "h-full p-0 m-0")}>
             <Routes location={displayLocation}>
+                {/* Intro setup */}
                 <Route index element={<Navigate to={startPage} replace/>}/>
                 <Route path={"/Intro/Portal"} element={<Portal/>}/>
                 <Route path={"/Intro/WelcomeToAlicornAgain"} element={<WelcomeToAlicornAgain/>}/>
                 <Route path={"/Intro/SelectMode"} element={<SelectMode/>}/>
                 <Route path={"/Intro/AcceptMirrors"} element={<AcceptMirrors/>}/>
                 <Route path={"/Intro/SelectTheme"} element={<SelectTheme/>}/>
-                <Route path={"/Intro/AddDefaultContainer"} element={<AddDefaultContainer/>}/>
+                <Route path={"/Intro/AddContainer"} element={<AddContainer/>}/>
+
+                {/* System pages */}
+                <Route path={"/TaskList"} element={<TaskList/>}/>
             </Routes>
         </div>
     </span>;

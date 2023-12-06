@@ -3,7 +3,7 @@
  */
 import { Options } from "@/modules/data/Options";
 import { Paths } from "@/modules/data/Paths";
-import { ReInit } from "@/renderer/reinit/ReInit";
+import { ReInit } from "@/renderer/ReInit";
 import { ipcRenderer } from "electron";
 import { runRendererTests } from "./RendererTestHost";
 import { SignalTest } from "./SignalTest";

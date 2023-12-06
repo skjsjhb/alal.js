@@ -15,8 +15,8 @@ import { Mirrors } from "@/modules/net/Mirrors";
 import { ipcRenderer } from "electron";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import pkg from "../../../package.json";
-import { App } from "../screen/App";
+import pkg from "../../package.json";
+import { App } from "./screen/App";
 
 export namespace ReInit {
     /**
@@ -83,7 +83,7 @@ export namespace ReInit {
             document.body.appendChild(rootElement = document.createElement("div"));
         }
         const root = createRoot(rootElement);
-        root.render(React.createElement(App)); // Making this file pure TS
+        root.render(React.createElement(App));
 
         console.log("All caught up! I'm now showing the window.");
         ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
@@ -105,7 +105,7 @@ export namespace ReInit {
 }
 
 if (process.env.MODE == "debug") {
-    console.log("Enabling HMR.");
+    console.warn("Enabling HMR. This is for development only and brings severe risks if used in production.");
     // @ts-ignore
     if (module.hot) { module.hot.accept(); }
 }

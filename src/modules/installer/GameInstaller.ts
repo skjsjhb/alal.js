@@ -35,6 +35,8 @@ export namespace GameInstaller {
                 const java = profile.javaVersion?.component || defaultJre;
                 if (!JavaGet.hasComponent(java)) {
                     await JavaGet.installComponent(java).link(task).wait();
+                } else {
+                    task.success();
                 }
                 await installClient(ct, profile).link(task).wait();
                 await installLibraries(ct, profile).link(task).wait();
@@ -46,6 +48,7 @@ export namespace GameInstaller {
                     task.success();
                 }
                 await unpackNatives(ct, profile).link(task).wait();
+                console.log("Install " + id + " completed.");
                 task.resolve();
             } catch (e) {
                 task.reject("Failed to install " + id + ": " + e);
@@ -116,7 +119,7 @@ export namespace GameInstaller {
      */
     export function installAssetIndex(ct: Container, prof: VersionProfile): Task<AssetIndex> {
         const taskName = Locale.getTranslation("install.asset-index", {assets: prof.assetIndex.id});
-        return new Task(taskName, null, async (task) => {
+        return new Task(taskName, 1, async (task) => {
             const manifest = await fetchJSON(prof.assetIndex.url);
             if (!manifest) {
                 task.reject("Asset index file not available: " + prof.assetIndex.url);
@@ -127,8 +130,10 @@ export namespace GameInstaller {
                 for (const p of outPath) {
                     await outputJSON(p, manifest);
                 }
+                task.success();
                 task.resolve(manifest);
             } catch (e) {
+                task.fail();
                 task.reject("Could not write asset index " + prof.assetIndex.id + ": " + e);
             }
         });

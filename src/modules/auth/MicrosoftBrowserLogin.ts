@@ -1,6 +1,8 @@
+import { Signals } from "@/background/Signals";
 import { WindowManager } from "@/background/WindowManager";
 import Sources from "@/constra/sources.json";
-import { BrowserWindow, dialog, Event, session } from "electron";
+import { Availa } from "@/modules/util/Availa";
+import { BrowserWindow, dialog, Event, ipcRenderer, session } from "electron";
 import { Locale } from "../i18n/Locale";
 
 /**
@@ -11,7 +13,18 @@ import { Locale } from "../i18n/Locale";
 export namespace MicrosoftBrowserLogin {
     const loginURL = Sources.microsoftLogin;
 
-    const loginBrowserPart = "ms-login";
+    const loginBrowserPart = "persist:ms-login";
+
+    /**
+     * Wrapper for both remote and main.
+     */
+    export function loginWithBrowserWindow(): Promise<string> {
+        if (Availa.isRemote()) {
+            return ipcRenderer.invoke(Signals.MICROSOFT_LOGIN);
+        } else {
+            return loginWithBrowserWindowMain();
+        }
+    }
 
     /**
      * Login to Microsoft account using `BrowserWindow`.
@@ -22,7 +35,11 @@ export namespace MicrosoftBrowserLogin {
      * The first returned Promise is fulfilled when the window loading has complete. The
      * second fulfills when the code is present.
      */
-    export async function loginWithBrowserWindow(): Promise<string> {
+    export async function loginWithBrowserWindowMain(): Promise<string> {
+        if (ipcRenderer) {
+            console.error("This method can only be called from main process!");
+            return "";
+        }
         return new Promise<string>((res) => {
             const window = createLoginBrowserWindow();
 

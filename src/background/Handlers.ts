@@ -2,23 +2,27 @@ import { MicrosoftBrowserLogin } from "@/modules/auth/MicrosoftBrowserLogin";
 import { Options } from "@/modules/data/Options";
 import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
 import { FetchUtil } from "@/modules/net/FetchUtil";
-import { app, ipcMain } from "electron";
-import fetch from "electron-fetch";
+import { app, dialog, ipcMain, IpcMainInvokeEvent, safeStorage } from "electron";
+import fetch, { RequestInit } from "electron-fetch";
 import { Signals } from "./Signals";
 
 /**
  * Backend handlers registry module.
  */
 export namespace Handlers {
-    import IpcMainInvokeEvent = Electron.IpcMainInvokeEvent;
     const BINDINGS = {
         [Signals.GET_APP_PATH]: getAppPath,
         [Signals.RELOAD_OPTIONS]: reloadOptions,
         [Signals.GET_LOCALE]: getLocale,
-        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindow,
+        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindowMain,
         [Signals.WEB_GET_FILE]: webGetFileMainProc,
         [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc,
-        [Signals.TEST_LATENCY]: testLatency
+        [Signals.FETCH_HEADERS_MAIN]: fetchHeadersMainProc,
+        [Signals.TEST_LATENCY]: testLatency,
+        [Signals.CHECK_ENCRYPT]: checkEncrypt,
+        [Signals.ENCRYPT]: encryptString,
+        [Signals.DECRYPT]: decryptString,
+        [Signals.SELECT_FOLDER]: selectFolder
     };
 
     /**
@@ -54,6 +58,22 @@ export namespace Handlers {
         return FetchUtil.fetchJSONMain(url, init);
     }
 
+    function fetchHeadersMainProc(_e: IpcMainInvokeEvent, url: string) {
+        return FetchUtil.fetchHeadersMain(url);
+    }
+
+    function checkEncrypt(_e: IpcMainInvokeEvent): Promise<boolean> {
+        return Promise.resolve(safeStorage.isEncryptionAvailable());
+    }
+
+    function encryptString(_e: IpcMainInvokeEvent, content: string): Promise<string> {
+        return Promise.resolve(safeStorage.encryptString(content).toString("base64"));
+    }
+
+    function decryptString(_e: IpcMainInvokeEvent, content: string): Promise<string> {
+        return Promise.resolve(safeStorage.decryptString(Buffer.from(content, "base64")));
+    }
+
     const latencyTestTries = 3;
     const latencyTestTimeout = 3000; // 3s is long enough for a HEAD request
     async function testLatency(_e: IpcMainInvokeEvent, url: string): Promise<number> {
@@ -71,5 +91,9 @@ export namespace Handlers {
             dat.push(Date.now() - start);
         }
         return Math.round(dat.reduce((a, b) => a + b) / dat.length);
+    }
+
+    async function selectFolder(_e: IpcMainInvokeEvent, title: string): Promise<string[]> {
+        return (await dialog.showOpenDialog({properties: ["openDirectory", "multiSelections"], title})).filePaths;
     }
 }

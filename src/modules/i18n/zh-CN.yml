@@ -7,6 +7,8 @@ ms-browser-login:
     b-yes: "我知道我在做什么！"
     b-no: "继续登录"
 
+ms-auth: 正在登录微软帐户
+
 download:
   batch: "下载并验证"
 
@@ -82,14 +84,19 @@ select-theme:
     作为本版本的特别主题，樱云将在下个版本替换为标准亮色主题。夜咲将作为常驻主题保留。
   next: 下一步
 
-add-default-container:
-  title: 你似乎曾做过些什么...
+add-container:
+  title: 你想将 Minecraft 存放在哪里？
   body: |
-    我们在你的电脑上找到了 Minecraft 文件夹：<code>${path}</code><br/>我们可以使用它，这样就不需要再安装一遍了。
-  choices:
-    title: 使用这个文件夹？
-    use: 就用它吧
-    ignore: ...果然还是算了
-  disclaimer: alal.js 能支持绝大多数启动器，但我们无法保证 100% 成功。如遇问题，请联系我们。
-  hint: 稍后你可以创建一个新的，或者手动定位一个 Minecraft 文件夹。
-  next: 下一页
+    选择存储 Minecraft 的位置。
+  add: 选择文件夹
+  add-more: 选择更多
+  nothing: 还没有选择...
+  select-title: 选择 Minecraft 的位置
+  hint: |
+    有好多文件夹？没关系，想添加多少个都可以！
+  warn: |
+    不同文件夹中的内容不能共享。
+  next: 下一步
+
+task-list:
+  title: 任务列表

@@ -15,7 +15,7 @@ export class Task<T> {
     /**
      * Parent task
      */
-    parents: Task<any>[] = [];
+    parent: Task<any> | null = null;
 
     /**
      * Progress indicator. An object counts the number of completed / failed / total atomic tasks. `null` means that the
@@ -32,7 +32,14 @@ export class Task<T> {
     error: any;
     value: T | null = null;
 
-    listeners: [(v: T) => void, (v: T) => void][] = [];
+    // Standalone tasks are removed after it's finished, while linked tasks are removed by its parent and stays alive.
+    standalone: boolean = true;
+
+    waitingPromises: [(v: T) => void, (v: T) => void][] = [];
+    listeners: Set<() => void> = new Set();
+    static listeners: Set<() => void> = new Set();
+
+    static tasks: Task<any>[] = [];
 
     /**
      * Creates the task object.
@@ -50,15 +57,17 @@ export class Task<T> {
             };
         }
         this.name = name;
+        Task.tasks.push(this);
         if (executor) {
             executor(this);
         }
+        Task.listeners.forEach(f => f());
     }
 
     setName(n: string) {
         this.name = n;
+        this.dispatch();
     }
-
 
     /**
      * Gets a Promise which resolves when the task completes.
@@ -71,7 +80,7 @@ export class Task<T> {
             return Promise.reject(this.error);
         }
         return new Promise((res, rej) => {
-            this.listeners.push([res, rej]);
+            this.waitingPromises.push([res, rej]);
         });
     }
 
@@ -82,10 +91,14 @@ export class Task<T> {
     resolve(value: T): void {
         this.resolved = true;
         this.value = value;
-        for (const [res] of this.listeners) {
+        for (const [res] of this.waitingPromises) {
             res(value);
         }
-        this.parents.forEach(p => p.success());
+        this.parent?.success();
+        if (this.standalone) {
+            this.remove();
+        }
+        this.dispatch();
     }
 
     /**
@@ -95,10 +108,15 @@ export class Task<T> {
     reject(error?: any): void {
         this.failed = true;
         this.error = error;
-        for (const [, rej] of this.listeners) {
+        this.dispatch();
+        for (const [, rej] of this.waitingPromises) {
             rej(error);
         }
-        this.parents.forEach(p => p.fail());
+        this.parent?.success();
+        if (this.standalone) {
+            this.remove();
+        }
+        this.dispatch();
     }
 
     /**
@@ -116,22 +134,23 @@ export class Task<T> {
     }
 
     /**
-     * Gets the progress as percentage (0 - 1).
+     * Gets the progress as percentage (0 - 100). Returns -1 for indeterminate ones.
      */
     getProgressPercent(): number {
         if (this.progress === null) {
             return -1;
         }
         if (this.progress.total == 0) {
-            return 1;
+            return 100;
         }
-        return this.progress.success / this.progress.total;
+        return this.progress.success * 100 / this.progress.total;
     }
 
     setTotal(t: number) {
         if (!this.progress) {
             return;
         }
+        this.dispatch();
         this.progress.total = t;
     }
 
@@ -139,6 +158,7 @@ export class Task<T> {
         if (!this.progress) {
             return;
         }
+        this.dispatch();
         this.progress.success = s;
     }
 
@@ -146,6 +166,7 @@ export class Task<T> {
         if (!this.progress) {
             return;
         }
+        this.dispatch();
         this.progress.failed = f;
     }
 
@@ -153,6 +174,7 @@ export class Task<T> {
         if (!this.progress) {
             return;
         }
+        this.dispatch();
         this.progress.success++;
     }
 
@@ -160,25 +182,64 @@ export class Task<T> {
         if (!this.progress) {
             return;
         }
+        this.dispatch();
         this.progress.failed++;
     }
 
+    /**
+     * Subscribe for state updates.
+     */
+    subscribe(f: () => void) {
+        this.listeners.add(f);
+    }
+
+    unsubscribe(f: () => void) {
+        this.listeners.delete(f);
+    }
+
+    static subscribe(f: () => void) {
+        Task.listeners.add(f);
+    }
+
+    static unsubscribe(f: () => void) {
+        Task.listeners.delete(f);
+    }
+
+    protected dispatch() {
+        this.listeners.forEach(f => f());
+        Task.listeners.forEach(f => f());
+    }
 
     /**
      * Link this task to specified task. Linked tasks will call `addSuccess` for parent when itself resolves and
      * vice versa. If the task is already resolved before being added, this happens immediately.
      */
     link(t: Task<any>): Task<T> {
-        this.parents.push(t);
+        this.standalone = false;
+        this.parent = t;
         t.children.push(this);
         if (this.resolved) {
-            t.parents.forEach(p => p.success());
+            t.parent?.success();
         } else if (this.failed) {
-            t.parents.forEach(p => p.fail());
+            this.parent.fail();
         }
         return this;
     }
 
+    // Remove this task from task list
+    remove() {
+        Task.tasks = Task.tasks.filter(t => t != this);
+        for (const c of this.children) {
+            c.remove();
+        }
+    }
+
+    /**
+     * Gets all tasks in an array copy.
+     */
+    static getTasks(): Task<any>[] {
+        return Task.tasks.concat();
+    }
 
     /**
      * Creates an indeterminate task with the specified promise object.

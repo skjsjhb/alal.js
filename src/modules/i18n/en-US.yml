@@ -85,15 +85,19 @@ select-theme:
   next: Next
 
 
-add-default-container:
-  title: There Is Something...
+add-container:
+  title: Where Do You Want to Place Minecraft?
   body: |
-    We've found a Minecraft folder on your PC, at <code>${path}</code><br/>
-    By using this we can skip the installation process.
-  choices:
-    title: Use this folder?
-    use: Just use it!
-    ignore: Emm... Not now.
-  disclaimer: alal.js supports most launcher but we can't guarantee a 100% success.
-  hint: You'll be able to create a new folder, or import an existed one later.
+    Select a folder to store game files.
+  add: Add Folder
+  add-more: Add More
+  nothing: Nothing here...
+  select-title: Select Location for Minecraft
+  hint: |
+    Many folders? You can just add as many as you like!
+  warn: |
+    Contents are not shared between folders.
   next: Next
+
+task-list:
+  title: Task List

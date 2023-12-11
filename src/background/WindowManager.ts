@@ -8,7 +8,7 @@ import { Signals } from "./Signals";
 /**
  * Multiple browser window management module.
  */
-export namespace WindowManager {
+export module WindowManager {
     let mainWindow: BrowserWindow | null = null;
 
     /**

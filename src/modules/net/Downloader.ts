@@ -32,7 +32,7 @@ export interface DownloadProfile {
  *
  * This module runs on the main process, but all methods are also compatible for renderer use.
  */
-export namespace Downloader {
+export module Downloader {
 
 
     /**

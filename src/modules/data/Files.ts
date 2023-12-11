@@ -5,7 +5,7 @@ import { pipeline } from "stream/promises";
 /**
  * Misc file functions.
  */
-export namespace Files {
+export module Files {
     /**
      * Check the integrity of the specified file.
      */

@@ -9,7 +9,7 @@ import { Signals } from "./Signals";
 /**
  * Backend handlers registry module.
  */
-export namespace Handlers {
+export module Handlers {
     const BINDINGS = {
         [Signals.GET_APP_PATH]: getAppPath,
         [Signals.RELOAD_OPTIONS]: reloadOptions,

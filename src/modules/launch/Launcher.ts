@@ -10,7 +10,7 @@ import path from "path";
 import pkg from "../../../package.json";
 import { Options } from "../data/Options";
 
-export namespace Launcher {
+export module Launcher {
     import hasLogConfig = ProfileTools.hasLogConfig;
     const mainClassAlias = "main_class";
     const logConfigAlias = "log_config_path";

@@ -11,7 +11,7 @@ import { OSInfo, OSType } from "@/modules/util/OSInfo";
 import { readJSON } from "fs-extra";
 import os from "os";
 
-export namespace ProfileTools {
+export module ProfileTools {
     /**
      * Covert a profile to fit the latest format in-place.
      *

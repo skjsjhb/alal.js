@@ -11,7 +11,7 @@ export enum OSType {
     LINUX = "linux"
 }
 
-export namespace OSInfo {
+export module OSInfo {
     /**
      * Make the input raw os name string canonical.
      *

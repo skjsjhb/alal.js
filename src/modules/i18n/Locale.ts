@@ -8,7 +8,7 @@ import { Objects } from "../util/Objects";
 import enUS from "./en-US.yml";
 import zhCN from "./zh-CN.yml";
 
-export namespace Locale {
+export module Locale {
     let currentLocale = "";
     const locales: Record<string, any> = {
         "en-US": enUS,

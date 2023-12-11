@@ -11,7 +11,7 @@ import { ipcRenderer } from "electron";
 import { nanoid } from "nanoid";
 import path from "path";
 
-export namespace AccountTools {
+export module AccountTools {
     const accountTableId = "accounts";
 
     /**

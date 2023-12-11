@@ -33,7 +33,7 @@ export interface Container {
     shared: boolean;
 }
 
-export namespace ContainerTools {
+export module ContainerTools {
     /**
      * Gets the path to the profile.
      */

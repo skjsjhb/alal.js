@@ -15,7 +15,7 @@ import path from "path";
  *
  * From alal.js (SakuraKumo) no data will be saved using the Web Storage API.
  */
-export namespace Paths {
+export module Paths {
     let rootPath: string;
     let appPath: string;
 

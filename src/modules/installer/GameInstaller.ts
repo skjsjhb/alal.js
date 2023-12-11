@@ -17,7 +17,7 @@ import unzip from "unzipper";
 /**
  * Game installer is responsible for installing, checking and repairing game files.
  */
-export namespace GameInstaller {
+export module GameInstaller {
     const defaultJre = "jre-legacy";
 
     /**

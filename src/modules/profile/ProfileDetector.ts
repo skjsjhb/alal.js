@@ -9,7 +9,7 @@ const PDRules = Strategies.profileDetection;
  * alal.js supports multiple variants of profiles. These profiles vary by their structures, version string formatting
  * and libraries. This module detected specific information about a profile.
  */
-export namespace ProfileDetector {
+export module ProfileDetector {
     /**
      * Check if the specified profile is a Mojang profile.
      *

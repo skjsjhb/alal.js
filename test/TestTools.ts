@@ -1,6 +1,6 @@
 import { TestSummary } from "./TestSummary";
 
-export namespace TestTools {
+export module TestTools {
     import AssertRecord = TestSummary.AssertRecord;
     let currentTestName = "";
     let assertRecords: AssertRecord[];

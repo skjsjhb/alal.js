@@ -32,7 +32,7 @@ export async function fetchHeaders(url: string): Promise<any> {
     }
 }
 
-export namespace FetchUtil {
+export module FetchUtil {
     // Fetch on main proc with tries
     export async function fetchJSONMain(url: string, init?: RequestInit): Promise<any> {
         const tries = Options.get().download.tries;

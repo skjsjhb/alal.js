@@ -8,7 +8,7 @@ import path from "path";
  *
  * Registry only stores objects which can be serialized into JSON format. Other properties are discarded.
  */
-export namespace Registry {
+export module Registry {
     // Table map for all entries
     let regTables = new Map<string, any>();
     let registryRoot = "reg";

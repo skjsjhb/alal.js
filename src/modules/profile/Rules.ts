@@ -7,7 +7,7 @@ import os from "os";
  *
  * Resolving rules is a cumbersome work and contains many profile-unrelated code. They are seperated to here.
  */
-export namespace Rules {
+export module Rules {
     export function resolveRules(rules?: ProfileRule[], features?: string[]): boolean {
         if (rules == undefined) {
             return true; // If rules are empty, then allow

@@ -7,7 +7,7 @@ import * as uuid from "uuid";
 /**
  * File cache module.
  */
-export namespace Cacher {
+export module Cacher {
     let cacheRoot: string;
     let cacheUUID = Keyring.uuid.cache;
 

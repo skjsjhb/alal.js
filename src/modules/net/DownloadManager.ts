@@ -11,7 +11,7 @@ import { stat } from "fs-extra";
  * Note that this module is different from Downloader, as the manager checks for file existence, manage concurrency and
  * summary the download progress on the fly. The download manager also generates tasks for tracing.
  */
-export namespace DownloadManager {
+export module DownloadManager {
     let pool: Pool;
 
     /**

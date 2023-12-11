@@ -2,7 +2,7 @@ import { Options } from "@/modules/data/Options";
 import darkTheme from "@/renderer/themes/theme-dark.css";
 import lightTheme from "@/renderer/themes/theme-light.css";
 
-export namespace ThemeManager {
+export module ThemeManager {
     let usingTheme: any;
     let colorMode: "light" | "dark";
 

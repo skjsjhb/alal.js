@@ -17,7 +17,7 @@ import path from "path";
 /**
  * Implementing Mojang JRE component downloading.
  */
-export namespace JavaGet {
+export module JavaGet {
     let jreStorePath: string;
     let javaGetRegistryId = "java-get";
 

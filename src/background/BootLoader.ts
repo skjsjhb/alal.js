@@ -9,7 +9,7 @@ import { WindowManager } from "./WindowManager";
 /**
  * The brand-new bootloader for alal.js.
  */
-export namespace BootLoader {
+export module BootLoader {
 
     export async function bootloaderMain() {
         console.log("This is alal.js bootloader. Newer bootloader brings better performance.");

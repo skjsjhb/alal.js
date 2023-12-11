@@ -1,6 +1,6 @@
 import JreMap from "@/constra/jre-map.json";
 
-export namespace JavaVersionMap {
+export module JavaVersionMap {
     const versionMatrix = JreMap as Record<string, string>;
 
     /**

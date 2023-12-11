@@ -5,7 +5,7 @@ import { outputJSON } from "fs-extra";
  *
  * Test summary runs on the renderer process and generate a file named `test-summary.json` in CWD.
  */
-export namespace TestSummary {
+export module TestSummary {
     export type AssertType = "equals" | "notEquals" | "true" | "notTrue" | "error";
 
     export interface AssertRecord {

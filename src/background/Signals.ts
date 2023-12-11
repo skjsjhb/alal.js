@@ -2,7 +2,7 @@
  * Defines constants for possible invocation and message channels between backend process and renderer.
  */
 
-export namespace Signals {
+export module Signals {
     export const SHOW_MAIN_WINDOW = "showMainWindow";
     export const USER_CLOSE_REQUEST = "userCloseRequest";
     export const USER_QUIT_REQUEST = "userQuitRequest";

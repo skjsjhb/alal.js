@@ -5,7 +5,7 @@ import FeatureMatrix from "R/build/feature-matrix.json";
 /**
  * Check for the availability of certain features.
  */
-export namespace Availa {
+export module Availa {
     const platform = os.platform() + "-" + os.arch();
     let featureSet: Set<string>;
 

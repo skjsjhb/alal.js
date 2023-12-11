@@ -7,7 +7,7 @@ import { ipcRenderer } from "electron";
 /**
  * Mirrors latency test, resolve and management module.
  */
-export namespace Mirrors {
+export module Mirrors {
     interface SourceRuleSet {
         test: string; // The URL to test latency
         overrides: Record<string, string | null>; // URL replacement rules

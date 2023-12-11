@@ -13,7 +13,7 @@ import { Paths } from "./Paths";
  * - Config handling is cumbersome for both main process and renderer process.
  * - The lack of type system for config files.
  */
-export namespace Options {
+export module Options {
     type OptionsModel = typeof OptionsTemplate;
 
     const OPTIONS_FILE_PATH = "options.json";

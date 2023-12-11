@@ -10,7 +10,7 @@ import { Locale } from "../i18n/Locale";
  *
  * Unlike most modules, this can only be called on the background.
  */
-export namespace MicrosoftBrowserLogin {
+export module MicrosoftBrowserLogin {
     const loginURL = Sources.microsoftLogin;
 
     const loginBrowserPart = "persist:ms-login";

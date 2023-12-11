@@ -6,7 +6,7 @@ import { pipeline } from "stream/promises";
 /**
  * Compression util module.
  */
-export namespace Compressing {
+export module Compressing {
     let lzma: typeof LZMA;
     let lzmaSoft: LZMASoft;
 

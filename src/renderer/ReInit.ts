@@ -18,7 +18,7 @@ import { createRoot } from "react-dom/client";
 import pkg from "../../package.json";
 import { App } from "./screen/App";
 
-export namespace ReInit {
+export module ReInit {
     /**
      * Initialize the renderer environment.
      */

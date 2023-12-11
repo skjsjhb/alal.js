@@ -25,10 +25,10 @@ The prerequisites are the same as described in README.
    corepack enable && yarn
    ```
 
-3. Run extra prebuild tasks (currently only sync `jre-map.json`):
+3. Run extra prebuild tasks (mainly sync registries):
    
    ```shell
-   node tools/syncJreVerMap.js # Sync jre-map.json
+   node tools/sync.js # Sync all those JSON stuff
    ```
 
 4. Edit code.
@@ -73,7 +73,7 @@ There are several hints during the build process we think worth noticing:
   
   Whether to use `dev-server` is totally a personal choice, you can still use the traditional **write, build, launch, build, launch...** It's totally acceptable.
 
-- Build steps like `node tools/syncJreVerMap.js` which are optional for users are **mandatory** for our developers.
+- Build steps like `node tools/sync.js` which are optional for users are **mandatory** for our developers.
 
 - You may use a custom pakcage manager to install dependencies. However, we've verified that `pnpm` does **not** work. Also, when commiting code, `yarn` is still required.
 

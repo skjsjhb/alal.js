@@ -95,7 +95,7 @@ async function allTests() {
                 const st = ProfileDetector.isMojang(file);
                 assertTrue(st, "Required Mojang structure test: " + p.id);
                 const id = file.id;
-                const isVer = ProfileDetector.isLikelyMojangVersion(id);
+                const isVer = ProfileDetector.isMojangVersion(id);
                 assertTrue(isVer, "Required Mojang version test: " + p.id);
             }
             pool.release();

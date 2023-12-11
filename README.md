@@ -87,10 +87,10 @@ following scenarios:
 
 ### Hints
 
-- We maintain a file `jre-map.json` to keep up-to-date with the latest Mojang JRE manifests. This file should be updated once a new profile releases. To do that, run the following command before build:
+- We maintain several JSON files to keep up-to-date with the latest Mojang manifests. These files should be updated once a new profile releases. To do that, run the following command before build:
   
   ```shell
-  node tools/syncJreVerMap.js
+  node tools/sync.js
   ```
 
 - `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially supported), as the library does not come with a valid prebuilt (either missing or malfunctioned). We use a JS-based implementation under this case. Usages of LZMA are also reduced.

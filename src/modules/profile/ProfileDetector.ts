@@ -1,6 +1,7 @@
 // noinspection JSUnresolvedReference
 
 import Strategies from "@/constra/strategies.json";
+import MojangVersions from "@/constra/version-names.json";
 
 const PDRules = Strategies.profileDetection;
 
@@ -59,25 +60,21 @@ export namespace ProfileDetector {
     }
 
     /**
-     * Checks if the passed id is likely to contains a Mojang version.
+     * Checks if the passed id is likely a Mojang version name.
      *
-     * When we say 'likely', we mean that this method uses RegExp and might not be 100% correct.
+     * This method uses a list of known Mojang versions to check and then the regex.
+     * If the file is outdated the data might be incorrect. A Mojang version name always passes the test, while
+     * it's not true in reverse.
      */
-    export function isLikelyMojangVersion(id: string): boolean {
-        const regexSet = PDRules.versionRegex;
-        for (let r of regexSet) {
-            if (new RegExp("^" + r + "$").test(id)) {
-                return true;
-            }
-        }
-        return false;
+    export function isMojangVersion(id: string): boolean {
+        return MojangVersions.includes(id) || !!PDRules.versionRegex.find(r => new RegExp(r).test(id));
     }
 
     // Compatibility with patched profiles (https://github.com/skjsjhb/alal.js/issues/6)
     function getVersionByPatches(src: any): string {
         if (src.patches instanceof Array) {
             for (const patch of src.patches) {
-                if (patch.id == "game" && patch.version && isLikelyMojangVersion(patch.version)) {
+                if (patch.id == "game" && patch.version && isMojangVersion(patch.version)) {
                     return patch.version;
                 }
             }
@@ -100,13 +97,13 @@ export namespace ProfileDetector {
 
         // Analyze the inherit chain
         const root = findRootProfile(profiles);
-        if (root && isLikelyMojangVersion(root.id)) {
+        if (root && isMojangVersion(root.id)) {
             return root.id;
         }
 
         // Directly check all profiles
         for (const prof of profiles) {
-            if (isLikelyMojangVersion(prof.id)) {
+            if (isMojangVersion(prof.id)) {
                 return prof.id;
             }
         }
@@ -129,6 +126,7 @@ export namespace ProfileDetector {
         return null;
     }
 
+    // Uses regex to extract mojang version name
     function extractMojangVersion(src: string): string {
         for (let r of PDRules.versionRegex) {
             const m = src.match(new RegExp(r));

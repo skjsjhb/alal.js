@@ -43,6 +43,9 @@ export module MicrosoftBrowserLogin {
         return new Promise<string>((res) => {
             const window = createLoginBrowserWindow();
 
+            (globalThis as any).msLoginWindow = window;
+            window.on('closed', () => {delete (globalThis as any).msLoginWindow;});
+
             // Bind listeners
             window.webContents.on('did-stop-loading', checkURL);
             window.on('close', beforeLoginWindowClose);

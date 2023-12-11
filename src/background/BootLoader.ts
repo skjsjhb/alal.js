@@ -1,3 +1,7 @@
+/**
+ * The brand-new bootloader for alal.js.
+ */
+
 import { Options } from '@/modules/data/Options';
 import { Paths } from '@/modules/data/Paths';
 import { Locale } from '@/modules/i18n/Locale';
@@ -6,11 +10,11 @@ import os from 'os';
 import { Handlers } from './Handlers';
 import { WindowManager } from './WindowManager';
 
-/**
- * The brand-new bootloader for alal.js.
- */
 export module BootLoader {
 
+    /**
+     * Bootloader main entry method.
+     */
     export async function bootloaderMain() {
         console.log('This is alal.js bootloader. Newer bootloader brings better performance.');
         await prepareRun();

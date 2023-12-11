@@ -36,6 +36,10 @@ export module WindowManager {
             },
             show: false
         });
+
+        // Reference the window to prevent gc
+        (globalThis as any).mainWindow = mainWindow;
+
         mainWindow.setAspectRatio(1.60);
         mainWindow.setTitle('alal.js');
         mainWindow.setMenu(null);
@@ -46,6 +50,7 @@ export module WindowManager {
         ipcMain.on(Signals.CLOSE_WINDOW_SOFT, closeWindowSoft); // Paired with userCloseWindowRequest & DOM close events
         ipcMain.on(Signals.CLOSE_WINDOW_AND_QUIT, closeWindowAndQuit); // Paired with userQuitRequest
         mainWindow.on('close', onUserCloseWindowReq);
+        mainWindow.on('closed', () => {delete (globalThis as any).mainWindow;});
         mainWindow.on('resized', pushMainWindowResizeEvent);
         app.once('before-quit', onUserQuitReq); // This is done by WM to prevent early quit
 
@@ -143,7 +148,7 @@ export module WindowManager {
         mainWindow?.webContents.send(Signals.USER_CLOSE_REQUEST);
     }
 
-
+    // Proxy requests and add a CORS header
     function unblockCORS(window: BrowserWindow) {
         console.log('Unblocking CORS.');
 

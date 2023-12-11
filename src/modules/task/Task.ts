@@ -124,7 +124,7 @@ export class Task<T> {
      */
     getProgressString(): string {
         if (this.progress === null || this.progress.total == 0) {
-            return "...";
+            return '...';
         }
         if (this.progress.failed > 0) {
             return `${this.progress.success + this.progress.failed} (-${this.progress.failed}) / ${this.progress.total}`;

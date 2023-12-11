@@ -1,10 +1,10 @@
-import { MicrosoftBrowserLogin } from "@/modules/auth/MicrosoftBrowserLogin";
-import { Options } from "@/modules/data/Options";
-import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
-import { FetchUtil } from "@/modules/net/FetchUtil";
-import { app, dialog, ipcMain, IpcMainInvokeEvent, safeStorage } from "electron";
-import fetch, { RequestInit } from "electron-fetch";
-import { Signals } from "./Signals";
+import { MicrosoftBrowserLogin } from '@/modules/auth/MicrosoftBrowserLogin';
+import { Options } from '@/modules/data/Options';
+import { Downloader, DownloadProfile } from '@/modules/net/Downloader';
+import { FetchUtil } from '@/modules/net/FetchUtil';
+import { app, dialog, ipcMain, IpcMainInvokeEvent, safeStorage } from 'electron';
+import fetch, { RequestInit } from 'electron-fetch';
+import { Signals } from './Signals';
 
 /**
  * Backend handlers registry module.
@@ -30,7 +30,7 @@ export module Handlers {
      */
     export function createBindings() {
         for (const [k, v] of Object.entries(BINDINGS)) {
-            console.log("Binding: " + k);
+            console.log('Binding: ' + k);
             ipcMain.handle(k, v);
         }
     }
@@ -41,7 +41,7 @@ export module Handlers {
 
     // Reload options file
     async function reloadOptions() {
-        console.log("Reloading options.");
+        console.log('Reloading options.');
         await Options.load();
     }
 
@@ -67,11 +67,11 @@ export module Handlers {
     }
 
     function encryptString(_e: IpcMainInvokeEvent, content: string): Promise<string> {
-        return Promise.resolve(safeStorage.encryptString(content).toString("base64"));
+        return Promise.resolve(safeStorage.encryptString(content).toString('base64'));
     }
 
     function decryptString(_e: IpcMainInvokeEvent, content: string): Promise<string> {
-        return Promise.resolve(safeStorage.decryptString(Buffer.from(content, "base64")));
+        return Promise.resolve(safeStorage.decryptString(Buffer.from(content, 'base64')));
     }
 
     const latencyTestTries = 3;
@@ -81,9 +81,9 @@ export module Handlers {
         for (const _i of Array(latencyTestTries)) {
             const start = Date.now();
             const controller = new AbortController();
-            const tid = setTimeout(() => controller.abort("Timeout"), latencyTestTimeout);
+            const tid = setTimeout(() => controller.abort('Timeout'), latencyTestTimeout);
             try {
-                await fetch(url, {method: "HEAD", signal: controller.signal});
+                await fetch(url, { method: 'HEAD', signal: controller.signal });
                 clearTimeout(tid);
             } catch {
                 return -1;
@@ -94,6 +94,6 @@ export module Handlers {
     }
 
     async function selectFolder(_e: IpcMainInvokeEvent, title: string): Promise<string[]> {
-        return (await dialog.showOpenDialog({properties: ["openDirectory", "multiSelections"], title})).filePaths;
+        return (await dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections'], title })).filePaths;
     }
 }

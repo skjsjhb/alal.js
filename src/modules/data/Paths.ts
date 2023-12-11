@@ -1,8 +1,8 @@
-import { Signals } from "@/background/Signals";
-import { Availa } from "@/modules/util/Availa";
-import { app, ipcRenderer } from "electron";
-import os from "os";
-import path from "path";
+import { Signals } from '@/background/Signals';
+import { Availa } from '@/modules/util/Availa';
+import { app, ipcRenderer } from 'electron';
+import os from 'os';
+import path from 'path';
 
 /**
  * Module for file path resolving and file management.
@@ -28,21 +28,21 @@ export module Paths {
      */
     export function detectRootPath() {
         switch (os.platform()) {
-            case "win32":
+            case 'win32':
                 if (process.env.LOCALAPPDATA) {
-                    rootPath = path.resolve(process.env.LOCALAPPDATA, "AlicornAgain");
+                    rootPath = path.resolve(process.env.LOCALAPPDATA, 'AlicornAgain');
                 } else if (process.env.APPDATA) {
-                    rootPath = path.resolve(process.env.APPDATA, "AlicornAgain");
+                    rootPath = path.resolve(process.env.APPDATA, 'AlicornAgain');
                 }
                 break;
-            case "darwin":
-                rootPath = path.resolve(os.homedir(), "Library/Application Support/AlicornAgain");
+            case 'darwin':
+                rootPath = path.resolve(os.homedir(), 'Library/Application Support/AlicornAgain');
                 break;
         }
         if (!rootPath) {
-            rootPath = path.resolve(os.homedir(), ".alicorn-again");
+            rootPath = path.resolve(os.homedir(), '.alicorn-again');
         }
-        console.log("Setting root path: " + rootPath);
+        console.log('Setting root path: ' + rootPath);
     }
 
 
@@ -57,7 +57,7 @@ export module Paths {
         } else {
             appPath = app.getAppPath();
         }
-        console.log("Setting app path: " + appPath);
+        console.log('Setting app path: ' + appPath);
     }
 
     /**
@@ -75,8 +75,8 @@ export module Paths {
      */
     export function getResourcePath(pt: string) {
         if (!appPath) {
-            console.error("Paths used with app path uninitialized. Skipped.");
-            return "";
+            console.error('Paths used with app path uninitialized. Skipped.');
+            return '';
         }
         return path.resolve(appPath, pt);
     }

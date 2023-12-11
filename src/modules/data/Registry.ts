@@ -1,7 +1,7 @@
-import { Paths } from "@/modules/data/Paths";
-import { ensureDir, outputJSON, readJSON } from "fs-extra";
-import { glob } from "glob";
-import path from "path";
+import { Paths } from '@/modules/data/Paths';
+import { ensureDir, outputJSON, readJSON } from 'fs-extra';
+import { glob } from 'glob';
+import path from 'path';
 
 /**
  * All-in-one user preferences and runtime data storage module.
@@ -11,9 +11,9 @@ import path from "path";
 export module Registry {
     // Table map for all entries
     let regTables = new Map<string, any>();
-    let registryRoot = "reg";
+    let registryRoot = 'reg';
 
-    const regFileSuffix = ".json";
+    const regFileSuffix = '.json';
 
     /**
      * Load all tables from disk.
@@ -22,8 +22,8 @@ export module Registry {
         const rootDir = Paths.getDataPath(registryRoot);
         await ensureDir(rootDir); // When running for the first time
 
-        console.log("Loading registry tables.");
-        const dirs = await glob("*" + regFileSuffix, {cwd: rootDir, nodir: true, absolute: true});
+        console.log('Loading registry tables.');
+        const dirs = await glob('*' + regFileSuffix, { cwd: rootDir, nodir: true, absolute: true });
         await Promise.all(dirs.map(loadOneTable));
     }
 
@@ -31,7 +31,7 @@ export module Registry {
      * Save all tables to disk.
      */
     export async function saveTables(): Promise<void> {
-        console.log("Saving registry tables.");
+        console.log('Saving registry tables.');
 
         const promos = [];
         for (const [k, t] of regTables.entries()) {
@@ -72,10 +72,10 @@ export module Registry {
     async function loadOneTable(absPath: string): Promise<void> {
         const name = path.basename(absPath, path.extname(absPath));
         try {
-            console.log("Loading registry table " + name);
+            console.log('Loading registry table ' + name);
             regTables.set(name, await readJSON(absPath));
         } catch (e) {
-            console.error("Could not load table " + name + ": " + e);
+            console.error('Could not load table ' + name + ': ' + e);
         }
     }
 }

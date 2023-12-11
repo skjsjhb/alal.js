@@ -48,10 +48,10 @@ export interface AssetIndex {
     objects: Record<string, { hash: string, size: number }>;
 }
 
-export type ProfileReleaseType = "release" | "snapshot" | "old_beta" | "old_alpha";
+export type ProfileReleaseType = 'release' | 'snapshot' | 'old_beta' | 'old_alpha';
 
 export interface ProfileRule {
-    action: "allow" | "disallow",
+    action: 'allow' | 'disallow',
     features?: {
         [key: string]: boolean
     },

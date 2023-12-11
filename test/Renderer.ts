@@ -1,12 +1,12 @@
 /**
  * Entry point of the new renderer for autotest bundles only.
  */
-import { Options } from "@/modules/data/Options";
-import { Paths } from "@/modules/data/Paths";
-import { ReInit } from "@/renderer/ReInit";
-import { ipcRenderer } from "electron";
-import { runRendererTests } from "./RendererTestHost";
-import { SignalTest } from "./SignalTest";
+import { Options } from '@/modules/data/Options';
+import { Paths } from '@/modules/data/Paths';
+import { ReInit } from '@/renderer/ReInit';
+import { ipcRenderer } from 'electron';
+import { runRendererTests } from './RendererTestHost';
+import { SignalTest } from './SignalTest';
 
 async function main() {
     // Redirect logs for renderer
@@ -30,9 +30,9 @@ async function main() {
 
 
     // Autotest modules entry
-    console.warn("This is a test bundle built for automated tests. They are NOT intended for normal use.");
-    console.warn("For development, use the debug bundle instead.");
-    console.warn("For a production ready app, see the release bundle.");
+    console.warn('This is a test bundle built for automated tests. They are NOT intended for normal use.');
+    console.warn('For development, use the debug bundle instead.');
+    console.warn('For a production ready app, see the release bundle.');
     await runRendererTests();
 }
 

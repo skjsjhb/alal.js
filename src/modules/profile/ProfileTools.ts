@@ -1,15 +1,15 @@
 // noinspection JSUnresolvedReference
 
-import Sources from "@/constra/sources.json";
-import Strategies from "@/constra/strategies.json";
-import { Container, ContainerTools } from "@/modules/container/ContainerTools";
-import { fetchJSON } from "@/modules/net/FetchUtil";
-import { Rules } from "@/modules/profile/Rules";
-import { Argument, AssetIndex, DownloadArtifact, Library, VersionProfile } from "@/modules/profile/VersionProfile";
-import { Objects } from "@/modules/util/Objects";
-import { OSInfo, OSType } from "@/modules/util/OSInfo";
-import { readJSON } from "fs-extra";
-import os from "os";
+import Sources from '@/constra/sources.json';
+import Strategies from '@/constra/strategies.json';
+import { Container, ContainerTools } from '@/modules/container/ContainerTools';
+import { fetchJSON } from '@/modules/net/FetchUtil';
+import { Rules } from '@/modules/profile/Rules';
+import { Argument, AssetIndex, DownloadArtifact, Library, VersionProfile } from '@/modules/profile/VersionProfile';
+import { Objects } from '@/modules/util/Objects';
+import { OSInfo, OSType } from '@/modules/util/OSInfo';
+import { readJSON } from 'fs-extra';
+import os from 'os';
 
 export module ProfileTools {
     /**
@@ -48,25 +48,25 @@ export module ProfileTools {
      * with the same ID from Mojang manifests, then copy the two properties mentioned above.
      */
     export async function upgradeProfile(src: any): Promise<void> {
-        if (typeof src.id == "string" && (!src.javaVersion || !src.complianceLevel)) {
-            console.log("Upgrading profile " + src.id);
+        if (typeof src.id == 'string' && (!src.javaVersion || !src.complianceLevel)) {
+            console.log('Upgrading profile ' + src.id);
             const manifest = await getMojangManifest();
             if (!manifest) {
                 return;
             }
             const entry = manifest.versions.find((v) => v.id == src.id);
             if (!entry) {
-                console.log("Profile " + src.id + " is not included in the manifest.");
+                console.log('Profile ' + src.id + ' is not included in the manifest.');
                 return;
             }
-            console.log("Fetching latest profile for " + src.id + " from " + entry.url);
+            console.log('Fetching latest profile for ' + src.id + ' from ' + entry.url);
             const profileSrc = await fetchJSON(entry.url);
             if (!profileSrc || !profileSrc.javaVersion || !profileSrc.complianceLevel) {
                 return;
             }
             src.javaVersion = profileSrc.javaVersion;
             src.complianceLevel = profileSrc.complianceLevel;
-            console.log("Upgraded profile " + src.id);
+            console.log('Upgraded profile ' + src.id);
         }
     }
 
@@ -99,7 +99,7 @@ export module ProfileTools {
             if (obj) {
                 mojangManifest = obj;
             } else {
-                console.error("Invalid response received when retrieving profile manifest.");
+                console.error('Invalid response received when retrieving profile manifest.');
             }
         }
         return mojangManifest;
@@ -111,12 +111,12 @@ export module ProfileTools {
     export async function getMojangProfile(id: string): Promise<any> {
         const mm = await getMojangManifest();
         if (!mm) {
-            console.error("Could not retrieve profile manifest.");
+            console.error('Could not retrieve profile manifest.');
             return null;
         }
         const index = mm.versions.find((v) => v.id == id);
         if (!index || !index.url) {
-            console.error("No profile with such version: " + id);
+            console.error('No profile with such version: ' + id);
             return null;
         }
         return await fetchJSON(index.url);
@@ -143,24 +143,24 @@ export module ProfileTools {
     }
 
     export function isNativeLibrary(l: Library): boolean {
-        return l.name.split(":").length == 4;
+        return l.name.split(':').length == 4;
     }
 
     /**
      * Check if the specified native library should be unpacked.
      */
     export function isNativeLibraryAllowed(l: Library): boolean {
-        const libName = l.name.split(":")[3]; // Assume already checked
+        const libName = l.name.split(':')[3]; // Assume already checked
         const arch = os.arch();
 
         // Caveat for arm devices
-        if (libName.includes("x86") && arch != "ia32") {
+        if (libName.includes('x86') && arch != 'ia32') {
             return false;
         }
-        if (libName.includes("x64") && arch != "x64") {
+        if (libName.includes('x64') && arch != 'x64') {
             return false;
         }
-        if ((libName.includes("arm") || libName.includes("aarch")) && arch != "arm64") {
+        if ((libName.includes('arm') || libName.includes('aarch')) && arch != 'arm64') {
             return false;
         }
         switch (OSInfo.getSelf()) {
@@ -181,14 +181,14 @@ export module ProfileTools {
     export function mergeProfiles(src: any[]): VersionProfile | null {
         const root = src.find(o => !o.inheritsFrom);
         if (!root) {
-            console.error("Could not merge profile: No root profile found");
+            console.error('Could not merge profile: No root profile found');
             return null;
         }
         const chain = [];
         while (chain.length < src.length - 1) {
             const dep = src.find(o => o.inheritsFrom == root.id);
             if (!dep) {
-                console.error("Could not merge profile: Broken dep chain");
+                console.error('Could not merge profile: Broken dep chain');
                 return null;
             }
             chain.push(dep);
@@ -224,7 +224,7 @@ export module ProfileTools {
     // Merge 'head' into 'base' in-place.
     function mergeProfileFrom(base: any, head: any) {
         if (!head.inheritsFrom == base.id) {
-            console.warn("Warning: merging independent profiles: " + base.id + " <- " + head.id);
+            console.warn('Warning: merging independent profiles: ' + base.id + ' <- ' + head.id);
         }
 
         // Arguments are appended
@@ -268,7 +268,7 @@ export module ProfileTools {
         const classifiers = Object.entries(src.downloads.classifiers);
         for (const [clazz, artifact] of classifiers) {
             generatedLibs.push({
-                name: src.name + ":" + clazz,
+                name: src.name + ':' + clazz,
                 rules: src.rules,
                 downloads: {
                     artifact: artifact as DownloadArtifact
@@ -282,14 +282,14 @@ export module ProfileTools {
     // Legacy launchers only uses a single space-split string to store the args.
     // This method converts them.
     function convertGameArguments(minecraftArguments: string): Argument[] {
-        const args = minecraftArguments.split(" ");
+        const args = minecraftArguments.split(' ');
         console.log(`Converted game arguments (${args.length} args)`);
         return args;
     }
 
     // Creates default args for legacy profiles
     function createDefaultVMArguments(): Argument[] {
-        console.log("Generating default arguments for VM.");
+        console.log('Generating default arguments for VM.');
         return Strategies.vmArgs as Argument[];
     }
 
@@ -298,16 +298,16 @@ export module ProfileTools {
         if (!src.name || !src.url) {
             return;
         }
-        const [group, artifact, version] = src.name.split(":");
+        const [group, artifact, version] = src.name.split(':');
         if (!group || !artifact || !version) {
             return;
         }
-        const path = group.replaceAll(".", "/") + "/" + artifact + "/" + version + "/" + artifact + "-" + version + ".jar";
+        const path = group.replaceAll('.', '/') + '/' + artifact + '/' + version + '/' + artifact + '-' + version + '.jar';
         src.downloads = {
             artifact: {
                 path,
                 url: src.url + path,
-                sha1: "",
+                sha1: '',
                 size: -1
             }
         };

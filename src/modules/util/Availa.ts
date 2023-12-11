@@ -1,12 +1,12 @@
-import { ipcRenderer } from "electron";
-import os from "os";
-import FeatureMatrix from "R/build/feature-matrix.json";
+import { ipcRenderer } from 'electron';
+import os from 'os';
+import FeatureMatrix from 'R/build/feature-matrix.json';
 
 /**
  * Check for the availability of certain features.
  */
 export module Availa {
-    const platform = os.platform() + "-" + os.arch();
+    const platform = os.platform() + '-' + os.arch();
     let featureSet: Set<string>;
 
     interface FeatureMatrixItem {

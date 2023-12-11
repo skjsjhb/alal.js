@@ -1,7 +1,7 @@
 export enum AccountType {
-    Microsoft = "MZ",
-    Local = "AL",
-    Yggdrasil = "YG",
+    Microsoft = 'MZ',
+    Local = 'AL',
+    Yggdrasil = 'YG',
 }
 
 export interface Account {

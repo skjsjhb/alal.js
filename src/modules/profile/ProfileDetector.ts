@@ -1,7 +1,7 @@
 // noinspection JSUnresolvedReference
 
-import Strategies from "@/constra/strategies.json";
-import MojangVersions from "@/constra/version-names.json";
+import Strategies from '@/constra/strategies.json';
+import MojangVersions from '@/constra/version-names.json';
 
 const PDRules = Strategies.profileDetection;
 
@@ -74,12 +74,12 @@ export module ProfileDetector {
     function getVersionByPatches(src: any): string {
         if (src.patches instanceof Array) {
             for (const patch of src.patches) {
-                if (patch.id == "game" && patch.version && isMojangVersion(patch.version)) {
+                if (patch.id == 'game' && patch.version && isMojangVersion(patch.version)) {
                     return patch.version;
                 }
             }
         }
-        return "";
+        return '';
     }
 
     /**
@@ -109,12 +109,12 @@ export module ProfileDetector {
         }
 
         // Extract any
-        for (const {id} of profiles) {
+        for (const { id } of profiles) {
             if ((v = extractMojangVersion(id))) return v;
         }
 
         // Cannot decide
-        return "";
+        return '';
     }
 
     function findRootProfile(profiles: any[]): any {
@@ -134,7 +134,7 @@ export module ProfileDetector {
                 return m[0];
             }
         }
-        return "";
+        return '';
     }
 
     // Checks the library presence or absence.

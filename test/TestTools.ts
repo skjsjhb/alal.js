@@ -1,12 +1,12 @@
-import { TestSummary } from "./TestSummary";
+import { TestSummary } from './TestSummary';
 
 export module TestTools {
     import AssertRecord = TestSummary.AssertRecord;
-    let currentTestName = "";
+    let currentTestName = '';
     let assertRecords: AssertRecord[];
 
     export async function test(name: string, todo: () => Promise<void> | void): Promise<void> {
-        console.debug("Now testing: " + name);
+        console.debug('Now testing: ' + name);
         currentTestName = name;
         assertRecords = [];
         try {
@@ -21,7 +21,7 @@ export module TestTools {
         } catch (e) {
             assertRaiseError(e);
         }
-        console.debug("Test " + name + " completed");
+        console.debug('Test ' + name + ' completed');
         const rc: TestSummary.SingleTest = {
             displayName: currentTestName,
             passed: assertRecords.every(r => r.ok),
@@ -32,17 +32,17 @@ export module TestTools {
 
     function assertRaiseError(e: any) {
         assertRecords.push({
-            type: "error",
+            type: 'error',
             ok: false,
             expected: null,
             received: e.toString(),
-            expl: ""
+            expl: ''
         });
     }
 
     export function assertTrue(what: any, why: string) {
         assertRecords.push({
-            type: "true",
+            type: 'true',
             ok: !!what,
             expected: true,
             received: !!what,
@@ -52,7 +52,7 @@ export module TestTools {
 
     export function assertFalse(what: any, why: string) {
         assertRecords.push({
-            type: "notTrue",
+            type: 'notTrue',
             ok: !what,
             expected: false,
             received: !what,
@@ -62,7 +62,7 @@ export module TestTools {
 
     export function assertEquals<T>(expected: T, received: T, why: string) {
         assertRecords.push({
-            type: "equals",
+            type: 'equals',
             ok: expected == received || jsonEquals(expected, received),
             expected,
             received,
@@ -72,7 +72,7 @@ export module TestTools {
 
     export function assertNotEquals<T>(expected: T, received: T, why: string) {
         assertRecords.push({
-            type: "notEquals",
+            type: 'notEquals',
             ok: expected != received && !jsonEquals(expected, received),
             expected,
             received,
@@ -81,7 +81,7 @@ export module TestTools {
     }
 
     function jsonEquals(expected: any, received: any) {
-        if (typeof expected == "object" && typeof received == "object") {
+        if (typeof expected == 'object' && typeof received == 'object') {
             return JSON.stringify(expected) == JSON.stringify(received);
         }
         return false;
@@ -94,6 +94,6 @@ export module TestTools {
      * Note: even simple tests are used for CI, a full test **MUST** pass before a release.
      */
     export function shouldSimpleTest() {
-        return process.env["ALAL_TEST_SIMPLE"] == "1";
+        return process.env['ALAL_TEST_SIMPLE'] == '1';
     }
 }

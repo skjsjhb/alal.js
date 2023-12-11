@@ -1,29 +1,29 @@
-import Sources from "@/constra/sources.json";
-import { Compressing } from "@/modules/data/Compressing";
-import { Options } from "@/modules/data/Options";
-import { Paths } from "@/modules/data/Paths";
-import { Registry } from "@/modules/data/Registry";
-import { Locale } from "@/modules/i18n/Locale";
-import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
-import { DownloadManager } from "@/modules/net/DownloadManager";
-import { fetchJSON } from "@/modules/net/FetchUtil";
-import { Task } from "@/modules/task/Task";
-import { Availa } from "@/modules/util/Availa";
-import { OSInfo, OSType } from "@/modules/util/OSInfo";
-import { chmod, ensureDir, remove } from "fs-extra";
-import os from "os";
-import path from "path";
+import Sources from '@/constra/sources.json';
+import { Compressing } from '@/modules/data/Compressing';
+import { Options } from '@/modules/data/Options';
+import { Paths } from '@/modules/data/Paths';
+import { Registry } from '@/modules/data/Registry';
+import { Locale } from '@/modules/i18n/Locale';
+import { Downloader, DownloadProfile } from '@/modules/net/Downloader';
+import { DownloadManager } from '@/modules/net/DownloadManager';
+import { fetchJSON } from '@/modules/net/FetchUtil';
+import { Task } from '@/modules/task/Task';
+import { Availa } from '@/modules/util/Availa';
+import { OSInfo, OSType } from '@/modules/util/OSInfo';
+import { chmod, ensureDir, remove } from 'fs-extra';
+import os from 'os';
+import path from 'path';
 
 /**
  * Implementing Mojang JRE component downloading.
  */
 export module JavaGet {
     let jreStorePath: string;
-    let javaGetRegistryId = "java-get";
+    let javaGetRegistryId = 'java-get';
 
     // See https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json
-    type MojangJavaPlatforms = "gamecore" | "linux" | "linux-i386" | "mac-os"
-        | "mac-os-arm64" | "windows-arm64" | "windows-x64" | "windows-x86";
+    type MojangJavaPlatforms = 'gamecore' | 'linux' | 'linux-i386' | 'mac-os'
+        | 'mac-os-arm64' | 'windows-arm64' | 'windows-x64' | 'windows-x86';
 
     type MojangJavaManifest = {
         // The keys have their names (e.g. java-runtime-gamma), but that's not our interest
@@ -42,7 +42,7 @@ export module JavaGet {
             raw: MojangJavaFileArtifact;
         };
         executable?: boolean;
-        type: "file" | "directory";
+        type: 'file' | 'directory';
     }
 
     interface MojangJavaFileArtifact {
@@ -72,10 +72,10 @@ export module JavaGet {
      */
     export async function configure() {
         try {
-            jreStorePath = Paths.getDataPath("jre");
+            jreStorePath = Paths.getDataPath('jre');
             await ensureDir(jreStorePath);
         } catch (e) {
-            console.error("Could not create JRE store path: " + e);
+            console.error('Could not create JRE store path: ' + e);
         }
     }
 
@@ -83,7 +83,7 @@ export module JavaGet {
     async function retrieveIndexManifest(): Promise<MojangJavaManifest> {
         const res = await fetchJSON(Sources.mojangJavaRuntimeManifest);
         if (!res) {
-            console.error("Could not retrieve index manifest!");
+            console.error('Could not retrieve index manifest!');
         }
         return res;
     }
@@ -91,22 +91,22 @@ export module JavaGet {
     async function retrieveDownloadManifest(u: string): Promise<MojangJavaDownloadManifest> {
         const res = await fetchJSON(u);
         if (!res) {
-            console.error("Could not retrieve manifest: " + u);
+            console.error('Could not retrieve manifest: ' + u);
         }
         return res;
     }
 
     function resolveComponentDownloadManifest(c: string): Task<MojangJavaDownloadManifest> {
-        return new Task("java-get.resolve", null, async (task) => {
+        return new Task('java-get.resolve', null, async (task) => {
             try {
                 const matrix = await retrieveIndexManifest();
                 const platform = getMojangNamedPlatform();
                 if (!(platform in matrix)) {
-                    task.reject("Platform " + platform + " not supported by JavaGet.");
+                    task.reject('Platform ' + platform + ' not supported by JavaGet.');
                 }
                 const componentProfile = matrix[platform as MojangJavaPlatforms][c];
                 if (!componentProfile || componentProfile.length == 0) {
-                    task.reject("No JRE component named " + c + " for platform " + platform);
+                    task.reject('No JRE component named ' + c + ' for platform ' + platform);
                 }
                 const component = componentProfile[0];
                 const manifest = await retrieveDownloadManifest(component.manifest.url);
@@ -125,7 +125,7 @@ export module JavaGet {
             const files = f.files;
             for (const [fileName, profile] of Object.entries(files)) {
                 // Exclude legal files and directories
-                if (fileName.startsWith("legal/") || profile.type == "directory") {
+                if (fileName.startsWith('legal/') || profile.type == 'directory') {
                     delete files[fileName];
                 }
             }
@@ -136,26 +136,26 @@ export module JavaGet {
      * Install specified JRE component.
      */
     export function installComponent(componentName: string): Task<void> {
-        const taskName = Locale.getTranslation("java-get.get", {name: componentName});
+        const taskName = Locale.getTranslation('java-get.get', { name: componentName });
         return new Task(taskName, 3, async (task) => {
             try {
                 // Fetch manifest
-                console.log("Fetching JRE download manifest for " + componentName);
+                console.log('Fetching JRE download manifest for ' + componentName);
                 const dlManifest = await resolveComponentDownloadManifest(componentName).link(task).wait();
 
                 // Optimize files
-                console.log("Optimizing JRE files.");
+                console.log('Optimizing JRE files.');
                 optimizeFiles(dlManifest);
 
                 // Download files in batch
-                console.log("Downloading files for " + componentName);
+                console.log('Downloading files for ' + componentName);
                 const downloadBatch = generateDownloadProfileList(componentName, dlManifest);
                 const downloadTask = DownloadManager.downloadBatched(downloadBatch);
-                downloadTask.setName(Locale.getTranslation("java-get.download", {name: componentName})); // Rename
+                downloadTask.setName(Locale.getTranslation('java-get.download', { name: componentName })); // Rename
                 await downloadTask.link(task).wait();
 
                 // Post process
-                console.log("Processing files for " + componentName);
+                console.log('Processing files for ' + componentName);
                 await postProcessFiles(componentName, dlManifest).link(task).wait();
 
                 // Add to registry
@@ -163,7 +163,7 @@ export module JavaGet {
                 if (!jgt.includes(componentName)) {
                     jgt.push(componentName);
                 }
-                console.log("Installed " + componentName);
+                console.log('Installed ' + componentName);
                 task.resolve();
             } catch (e) {
                 task.reject(e);
@@ -179,11 +179,11 @@ export module JavaGet {
      * @param c JRE component name.
      */
     export function getJavaExecutable(c: string): string {
-        let pathToJava = "bin/java";
+        let pathToJava = 'bin/java';
         if (OSInfo.getSelf() == OSType.WINDOWS) {
-            pathToJava = "bin/java.exe";
+            pathToJava = 'bin/java.exe';
         } else if (OSInfo.getSelf() == OSType.MACOS) {
-            pathToJava = "jre.bundle/Contents/Home/bin/java";
+            pathToJava = 'jre.bundle/Contents/Home/bin/java';
         }
         return path.join(jreStorePath, c, pathToJava);
     }
@@ -209,18 +209,18 @@ export module JavaGet {
 
     function generateDownloadProfile(componentName: string, fileName: string, profile: MojangJavaFileDownload): DownloadProfile | null {
         const originalPath = path.join(jreStorePath, componentName, fileName);
-        const archivePath = originalPath + ".lzma"; // Files are compressed
+        const archivePath = originalPath + '.lzma'; // Files are compressed
         if (!profile.downloads) {
             return null; // Directories are automatically created
         } else {
-            if (profile.downloads.lzma && Availa.supports("lzma-native")) {
+            if (profile.downloads.lzma && Availa.supports('lzma-native')) {
                 // Download LZMA
                 return Downloader.createProfile({
                     url: profile.downloads.lzma.url,
                     location: archivePath,
                     size: profile.downloads.lzma.size,
                     checksum: profile.downloads.lzma.sha1,
-                    validation: "sha1"
+                    validation: 'sha1'
                 });
             } else {
                 // Download RAW
@@ -229,7 +229,7 @@ export module JavaGet {
                     location: originalPath,
                     size: profile.downloads.raw.size,
                     checksum: profile.downloads.raw.sha1,
-                    validation: "sha1"
+                    validation: 'sha1'
                 });
             }
         }
@@ -239,29 +239,29 @@ export module JavaGet {
     function getMojangNamedPlatform(): string {
         let sys: string;
         switch (os.platform()) {
-            case "darwin":
-                sys = "mac-os";
+            case 'darwin':
+                sys = 'mac-os';
                 break;
-            case "win32":
-                sys = "windows";
+            case 'win32':
+                sys = 'windows';
                 break;
-            case "linux":
+            case 'linux':
             default: // alal.js does not have releases on other platforms
-                sys = "linux";
+                sys = 'linux';
                 break;
         }
 
         if (OSInfo.isARM()) {
-            sys += "-arm64";
+            sys += '-arm64';
         }
-        if (os.arch() == "x64" && sys == "windows") {
-            sys += "-x64";
+        if (os.arch() == 'x64' && sys == 'windows') {
+            sys += '-x64';
         }
         return sys;
     }
 
     function postProcessFiles(componentName: string, manifest: MojangJavaDownloadManifest): Task<void> {
-        const taskName = Locale.getTranslation("java-get.post-process", {name: componentName});
+        const taskName = Locale.getTranslation('java-get.post-process', { name: componentName });
         return new Task(taskName, Object.keys(manifest.files).length, async (task) => {
             const results: [boolean, string][] = await Promise.all(Object.entries(manifest.files).map(async ([location, dl]) => {
                 const state = await postProcessFile(componentName, location, dl);
@@ -284,10 +284,10 @@ export module JavaGet {
 
     async function postProcessFile(componentName: string, location: string, dl: MojangJavaFileDownload): Promise<boolean> {
         const originalPath = path.join(jreStorePath, componentName, location);
-        const archivePath = originalPath + ".lzma";
+        const archivePath = originalPath + '.lzma';
 
         // Decompress
-        if (dl.downloads?.lzma && Availa.supports("lzma-native")) {
+        if (dl.downloads?.lzma && Availa.supports('lzma-native')) {
             if (!await Compressing.decompressLZMA(archivePath, originalPath)) {
                 return false; // Decompression failed
             }
@@ -298,9 +298,9 @@ export module JavaGet {
         if (dl.executable) {
             try {
                 await chmod(originalPath, 0o775);
-                console.log("Made executable: " + originalPath);
+                console.log('Made executable: ' + originalPath);
             } catch (e) {
-                console.error("Could not make file executable for " + originalPath + ": " + e);
+                console.error('Could not make file executable for ' + originalPath + ': ' + e);
             }
         }
         return true;

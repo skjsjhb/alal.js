@@ -1,4 +1,4 @@
-import os from "os";
+import os from 'os';
 
 /**
  * The type of supported OS.
@@ -6,9 +6,9 @@ import os from "os";
  * Mojang officially supports only these three platforms, when porting for others, modifications are needed.
  */
 export enum OSType {
-    WINDOWS = "windows",
-    MACOS = "macos",
-    LINUX = "linux"
+    WINDOWS = 'windows',
+    MACOS = 'macos',
+    LINUX = 'linux'
 }
 
 export module OSInfo {
@@ -19,19 +19,19 @@ export module OSInfo {
      */
     export function fromString(src: string): OSType {
         src = src.toLowerCase();
-        if (src == "osx" || src == "macos") {
+        if (src == 'osx' || src == 'macos') {
             return OSType.MACOS;
         }
-        if (src == "windows" || src == "win32" || src == "win64") {
+        if (src == 'windows' || src == 'win32' || src == 'win64') {
             return OSType.WINDOWS;
         }
-        if (src == "linux") {
+        if (src == 'linux') {
             return OSType.LINUX;
         }
-        if (src.includes("darwin")) {
+        if (src.includes('darwin')) {
             return OSType.MACOS;
         }
-        if (src.includes("win")) {
+        if (src.includes('win')) {
             return OSType.WINDOWS;
         }
         return OSType.LINUX;
@@ -42,9 +42,9 @@ export module OSInfo {
      */
     export function getSelf(): OSType {
         switch (os.platform()) {
-            case "darwin":
+            case 'darwin':
                 return OSType.MACOS;
-            case "win32":
+            case 'win32':
                 return OSType.WINDOWS;
             default:
                 return OSType.LINUX;
@@ -64,6 +64,6 @@ export module OSInfo {
     }
 
     export function isARM(): boolean {
-        return os.arch() == "arm64";
+        return os.arch() == 'arm64';
     }
 }

@@ -1,9 +1,9 @@
-import { Files } from "@/modules/data/Files";
-import { Options } from "@/modules/data/Options";
-import { Downloader, DownloadProfile } from "@/modules/net/Downloader";
-import { Task } from "@/modules/task/Task";
-import { Pool } from "@/modules/util/Throttle";
-import { stat } from "fs-extra";
+import { Files } from '@/modules/data/Files';
+import { Options } from '@/modules/data/Options';
+import { Downloader, DownloadProfile } from '@/modules/net/Downloader';
+import { Task } from '@/modules/task/Task';
+import { Pool } from '@/modules/util/Throttle';
+import { stat } from 'fs-extra';
 
 /**
  * Batched file download manager.
@@ -19,7 +19,7 @@ export module DownloadManager {
      */
     export function downloadBatched(batch: DownloadProfile[]): Task<void> {
         pool || configure();
-        return new Task("download.batch", batch.length, async (task) => {
+        return new Task('download.batch', batch.length, async (task) => {
             const results: [boolean, string][] = await Promise.all(batch.map(async (p) => {
                 await pool.acquire();
                 const res = await downloadSingleInBatched(p);
@@ -45,13 +45,13 @@ export module DownloadManager {
     function configure() {
         pool = new Pool(32);
         const limit = Options.get().download.maxTasks;
-        console.log("Max tasks for download: " + limit);
+        console.log('Max tasks for download: ' + limit);
         pool.setLimit(limit);
     }
 
     async function downloadSingleInBatched(p: DownloadProfile): Promise<boolean> {
         if (await checkForExistence(p)) {
-            console.log("Fnd: " + p.url);
+            console.log('Fnd: ' + p.url);
             return true;
         }
         return await Downloader.downloadFile(p);
@@ -63,9 +63,9 @@ export module DownloadManager {
             return false;
         }
         switch (prof.validation) {
-            case "":
+            case '':
                 return true;
-            case "size":
+            case 'size':
                 if (prof.size < 0) { return true; } // Cannot check, assume correct
                 try {
                     const st = await stat(prof.location);

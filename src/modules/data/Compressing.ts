@@ -1,7 +1,7 @@
-import { Availa } from "@/modules/util/Availa";
-import { createReadStream, createWriteStream, readFile, writeFile } from "fs-extra";
-import type LZMA from "lzma-native";
-import { pipeline } from "stream/promises";
+import { Availa } from '@/modules/util/Availa';
+import { createReadStream, createWriteStream, readFile, writeFile } from 'fs-extra';
+import type LZMA from 'lzma-native';
+import { pipeline } from 'stream/promises';
 
 /**
  * Compression util module.
@@ -19,13 +19,13 @@ export module Compressing {
      */
     export async function decompressLZMA(src: string, target: string): Promise<boolean> {
         try {
-            if (!Availa.supports("lzma-native")) {
+            if (!Availa.supports('lzma-native')) {
                 // Use a software implementation
                 if (!lzmaSoft) {
-                    console.warn("Native implementation of LZMA is not available. A software implementation is used.");
-                    console.warn("Note: This can bring heavy performance impact for large files.");
+                    console.warn('Native implementation of LZMA is not available. A software implementation is used.');
+                    console.warn('Note: This can bring heavy performance impact for large files.');
                     // @ts-ignore
-                    lzmaSoft = (await import("lzma/src/lzma_worker") as { LZMA_WORKER: LZMASoft }).LZMA_WORKER;
+                    lzmaSoft = (await import('lzma/src/lzma_worker') as { LZMA_WORKER: LZMASoft }).LZMA_WORKER;
                 }
                 const buf = await readFile(src);
                 await new Promise((res, rej) => {
@@ -40,15 +40,15 @@ export module Compressing {
                 await writeFile(target, buf);
             } else {
                 if (!lzma) {
-                    lzma = await import("lzma-native");
+                    lzma = await import('lzma-native');
                 }
                 const stream = lzma.createDecompressor();
                 await pipeline(createReadStream(src), stream, createWriteStream(target));
             }
-            console.log("Inflated: " + src);
+            console.log('Inflated: ' + src);
             return true;
         } catch (e) {
-            console.error("Could not decompress LZMA " + src + ": " + e);
+            console.error('Could not decompress LZMA ' + src + ': ' + e);
             return false;
         }
     }

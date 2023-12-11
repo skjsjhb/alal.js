@@ -1,18 +1,18 @@
-import { Signals } from "@/background/Signals";
-import Sources from "@/constra/sources.json";
-import { Account, AccountType } from "@/modules/auth/Account";
-import { Registry } from "@/modules/data/Registry";
-import { Locale } from "@/modules/i18n/Locale";
-import { fetchHeaders, fetchJSON } from "@/modules/net/FetchUtil";
-import { Task } from "@/modules/task/Task";
-import { Hash } from "@/modules/util/Hash";
-import { createHash } from "crypto";
-import { ipcRenderer } from "electron";
-import { nanoid } from "nanoid";
-import path from "path";
+import { Signals } from '@/background/Signals';
+import Sources from '@/constra/sources.json';
+import { Account, AccountType } from '@/modules/auth/Account';
+import { Registry } from '@/modules/data/Registry';
+import { Locale } from '@/modules/i18n/Locale';
+import { fetchHeaders, fetchJSON } from '@/modules/net/FetchUtil';
+import { Task } from '@/modules/task/Task';
+import { Hash } from '@/modules/util/Hash';
+import { createHash } from 'crypto';
+import { ipcRenderer } from 'electron';
+import { nanoid } from 'nanoid';
+import path from 'path';
 
 export module AccountTools {
-    const accountTableId = "accounts";
+    const accountTableId = 'accounts';
 
     /**
      * Generates local account from given name.
@@ -22,25 +22,25 @@ export module AccountTools {
         return {
             uuid: getOfflinePlayerUUID(name),
             accessToken: nanoid(20),
-            email: "",
+            email: '',
             playerName: name,
-            xuid: "",
-            host: "localhost",
+            xuid: '',
+            host: 'localhost',
             type: AccountType.Local
         };
     }
 
     // A subsequent requests to convert browser code to tokens.
     export function authMicrosoft(code: string): Task<Account> {
-        const taskName = Locale.getTranslation("ms-auth");
+        const taskName = Locale.getTranslation('ms-auth');
         return new Task(taskName, 6, async (task) => {
             try {
-                console.log("Code -> Token");
+                console.log('Code -> Token');
                 // TODO save refresh token
-                const {access_token: msToken} = await fetchJSON(Sources.msTokenAPI, {
-                    method: "POST",
+                const { access_token: msToken } = await fetchJSON(Sources.msTokenAPI, {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: `client_id=00000000402b5328&code=${code}&grant_type=authorization_code` +
                         `&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf` +
@@ -48,61 +48,64 @@ export module AccountTools {
                 });
                 task.success();
 
-                console.log("Token -> XBL");
-                const {Token: xblToken, DisplayClaims: {xui: [{uhs: userHash}]}} = await postJSON(Sources.xblAPI, {
+                console.log('Token -> XBL');
+                const {
+                    Token: xblToken,
+                    DisplayClaims: { xui: [{ uhs: userHash }] }
+                } = await postJSON(Sources.xblAPI, {
                     Properties: {
-                        AuthMethod: "RPS",
-                        SiteName: "user.auth.xboxlive.com",
+                        AuthMethod: 'RPS',
+                        SiteName: 'user.auth.xboxlive.com',
                         RpsTicket: msToken // Note: not what wiki.vg said - no `d=` as prefix!
                     },
-                    RelyingParty: "http://auth.xboxlive.com", // Should be kept as-is
-                    TokenType: "JWT"
+                    RelyingParty: 'http://auth.xboxlive.com', // Should be kept as-is
+                    TokenType: 'JWT'
                 });
                 task.success();
 
-                console.log("XBL -> XSTS");
-                const {Token: xstsToken} = await postJSON(Sources.xstsAPI, {
+                console.log('XBL -> XSTS');
+                const { Token: xstsToken } = await postJSON(Sources.xstsAPI, {
                     Properties: {
-                        SandboxId: "RETAIL",
+                        SandboxId: 'RETAIL',
                         UserTokens: [xblToken]
                     },
-                    RelyingParty: "rp://api.minecraftservices.com/",
-                    TokenType: "JWT"
+                    RelyingParty: 'rp://api.minecraftservices.com/',
+                    TokenType: 'JWT'
                 });
                 task.success();
 
-                console.log("XBL -> XUID");
-                const {DisplayClaims: {xui: [{xid: xuid}]}} = await postJSON(Sources.xstsAPI, {
+                console.log('XBL -> XUID');
+                const { DisplayClaims: { xui: [{ xid: xuid }] } } = await postJSON(Sources.xstsAPI, {
                     Properties: {
-                        SandboxId: "RETAIL",
+                        SandboxId: 'RETAIL',
                         UserTokens: [xblToken]
                     },
-                    RelyingParty: "http://xboxlive.com",
-                    TokenType: "JWT"
+                    RelyingParty: 'http://xboxlive.com',
+                    TokenType: 'JWT'
                 });
                 task.success();
 
-                console.log("XSTS -> Access Token");
-                const {access_token: accessToken} = await postJSON(Sources.mcLoginAPI, {
+                console.log('XSTS -> Access Token');
+                const { access_token: accessToken } = await postJSON(Sources.mcLoginAPI, {
                     identityToken: `XBL3.0 x=${userHash};${xstsToken}`
                 });
                 task.success();
 
-                console.log("Access Token -> Profile");
-                const {id: uuid, name: playerName} = await fetchJSON(Sources.mcProfileAPI, {
-                    method: "GET",
+                console.log('Access Token -> Profile');
+                const { id: uuid, name: playerName } = await fetchJSON(Sources.mcProfileAPI, {
+                    method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
                 task.success();
 
-                console.log("Done with Microsoft login. Welcome, " + playerName + "!");
+                console.log('Done with Microsoft login. Welcome, ' + playerName + '!');
                 // Assemble
                 task.resolve({
-                    uuid, xuid, accessToken, type: AccountType.Microsoft, email: "", playerName,
-                    host: "https://api.minecraftservices.com" // Only a placeholder
+                    uuid, xuid, accessToken, type: AccountType.Microsoft, email: '', playerName,
+                    host: 'https://api.minecraftservices.com' // Only a placeholder
                 });
             } catch (e) {
                 task.reject(e);
@@ -125,20 +128,20 @@ export module AccountTools {
     // TODO convert to task
     export async function authYggdrasil(rawHost: string, user: string, pwd: string): Promise<Account | null> {
         let host = await resolveYggdrasilLocation(rawHost);
-        console.log("Resolved Yggdrasil host: " + host);
-        if (host.endsWith("/")) {
+        console.log('Resolved Yggdrasil host: ' + host);
+        if (host.endsWith('/')) {
             host = host.slice(0, host.length - 1);
         }
-        const authAPI = host + "/authserver/authenticate";
+        const authAPI = host + '/authserver/authenticate';
 
-        const {accessToken, selectedProfile}: {
+        const { accessToken, selectedProfile }: {
             accessToken: string,
             selectedProfile: YggdrasilProfile
         } = await postJSON(authAPI, {
             username: user,
             password: pwd,
             agent: {
-                name: "Minecraft",
+                name: 'Minecraft',
                 version: 1
             }
         });
@@ -147,7 +150,7 @@ export module AccountTools {
             // multiple profiles
         }
         return {
-            host, accessToken, uuid: selectedProfile.id, xuid: "", playerName: selectedProfile.name,
+            host, accessToken, uuid: selectedProfile.id, xuid: '', playerName: selectedProfile.name,
             email: user, type: AccountType.Yggdrasil
         };
     }
@@ -157,10 +160,10 @@ export module AccountTools {
         const hostURL = new URL(host);
         const headers = await fetchHeaders(host);
         console.log(headers);
-        const location = Object.entries(headers).find(([k]) => k.toLowerCase() == "x-authlib-injector-api-location");
+        const location = Object.entries(headers).find(([k]) => k.toLowerCase() == 'x-authlib-injector-api-location');
         if (location) {
             const url = String(location[1]);
-            if (url.includes("://")) {
+            if (url.includes('://')) {
                 return url;
             }
             hostURL.pathname = path.join(hostURL.pathname, url);
@@ -182,7 +185,7 @@ export module AccountTools {
     // Account -> Encrypted string
     async function dumpAccount(a: Account): Promise<string> {
         if (!await ipcRenderer.invoke(Signals.CHECK_ENCRYPT)) {
-            console.warn("Encryption is not available. Credentials stored as plain text.");
+            console.warn('Encryption is not available. Credentials stored as plain text.');
             return JSON.stringify(a);
         } else {
             return await ipcRenderer.invoke(Signals.ENCRYPT, JSON.stringify(a));
@@ -200,10 +203,10 @@ export module AccountTools {
 
     async function postJSON(url: string, body: any) {
         return await fetchJSON(url, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
             },
             body: JSON.stringify(body)
         });
@@ -211,11 +214,11 @@ export module AccountTools {
 
     // https://stackoverflow.com/questions/47505620/javas-uuid-nameuuidfrombytes-to-written-in-javascript
     function getOfflinePlayerUUID(name: string): string {
-        let md5Bytes = createHash("md5").update("OfflinePlayer:" + name).digest();
+        let md5Bytes = createHash('md5').update('OfflinePlayer:' + name).digest();
         md5Bytes[6] &= 0x0f;
         md5Bytes[6] |= 0x30;
         md5Bytes[8] &= 0x3f;
         md5Bytes[8] |= 0x80;
-        return md5Bytes.toString("hex");
+        return md5Bytes.toString('hex');
     }
 }

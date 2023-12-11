@@ -1,4 +1,4 @@
-import { outputJSON } from "fs-extra";
+import { outputJSON } from 'fs-extra';
 
 /**
  * The test summarize and report module for autotest.
@@ -6,7 +6,7 @@ import { outputJSON } from "fs-extra";
  * Test summary runs on the renderer process and generate a file named `test-summary.json` in CWD.
  */
 export module TestSummary {
-    export type AssertType = "equals" | "notEquals" | "true" | "notTrue" | "error";
+    export type AssertType = 'equals' | 'notEquals' | 'true' | 'notTrue' | 'error';
 
     export interface AssertRecord {
         type: AssertType;
@@ -29,6 +29,6 @@ export module TestSummary {
     }
 
     export async function writeTestSummary() {
-        await outputJSON("test-summary.json", tests);
+        await outputJSON('test-summary.json', tests);
     }
 }

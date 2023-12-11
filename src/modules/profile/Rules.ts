@@ -1,6 +1,6 @@
-import { ProfileRule } from "@/modules/profile/VersionProfile";
-import { OSInfo } from "@/modules/util/OSInfo";
-import os from "os";
+import { ProfileRule } from '@/modules/profile/VersionProfile';
+import { OSInfo } from '@/modules/util/OSInfo';
+import os from 'os';
 
 /**
  * Profile rule solver.
@@ -24,8 +24,8 @@ export module Rules {
             }
             if (r.os?.arch) {
                 switch (r.os.arch) {
-                    case "x86":
-                        apply &&= os.arch() == "ia32";
+                    case 'x86':
+                        apply &&= os.arch() == 'ia32';
                         break;
                 }
             }
@@ -36,7 +36,7 @@ export module Rules {
                 }
             }
             if (apply) {
-                allow = r.action == "allow";
+                allow = r.action == 'allow';
             }
         }
         return allow;
@@ -44,13 +44,13 @@ export module Rules {
 
     function isMojangNamedOS(mojang: string): boolean {
         mojang = mojang.toLowerCase();
-        if (mojang == "osx" || mojang == "macos") {
+        if (mojang == 'osx' || mojang == 'macos') {
             return OSInfo.isMacOS();
         }
-        if (mojang == "windows") {
+        if (mojang == 'windows') {
             return OSInfo.isWindows();
         }
-        if (mojang == "linux") {
+        if (mojang == 'linux') {
             return OSInfo.isLinux();
         }
         return true;

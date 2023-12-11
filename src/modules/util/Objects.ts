@@ -1,7 +1,7 @@
 export module Objects {
 
     function isObject(item: any) {
-        return (item && typeof item === "object" && !Array.isArray(item));
+        return (item && typeof item === 'object' && !Array.isArray(item));
     }
 
     /**
@@ -15,11 +15,11 @@ export module Objects {
                 for (const key in source) {
                     if (isObject(source[key])) {
                         if (!target[key]) {
-                            Object.assign(target, {[key]: {}});
+                            Object.assign(target, { [key]: {} });
                         }
                         merge(target[key], source[key]);
                     } else {
-                        Object.assign(target, {[key]: source[key]});
+                        Object.assign(target, { [key]: source[key] });
                     }
                 }
             }
@@ -44,10 +44,10 @@ export module Objects {
      * @param k Properties chain split by dot.
      */
     export function getPropertyByKey(target: any, k: string): any {
-        const keys = k.split(".");
+        const keys = k.split('.');
         let current: any = target;
         for (const key of keys) {
-            if (current && typeof current == "object" && key in current) {
+            if (current && typeof current == 'object' && key in current) {
                 current = current[key];
             } else {
                 return undefined;

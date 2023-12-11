@@ -1,4 +1,4 @@
-import JreMap from "@/constra/jre-map.json";
+import JreMap from '@/constra/jre-map.json';
 
 export module JavaVersionMap {
     const versionMatrix = JreMap as Record<string, string>;
@@ -10,6 +10,6 @@ export module JavaVersionMap {
      * @param id Profile ID.
      */
     export function getJavaComponent(id: string): string {
-        return versionMatrix[id] || "jre-legacy";
+        return versionMatrix[id] || 'jre-legacy';
     }
 }

@@ -1,6 +1,6 @@
-import { createHash } from "crypto";
-import { access, createReadStream } from "fs-extra";
-import { pipeline } from "stream/promises";
+import { createHash } from 'crypto';
+import { access, createReadStream } from 'fs-extra';
+import { pipeline } from 'stream/promises';
 
 /**
  * Misc file functions.
@@ -13,7 +13,7 @@ export module Files {
         try {
             return (await hashFile(file, type)) == hash.toLowerCase();
         } catch (e) {
-            console.error("Failed to validate hash for " + file + ": " + e);
+            console.error('Failed to validate hash for ' + file + ': ' + e);
             return false;
         }
     }
@@ -24,7 +24,7 @@ export module Files {
     export async function hashFile(file: string, type: string): Promise<string> {
         const hashed = createHash(type);
         await pipeline(createReadStream(file), hashed);
-        return hashed.digest("hex").toLowerCase();
+        return hashed.digest('hex').toLowerCase();
     }
 
 

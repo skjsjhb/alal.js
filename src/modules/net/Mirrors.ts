@@ -1,8 +1,8 @@
-import { Signals } from "@/background/Signals";
-import OriginalRulesRaw from "@/constra/mirrors.json";
-import { Options } from "@/modules/data/Options";
-import { Registry } from "@/modules/data/Registry";
-import { ipcRenderer } from "electron";
+import { Signals } from '@/background/Signals';
+import OriginalRulesRaw from '@/constra/mirrors.json';
+import { Options } from '@/modules/data/Options';
+import { Registry } from '@/modules/data/Registry';
+import { ipcRenderer } from 'electron';
 
 /**
  * Mirrors latency test, resolve and management module.
@@ -18,7 +18,7 @@ export module Mirrors {
         latency: number;
     } & SourceRuleSet;
 
-    const mirrorsRegId = "mirrors";
+    const mirrorsRegId = 'mirrors';
     const originalRules = OriginalRulesRaw as Record<string, SourceRuleSet>;
 
     /**
@@ -42,7 +42,7 @@ export module Mirrors {
         const rules = Object.entries(ruleSet);
         const genRules: GeneratedRuleSet[] = [];
 
-        console.log("Updating mirror latency. This may take several seconds.");
+        console.log('Updating mirror latency. This may take several seconds.');
         // Generate latency map
         await Promise.all(rules.map(async ([name, rule]) => {
             const latency = await testLatency(rule.test);
@@ -50,7 +50,7 @@ export module Mirrors {
                 console.warn(`Mirror ${name} unreachable, skipped.`);
                 return;
             } else {
-                console.log("Latency of " + name + ": " + latency + " ms");
+                console.log('Latency of ' + name + ': ' + latency + ' ms');
             }
             genRules.push({
                 ...rule,
@@ -68,7 +68,7 @@ export module Mirrors {
     export async function updateRules() {
         const res = await sortRulesByLatency(originalRules);
         Registry.setTable(mirrorsRegId, res);
-        console.log("Saved mirror rules.");
+        console.log('Saved mirror rules.');
     }
 
     function synthesizeRules() {

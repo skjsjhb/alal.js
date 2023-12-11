@@ -1,8 +1,8 @@
-import Keyring from "@/constra/keyring.json";
-import { Paths } from "@/modules/data/Paths";
-import { access, copyFile, ensureDir, remove } from "fs-extra";
-import path from "path";
-import * as uuid from "uuid";
+import Keyring from '@/constra/keyring.json';
+import { Paths } from '@/modules/data/Paths';
+import { access, copyFile, ensureDir, remove } from 'fs-extra';
+import path from 'path';
+import * as uuid from 'uuid';
 
 /**
  * File cache module.
@@ -16,11 +16,11 @@ export module Cacher {
      */
     export async function configure(): Promise<void> {
         try {
-            console.log("Configuring cache module.");
-            cacheRoot = Paths.getDataPath("cache");
+            console.log('Configuring cache module.');
+            cacheRoot = Paths.getDataPath('cache');
             await ensureDir(cacheRoot);
         } catch (e) {
-            console.error("Error during configuring cache: " + e);
+            console.error('Error during configuring cache: ' + e);
         }
     }
 
@@ -39,7 +39,7 @@ export module Cacher {
             const dest = path.join(cacheRoot, getUUID(key));
             await copyFile(source, dest);
         } catch (e) {
-            console.error("Could not append cache: " + e);
+            console.error('Could not append cache: ' + e);
         }
     }
 
@@ -61,7 +61,7 @@ export module Cacher {
             return true;
         } catch (e) {
             // This is not expected
-            console.error("Error during applying cache: " + e);
+            console.error('Error during applying cache: ' + e);
             return false;
         }
     }

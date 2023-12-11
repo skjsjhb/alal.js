@@ -1,19 +1,19 @@
-import Keyring from "@/constra/keyring.json";
-import Strategies from "@/constra/strategies.json";
-import { Container, ContainerTools } from "@/modules/container/ContainerTools";
-import { JavaGet } from "@/modules/jem/JavaGet";
-import { JavaVersionMap } from "@/modules/jem/JavaVersionMap";
-import { ProfileTools } from "@/modules/profile/ProfileTools";
-import { Rules } from "@/modules/profile/Rules";
-import { Argument, AssetIndex, VersionProfile } from "@/modules/profile/VersionProfile";
-import path from "path";
-import pkg from "../../../package.json";
-import { Options } from "../data/Options";
+import Keyring from '@/constra/keyring.json';
+import Strategies from '@/constra/strategies.json';
+import { Container, ContainerTools } from '@/modules/container/ContainerTools';
+import { JavaGet } from '@/modules/jem/JavaGet';
+import { JavaVersionMap } from '@/modules/jem/JavaVersionMap';
+import { ProfileTools } from '@/modules/profile/ProfileTools';
+import { Rules } from '@/modules/profile/Rules';
+import { Argument, AssetIndex, VersionProfile } from '@/modules/profile/VersionProfile';
+import path from 'path';
+import pkg from '../../../package.json';
+import { Options } from '../data/Options';
 
 export module Launcher {
     import hasLogConfig = ProfileTools.hasLogConfig;
-    const mainClassAlias = "main_class";
-    const logConfigAlias = "log_config_path";
+    const mainClassAlias = 'main_class';
+    const logConfigAlias = 'log_config_path';
 
     /**
      * Create arguments for launching. This method automatically handles content sharing and paths locating.
@@ -28,25 +28,25 @@ export module Launcher {
 
 
         // Mojang variables
-        variables["classpath"] = createClasspath(ct, prof);
-        variables["game_assets"] = variables["assets_root"] = assetsRoot;
-        variables["assets_index_name"] = prof.assetIndex.id;
-        variables["user_properties"] = "[]"; // 1.7.x twitch compatibility
-        variables["clientid"] = Keyring.uuid.client;
-        variables["version_name"] = prof.id;
-        variables["game_directory"] = ct.rootDir;
-        variables["user_type"] = "mojang";
-        variables["version_type"] = Options.get().launch.showLauncherName ? "alal.js" : prof.type;
-        variables["natives_directory"] = ContainerTools.getNativesDirectory(ct, prof.id);
-        variables["launcher_name"] = pkg.name;
-        variables["launcher_version"] = pkg.version;
+        variables['classpath'] = createClasspath(ct, prof);
+        variables['game_assets'] = variables['assets_root'] = assetsRoot;
+        variables['assets_index_name'] = prof.assetIndex.id;
+        variables['user_properties'] = '[]'; // 1.7.x twitch compatibility
+        variables['clientid'] = Keyring.uuid.client;
+        variables['version_name'] = prof.id;
+        variables['game_directory'] = ct.rootDir;
+        variables['user_type'] = 'mojang';
+        variables['version_type'] = Options.get().launch.showLauncherName ? 'alal.js' : prof.type;
+        variables['natives_directory'] = ContainerTools.getNativesDirectory(ct, prof.id);
+        variables['launcher_name'] = pkg.name;
+        variables['launcher_version'] = pkg.version;
 
         // TODO placeholders
-        variables["auth_player_name"] = "Player";
-        variables["auth_session"] = "0";
-        variables["auth_uuid"] = "0";
-        variables["auth_xuid"] = "0";
-        variables["auth_access_token"] = "0";
+        variables['auth_player_name'] = 'Player';
+        variables['auth_session'] = '0';
+        variables['auth_uuid'] = '0';
+        variables['auth_xuid'] = '0';
+        variables['auth_access_token'] = '0';
 
         // Custom aliases & caveats
         if (ProfileTools.hasLogConfig(prof)) {
@@ -69,7 +69,7 @@ export module Launcher {
     // the placeholder.
     function createArguments(prof: VersionProfile, features?: string[]): string[] {
         const filterFun = (a: Argument) => {
-            if (typeof a == "string") {
+            if (typeof a == 'string') {
                 return true;
             } else {
                 return Rules.resolveRules(a.rules, features);
@@ -83,16 +83,16 @@ export module Launcher {
 
         // Logging
         if (hasLogConfig(prof)) {
-            const logArg = prof.logging.client.argument.replaceAll("${path}", getTemplatePlaceHolder(logConfigAlias));
+            const logArg = prof.logging.client.argument.replaceAll('${path}', getTemplatePlaceHolder(logConfigAlias));
             vm.push(logArg);
         }
 
         const out: string[] = [];
         const mapFun = (a: Argument) => {
-            if (typeof a == "string") {
+            if (typeof a == 'string') {
                 out.push(a);
             } else {
-                if (typeof a.value == "string") {
+                if (typeof a.value == 'string') {
                     out.push(a.value);
                 } else {
                     out.push(...a.value);
@@ -106,13 +106,13 @@ export module Launcher {
     }
 
     function getTemplatePlaceHolder(id: string): string {
-        return "${" + id + "}";
+        return '${' + id + '}';
     }
 
     function replaceTemplates(args: string[], variables: Record<string, string>): string[] {
         return args.map((arg) => {
             for (const [k, v] of Object.entries(variables)) {
-                arg = arg.replaceAll("${" + k + "}", v);
+                arg = arg.replaceAll('${' + k + '}', v);
             }
             return arg;
         });
@@ -134,12 +134,12 @@ export module Launcher {
     function createRuntimeAssetPath(ct: Container, prof: VersionProfile, ai: AssetIndex): string {
         const aiid = prof.assetIndex.id;
         if (!ProfileTools.isLegacyAssets(aiid)) {
-            return path.join(ct.rootDir, "assets");
+            return path.join(ct.rootDir, 'assets');
         } else {
             if (ai.map_to_resources) {
-                return path.join(ct.rootDir, "resources");
+                return path.join(ct.rootDir, 'resources');
             } else {
-                return path.join(ct.rootDir, "assets", "virtual", "legacy");
+                return path.join(ct.rootDir, 'assets', 'virtual', 'legacy');
             }
         }
     }

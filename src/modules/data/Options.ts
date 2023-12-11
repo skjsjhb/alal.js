@@ -1,10 +1,10 @@
-import { Signals } from "@/background/Signals";
-import { Files } from "@/modules/data/Files";
-import { ipcRenderer } from "electron";
-import { outputJSON, readJSON } from "fs-extra";
-import OptionsTemplate from "../../constra/options.json";
-import { Objects } from "../util/Objects";
-import { Paths } from "./Paths";
+import { Signals } from '@/background/Signals';
+import { Files } from '@/modules/data/Files';
+import { ipcRenderer } from 'electron';
+import { outputJSON, readJSON } from 'fs-extra';
+import OptionsTemplate from '../../constra/options.json';
+import { Objects } from '../util/Objects';
+import { Paths } from './Paths';
 
 /**
  * ReOptions, aka. Config v2. The newly designed options system for alal.js.
@@ -16,7 +16,7 @@ import { Paths } from "./Paths";
 export module Options {
     type OptionsModel = typeof OptionsTemplate;
 
-    const OPTIONS_FILE_PATH = "options.json";
+    const OPTIONS_FILE_PATH = 'options.json';
     let options: OptionsModel = OptionsTemplate;
 
     /**
@@ -26,14 +26,14 @@ export module Options {
         try {
             const optnPath = Paths.getDataPath(OPTIONS_FILE_PATH);
             if (!await Files.exists(optnPath)) {
-                console.log("Options file not present, skipped.");
+                console.log('Options file not present, skipped.');
                 return;
             }
-            console.log("Loading options file.");
+            console.log('Loading options file.');
             const overrides = await readJSON(optnPath);
             Objects.merge(options, overrides);
         } catch (e) {
-            console.error("Failed to load options file: " + e);
+            console.error('Failed to load options file: ' + e);
         }
     }
 
@@ -54,9 +54,9 @@ export module Options {
      */
     export async function save() {
         try {
-            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options, {spaces: 4});
+            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options, { spaces: 4 });
         } catch (e) {
-            console.error("Failed to save options file: " + e);
+            console.error('Failed to save options file: ' + e);
         }
     }
 

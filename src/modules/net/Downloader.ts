@@ -1,15 +1,15 @@
-import { Signals } from "@/background/Signals";
-import { Files } from "@/modules/data/Files";
-import { Options } from "@/modules/data/Options";
-import { Cacher } from "@/modules/net/Cacher";
-import { Mirrors } from "@/modules/net/Mirrors";
-import { Availa } from "@/modules/util/Availa";
-import { ipcRenderer } from "electron";
-import fetch from "electron-fetch";
-import { createWriteStream, ensureDir, stat } from "fs-extra";
-import path from "path";
-import { PassThrough, Transform, TransformCallback } from "stream";
-import { pipeline } from "stream/promises";
+import { Signals } from '@/background/Signals';
+import { Files } from '@/modules/data/Files';
+import { Options } from '@/modules/data/Options';
+import { Cacher } from '@/modules/net/Cacher';
+import { Mirrors } from '@/modules/net/Mirrors';
+import { Availa } from '@/modules/util/Availa';
+import { ipcRenderer } from 'electron';
+import fetch from 'electron-fetch';
+import { createWriteStream, ensureDir, stat } from 'fs-extra';
+import path from 'path';
+import { PassThrough, Transform, TransformCallback } from 'stream';
+import { pipeline } from 'stream/promises';
 
 /**
  * The profile to tell downloader how to get the files.
@@ -50,7 +50,7 @@ export module Downloader {
         validation?: string,
         mirror?: boolean // Whether to apply mirror the url
     }): DownloadProfile {
-        const {url, location, headerTimeout, minSpeed, tries, cache, size, checksum, validation, mirror} = opt;
+        const { url, location, headerTimeout, minSpeed, tries, cache, size, checksum, validation, mirror } = opt;
         let effectiveURL = url;
         if (mirror ?? true) { // Enabled by default
             effectiveURL = Mirrors.apply(effectiveURL);
@@ -64,8 +64,8 @@ export module Downloader {
             tries: tries || Options.get().download.tries,
             cache: cache ?? false, // Cache is not enabled by default
             size: size ?? -1,
-            checksum: checksum ?? "",
-            validation: validation ?? "size"
+            checksum: checksum ?? '',
+            validation: validation ?? 'size'
         };
     }
 
@@ -83,10 +83,10 @@ export module Downloader {
                 err = await webGetFile(p);
             }
             if (!err) {
-                console.log("Chk: " + p.url);
+                console.log('Chk: ' + p.url);
                 if (await validateDownload(p)) {
                     await addDownloadCache(p);
-                    console.log("Got: " + p.url);
+                    console.log('Got: ' + p.url);
                     return true;
                 }
             }
@@ -97,10 +97,10 @@ export module Downloader {
             }
             p.url = p.origin; // Disable mirrors
             // Try again
-            console.log("Try: " + p.url);
+            console.log('Try: ' + p.url);
         }
         // You failed!
-        console.log("Drp: " + p.url);
+        console.log('Drp: ' + p.url);
         return false;
     }
 
@@ -114,14 +114,14 @@ export module Downloader {
         if (!p.validation) {
             return true; // Always pass
         }
-        if (p.validation == "size") {
+        if (p.validation == 'size') {
             if (p.size <= 0) {
                 return true; // Size unknown, cannot check, assume pass
             }
             try {
                 return (await stat(p.location)).size == p.size;
             } catch (e) {
-                console.error("Could not stat file: " + e);
+                console.error('Could not stat file: ' + e);
                 return false;
             }
         }
@@ -137,7 +137,7 @@ export module Downloader {
             return false; // Disabled by caller or global settings
         }
         if (await Cacher.applyCache(p.url, p.location)) {
-            console.log("Hit: " + p.url);
+            console.log('Hit: ' + p.url);
             return true;
         }
         return false;
@@ -158,8 +158,8 @@ export module Downloader {
      * @param p Download profile.
      */
     export async function webGetFile(p: DownloadProfile): Promise<string | null> {
-        const {url} = p;
-        console.log("Get: " + url);
+        const { url } = p;
+        console.log('Get: ' + url);
         let err;
         if (Availa.isRemote()) {
             err = await webGetFileRemote(p);
@@ -167,7 +167,7 @@ export module Downloader {
             err = await webGetFileMain(p);
         }
         if (err == null) {
-            console.log("Res: " + url);
+            console.log('Res: ' + url);
             return null;
         } else {
             console.log(`Err: ${url} (${err})`);
@@ -183,10 +183,10 @@ export module Downloader {
     // Download a file using electron-fetch in main process
     // Returns the error message, or `null` if successful.
     export async function webGetFileMain(p: DownloadProfile): Promise<string | null> {
-        const {url, location, headerTimeout, minSpeed} = p;
+        const { url, location, headerTimeout, minSpeed } = p;
         const timeoutController = new AbortController();
         const tlc = setTimeout(() => {
-            timeoutController.abort("Timeout");
+            timeoutController.abort('Timeout');
         }, headerTimeout);
         try {
             const res = await fetch(url, {
@@ -196,7 +196,7 @@ export module Downloader {
                 return res.status.toString();
             }
             if (!res.body) {
-                return "Empty body";
+                return 'Empty body';
             }
             // Remove timeout on header received
             clearTimeout(tlc);
@@ -220,7 +220,7 @@ export module Downloader {
         let size = 0;
         const tld = setInterval(() => {
             if (size < minSpeed * meterInterval / 1000) {
-                tr.emit("error", new Error("Speed below minimum"));
+                tr.emit('error', new Error('Speed below minimum'));
             } else {
                 size = 0;
             }

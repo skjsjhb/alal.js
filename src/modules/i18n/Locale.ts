@@ -1,18 +1,18 @@
-import { Signals } from "@/background/Signals";
-import { Options } from "@/modules/data/Options";
-import { Availa } from "@/modules/util/Availa";
-import { app, ipcRenderer } from "electron";
-import { Objects } from "../util/Objects";
+import { Signals } from '@/background/Signals';
+import { Options } from '@/modules/data/Options';
+import { Availa } from '@/modules/util/Availa';
+import { app, ipcRenderer } from 'electron';
+import { Objects } from '../util/Objects';
 
 // Language imports
-import enUS from "./en-US.yml";
-import zhCN from "./zh-CN.yml";
+import enUS from './en-US.yml';
+import zhCN from './zh-CN.yml';
 
 export module Locale {
-    let currentLocale = "";
+    let currentLocale = '';
     const locales: Record<string, any> = {
-        "en-US": enUS,
-        "zh-CN": zhCN
+        'en-US': enUS,
+        'zh-CN': zhCN
     };
 
 
@@ -40,7 +40,7 @@ export module Locale {
      * when the translation method is called.
      */
     export function setActiveLocale(id: string) {
-        console.log("Active locale: " + id);
+        console.log('Active locale: ' + id);
         currentLocale = id;
     }
 
@@ -51,15 +51,15 @@ export module Locale {
      */
     export function getTranslation(key: string, vars?: Record<string, any>): string {
         if (!currentLocale || !locales[currentLocale]) {
-            console.warn("Attempting to get translation when locale is not set. Skipped.");
-            return "";
+            console.warn('Attempting to get translation when locale is not set. Skipped.');
+            return '';
         }
         const v = Objects.getPropertyByKey(locales[currentLocale], key);
-        if (typeof v == "string") {
+        if (typeof v == 'string') {
             return applyVars(v, vars);
         }
         console.warn(`Translation key ${key} does not map to a valid value. Check lang files.`);
-        return ""; // Invalid values are skipped
+        return ''; // Invalid values are skipped
     }
 
     /**
@@ -67,7 +67,7 @@ export module Locale {
      * @param rootKey Key prefix to attach.
      */
     export function getSection(rootKey: string): (key: string, vars?: Record<string, any>) => string {
-        return (k, v) => getTranslation(rootKey + "." + k, v);
+        return (k, v) => getTranslation(rootKey + '.' + k, v);
     }
 
     /**

@@ -1,17 +1,17 @@
-import { app, ipcMain } from "electron";
-import { SignalTest } from "./SignalTest";
+import { app, ipcMain } from 'electron';
+import { SignalTest } from './SignalTest';
 
 function processArgs(args: any[]): any[] {
     let main = args.shift();
-    if (typeof main == "string") {
-        main = "[Remote] " + main;
+    if (typeof main == 'string') {
+        main = '[Remote] ' + main;
     }
     args.unshift(main);
     return args;
 }
 
 export function runMainTests() {
-    console.log("Automate tests for main process.");
+    console.log('Automate tests for main process.');
 
     ipcMain.on(SignalTest.LOG_DEBUG, (_event, ...args) => {
         console.log(...processArgs(args));
@@ -23,7 +23,7 @@ export function runMainTests() {
         console.error(...processArgs(args));
     });
     ipcMain.once(SignalTest.EXIT, () => {
-        console.log("Exiting!");
+        console.log('Exiting!');
         app.exit(0);
     });
 }

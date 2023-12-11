@@ -1,7 +1,7 @@
-import { Paths } from "@/modules/data/Paths";
-import { ProfileTools } from "@/modules/profile/ProfileTools";
-import { AssetIndex } from "@/modules/profile/VersionProfile";
-import path from "path";
+import { Paths } from '@/modules/data/Paths';
+import { ProfileTools } from '@/modules/profile/ProfileTools';
+import { AssetIndex } from '@/modules/profile/VersionProfile';
+import path from 'path';
 
 export interface Container {
     /**
@@ -39,7 +39,7 @@ export module ContainerTools {
      */
     export function getProfilePath(c: Container, id: string): string {
         // Profile paths are constant
-        return path.join(c.rootDir, "versions", id, id + ".json");
+        return path.join(c.rootDir, 'versions', id, id + '.json');
     }
 
     /**
@@ -48,11 +48,11 @@ export module ContainerTools {
      * Note that client file might not exist if there is no `downloads.client` key.
      */
     export function getClientPath(c: Container, id: string): string {
-        return path.join(c.rootDir, "versions", id, id + ".jar");
+        return path.join(c.rootDir, 'versions', id, id + '.jar');
     }
 
     export function getNativesDirectory(c: Container, id: string): string {
-        return path.join(c.rootDir, "versions", id, "natives");
+        return path.join(c.rootDir, 'versions', id, 'natives');
     }
 
     /**
@@ -83,7 +83,7 @@ export module ContainerTools {
         const sharedPath = getGlobalAssetIndexPath(id);
         if (a.map_to_resources) {
             // The mapped files cannot be shared. We left a copy for indexing.
-            return [path.join(c.rootDir, "resources", id + ".json"), c.shared ? sharedPath : dedicatedPath];
+            return [path.join(c.rootDir, 'resources', id + '.json'), c.shared ? sharedPath : dedicatedPath];
         } else {
             if (!ProfileTools.isLegacyAssets(id) && c.shared) {
                 return [sharedPath];
@@ -108,20 +108,20 @@ export module ContainerTools {
     }
 
     function getLocalAssetIndexPath(c: Container, aid: string): string {
-        return path.join(c.rootDir, "assets", "indexes", aid + ".json");
+        return path.join(c.rootDir, 'assets', 'indexes', aid + '.json');
     }
 
     function getGlobalAssetIndexPath(aid: string): string {
-        return Paths.getDataPath("sharedAssets", "assets", "indexes", aid + ".json");
+        return Paths.getDataPath('sharedAssets', 'assets', 'indexes', aid + '.json');
     }
 
     function getLegacyAssetPath(c: Container, fileName: string): string {
-        return path.join(c.rootDir, "assets", "virtual", "legacy", fileName);
+        return path.join(c.rootDir, 'assets', 'virtual', 'legacy', fileName);
     }
 
     // For 1.5.2 or earlier
     function getMappedAssetPath(c: Container, fileName: string): string {
-        return path.join(c.rootDir, "resources", fileName);
+        return path.join(c.rootDir, 'resources', fileName);
     }
 
     /**
@@ -137,19 +137,19 @@ export module ContainerTools {
     }
 
     function getLocalAssetPath(c: Container, hash: string): string {
-        return path.join(c.rootDir, "assets", "objects", hash.slice(0, 2), hash);
+        return path.join(c.rootDir, 'assets', 'objects', hash.slice(0, 2), hash);
     }
 
     function getGlobalAssetPath(hash: string): string {
-        return Paths.getDataPath("sharedAssets", "assets", "objects", hash.slice(0, 2), hash);
+        return Paths.getDataPath('sharedAssets', 'assets', 'objects', hash.slice(0, 2), hash);
     }
 
     function getLocalLibraryPath(c: Container, p: string): string {
-        return path.join(c.rootDir, "libraries", p);
+        return path.join(c.rootDir, 'libraries', p);
     }
 
     function getGlobalLibraryPath(p: string): string {
-        return Paths.getDataPath("maven", p);
+        return Paths.getDataPath('maven', p);
     }
 
 

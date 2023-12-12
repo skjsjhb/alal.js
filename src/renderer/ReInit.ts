@@ -106,6 +106,6 @@ export module ReInit {
 
 if (process.env.MODE == 'debug') {
     console.warn('Enabling HMR. This is for development only and brings severe risks if used in production.');
-    // @ts-ignore
+    // @ts-expect-error Webpack Module API is not typed
     if (module.hot) { module.hot.accept(); }
 }

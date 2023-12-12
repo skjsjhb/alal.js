@@ -8,7 +8,7 @@ import path from 'path';
 
 export module ContainerManager {
     let containers: Record<string, Container>;
-    let containersRegId = 'containers';
+    const containersRegId = 'containers';
 
     /**
      * Gets a container.

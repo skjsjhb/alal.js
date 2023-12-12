@@ -17,7 +17,7 @@ export module Options {
     type OptionsModel = typeof OptionsTemplate;
 
     const OPTIONS_FILE_PATH = 'options.json';
-    let options: OptionsModel = OptionsTemplate;
+    const options: OptionsModel = OptionsTemplate;
 
     /**
      * Loads options from `options.json`.

@@ -229,8 +229,8 @@ export module ProfileTools {
 
         // Arguments are appended
         base.arguments = {
-            game: [...base.arguments?.game, ...head.arguments?.game],
-            jvm: [...base.arguments?.jvm, ...head.arguments?.jvm]
+            game: [...(base.arguments?.game ?? []), ...(head.arguments?.game ?? [])],
+            jvm: [...(base.arguments?.jvm ?? []), ...(head.arguments?.jvm ?? [])]
         };
 
         // Replace main class

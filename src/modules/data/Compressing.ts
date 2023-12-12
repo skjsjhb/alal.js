@@ -24,7 +24,7 @@ export module Compressing {
                 if (!lzmaSoft) {
                     console.warn('Native implementation of LZMA is not available. A software implementation is used.');
                     console.warn('Note: This can bring heavy performance impact for large files.');
-                    // @ts-ignore
+                    // @ts-expect-error LZMA soft is not typed
                     lzmaSoft = (await import('lzma/src/lzma_worker') as { LZMA_WORKER: LZMASoft }).LZMA_WORKER;
                 }
                 const buf = await readFile(src);

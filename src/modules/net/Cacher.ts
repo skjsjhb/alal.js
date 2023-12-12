@@ -9,7 +9,7 @@ import * as uuid from 'uuid';
  */
 export module Cacher {
     let cacheRoot: string;
-    let cacheUUID = Keyring.uuid.cache;
+    const cacheUUID = Keyring.uuid.cache;
 
     /**
      * Gets the root directory and ensures its existence.
@@ -72,6 +72,8 @@ export module Cacher {
     export async function removeCache(key: string): Promise<void> {
         try {
             await remove(path.join(cacheRoot, getUUID(key)));
-        } catch {}
+        } catch (e) {
+            console.warn('Could not remove cache: ' + e);
+        }
     }
 }

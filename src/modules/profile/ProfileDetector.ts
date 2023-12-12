@@ -128,7 +128,7 @@ export module ProfileDetector {
 
     // Uses regex to extract mojang version name
     function extractMojangVersion(src: string): string {
-        for (let r of PDRules.versionRegex) {
+        for (const r of PDRules.versionRegex) {
             const m = src.match(new RegExp(r));
             if (m) {
                 return m[0];

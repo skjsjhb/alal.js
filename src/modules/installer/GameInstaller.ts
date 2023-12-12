@@ -215,9 +215,9 @@ export module GameInstaller {
 
     function filterAndExtractNatives(src: string, dest: string): Promise<void> {
         const regex = new RegExp(Strategies.installer.nativesRegex);
-        return new Promise(async (res, rej) => {
-            let closed = false;
-            const stream = createReadStream(src).pipe(unzip.Parse());
+        let closed = false;
+        const stream = createReadStream(src).pipe(unzip.Parse());
+        return new Promise((res, rej) => {
             stream.on('entry', async (e: unzip.Entry) => {
                 if (closed || e.path.endsWith('/')) {
                     return;

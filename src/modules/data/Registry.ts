@@ -10,8 +10,8 @@ import path from 'path';
  */
 export module Registry {
     // Table map for all entries
-    let regTables = new Map<string, any>();
-    let registryRoot = 'reg';
+    const regTables = new Map<string, any>();
+    const registryRoot = 'reg';
 
     const regFileSuffix = '.json';
 

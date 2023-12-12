@@ -12,9 +12,11 @@
   "rules": {
     "no-unused-vars": "off",
     "no-unused-labels": "warn",
-    "no-unused-expressions": "warn",
+    "no-unused-expressions": "off",
     "prefer-const": "warn",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "no-inner-declarations": "off"
   }
 }

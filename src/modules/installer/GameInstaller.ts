@@ -20,34 +20,54 @@ import unzip from 'unzipper';
 export module GameInstaller {
     const defaultJre = 'jre-legacy';
 
+    export enum InstallVariant {
+        FULL = 'FULL', // Everything
+        LIBS = 'LIBS', // Libraries, client and profile
+        INDEX = 'INDEX', // Profile only
+    }
+
     /**
      * Prepare game files with version `id`. Installing all necessary components.
      */
-    export function installVersionFull(ct: Container, id: string): Task<void> {
-        console.log('Full installing ' + id + ' at ' + ct.rootDir);
+    export function installGame(ct: Container, id: string, variant: InstallVariant = InstallVariant.FULL): Task<void> {
+        console.log('Installing ' + id + ' at ' + ct.rootDir + ' [' + variant + ']');
         if (ct.locked) {
             console.warn('Installing on a locked container: ' + ct.rootDir);
         }
         const taskName = Locale.getTranslation('install.compound', { id });
-        return new Task(taskName, 8, async (task) => {
+        let taskCount = 1;
+        if (variant === InstallVariant.FULL) {
+            taskCount = 8;
+        } else if (variant === InstallVariant.LIBS) {
+            taskCount = 4;
+        }
+        return new Task(taskName, taskCount, async (task) => {
             try {
                 const profile = await installProfile(ct, id).link(task).wait();
                 const java = profile.javaVersion?.component || defaultJre;
-                if (!JavaGet.hasComponent(java)) {
-                    await JavaGet.installComponent(java).link(task).wait();
-                } else {
-                    task.success();
+                if (variant == InstallVariant.FULL) {
+                    if (!JavaGet.hasComponent(java)) {
+                        await JavaGet.installComponent(java).link(task).wait();
+                    } else {
+                        task.success();
+                    }
                 }
-                await installClient(ct, profile).link(task).wait();
-                await installLibraries(ct, profile).link(task).wait();
-                const ai = await installAssetIndex(ct, profile).link(task).wait();
-                await installAssets(ct, profile.assetIndex.id, ai).link(task).wait();
-                if (ProfileTools.hasLogConfig(profile)) {
-                    await installLogConfig(ct, profile).link(task).wait();
-                } else {
-                    task.success();
+
+                if (variant != InstallVariant.INDEX) {
+                    await installClient(ct, profile).link(task).wait();
+                    await installLibraries(ct, profile).link(task).wait();
+                    await unpackNatives(ct, profile).link(task).wait();
                 }
-                await unpackNatives(ct, profile).link(task).wait();
+
+                if (variant == InstallVariant.FULL) {
+                    const ai = await installAssetIndex(ct, profile).link(task).wait();
+                    await installAssets(ct, profile.assetIndex.id, ai).link(task).wait();
+                    if (ProfileTools.hasLogConfig(profile)) {
+                        await installLogConfig(ct, profile).link(task).wait();
+                    } else {
+                        task.success();
+                    }
+                }
                 console.log('Install ' + id + ' completed.');
                 task.resolve();
             } catch (e) {

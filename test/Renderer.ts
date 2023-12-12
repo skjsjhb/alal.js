@@ -24,6 +24,7 @@ async function main() {
     await Paths.retrieveAppPath();
     Options.get().dev = true;
     Options.get().download.maxTasks = 5;
+    Options.get().download.tries = 20;
     await Options.save();
 
     await ReInit.initRenderer();

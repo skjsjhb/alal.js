@@ -5,6 +5,7 @@ import { ProfileTools } from '@/modules/profile/ProfileTools';
 import { ensureDir, readdir } from 'fs-extra';
 import path from 'path';
 import { TestTools } from 'T/TestTools';
+import InstallVariant = GameInstaller.InstallVariant;
 import assertFalse = TestTools.assertFalse;
 import assertNotEquals = TestTools.assertNotEquals;
 import assertTrue = TestTools.assertTrue;
@@ -32,7 +33,7 @@ export async function testInstaller() {
             for (const v of versions) {
                 i++;
                 console.debug(`Test installing ${v} (${i}/${versions.length})`);
-                await GameInstaller.installVersionFull(ct, v).wait();
+                await GameInstaller.installGame(ct, v, InstallVariant.LIBS).wait();
                 const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v));
                 assertTrue(dirs.length > 0, 'Natives dir is not empty');
             }
@@ -49,7 +50,7 @@ export async function testInstaller() {
             for (const v of allVersions.versions) {
                 i++;
                 console.debug(`Test installing ${v.id} (${i}/${allVersions.versions.length})`);
-                await GameInstaller.installVersionFull(ct, v.id).wait();
+                await GameInstaller.installGame(ct, v.id).wait();
                 const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v.id));
                 assertTrue(dirs.length > 0, 'Natives dir is not empty');
             }

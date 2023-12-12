@@ -22,6 +22,7 @@ export module AccountTools {
         return {
             uuid: getOfflinePlayerUUID(name),
             accessToken: nanoid(20),
+            refreshToken: '',
             email: '',
             playerName: name,
             xuid: '',
@@ -31,20 +32,22 @@ export module AccountTools {
     }
 
     // A subsequent requests to convert browser code to tokens.
-    export function authMicrosoft(code: string): Task<Account> {
-        const taskName = Locale.getTranslation('ms-auth');
-        return new Task(taskName, 6, async (task) => {
+    export function authMicrosoft(code: string, role: 'code' | 'refresh'): Task<Account> {
+        const taskExec = async (task: Task<Account>) => {
             try {
-                console.log('Code -> Token');
-                // TODO save refresh token
-                const { access_token: msToken } = await fetchJSON(Sources.msTokenAPI, {
+                const grantTag = role == 'code' ? 'code' : 'refresh_token';
+                const grantType = role == 'code' ? 'authorization_code' : 'refresh_token';
+
+                console.log('Retrieving token.');
+
+                const body = `client_id=00000000402b5328&${grantTag}=${code}&grant_type=${grantType}` +
+                    `&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf` +
+                    `&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL`;
+
+                const { access_token: msToken, refresh_token: msRefreshToken } = await fetchJSON(Sources.msTokenAPI, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `client_id=00000000402b5328&code=${code}&grant_type=authorization_code` +
-                        `&redirect_uri=https%3A%2F%2Flogin.live.com%2Foauth20_desktop.srf` +
-                        `&scope=service%3A%3Auser.auth.xboxlive.com%3A%3AMBI_SSL`
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body
                 });
                 task.success();
 
@@ -105,13 +108,15 @@ export module AccountTools {
                 // Assemble
                 task.resolve({
                     uuid, xuid, accessToken, type: AccountType.Microsoft, email: '', playerName,
-                    host: 'https://api.minecraftservices.com' // Only a placeholder
+                    refreshToken: msRefreshToken, host: 'https://api.minecraftservices.com' // Only a placeholder
                 });
             } catch (e) {
                 task.reject(e);
-                return null;
             }
-        });
+        };
+
+        const taskName = Locale.getTranslation('ms-auth');
+        return new Task(taskName, 6, taskExec);
     }
 
     interface YggdrasilProfile {
@@ -126,40 +131,47 @@ export module AccountTools {
      * method returns them all, with the selected profile always on the first.
      */
     // TODO convert to task
-    export async function authYggdrasil(rawHost: string, user: string, pwd: string): Promise<Account | null> {
-        let host = await resolveYggdrasilLocation(rawHost);
-        console.log('Resolved Yggdrasil host: ' + host);
-        if (host.endsWith('/')) {
-            host = host.slice(0, host.length - 1);
-        }
-        const authAPI = host + '/authserver/authenticate';
+    export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<Account> {
+        const taskExec = async (task: Task<Account>) => {
+            try {
+                let host = await resolveYggdrasilLocation(rawHost);
+                console.log('Resolved Yggdrasil host: ' + host);
+                if (host.endsWith('/')) {
+                    host = host.slice(0, host.length - 1);
+                }
+                const authAPI = host + '/authserver/authenticate';
 
-        const { accessToken, selectedProfile }: {
-            accessToken: string,
-            selectedProfile: YggdrasilProfile
-        } = await postJSON(authAPI, {
-            username: user,
-            password: pwd,
-            agent: {
-                name: 'Minecraft',
-                version: 1
+                const { accessToken, selectedProfile, refreshToken }: {
+                    accessToken: string, refreshToken: string,
+                    selectedProfile: YggdrasilProfile
+                } = await postJSON(authAPI, {
+                    username: user,
+                    password: pwd,
+                    agent: {
+                        name: 'Minecraft',
+                        version: 1
+                    }
+                });
+                if (!selectedProfile) {
+                    return null; // TODO support profile selection
+                    // multiple profiles
+                }
+                task.resolve({
+                    host, accessToken, uuid: selectedProfile.id, xuid: '', playerName: selectedProfile.name,
+                    email: user, type: AccountType.Yggdrasil, refreshToken
+                });
+            } catch (e) {
+                task.reject(e);
             }
-        });
-        if (!selectedProfile) {
-            return null; // TODO support profile selection
-            // multiple profiles
-        }
-        return {
-            host, accessToken, uuid: selectedProfile.id, xuid: '', playerName: selectedProfile.name,
-            email: user, type: AccountType.Yggdrasil
         };
+        const taskName = Locale.getTranslation('yggdrasil-auth');
+        return new Task(taskName, 1, taskExec);
     }
 
     // Use ALI to get the API location
     async function resolveYggdrasilLocation(host: string): Promise<string> {
         const hostURL = new URL(host);
         const headers = await fetchHeaders(host);
-        console.log(headers);
         const location = Object.entries(headers).find(([k]) => k.toLowerCase() == 'x-authlib-injector-api-location');
         if (location) {
             const url = String(location[1]);
@@ -214,7 +226,7 @@ export module AccountTools {
 
     // https://stackoverflow.com/questions/47505620/javas-uuid-nameuuidfrombytes-to-written-in-javascript
     function getOfflinePlayerUUID(name: string): string {
-        let md5Bytes = createHash('md5').update('OfflinePlayer:' + name).digest();
+        const md5Bytes = createHash('md5').update('OfflinePlayer:' + name).digest();
         md5Bytes[6] &= 0x0f;
         md5Bytes[6] |= 0x30;
         md5Bytes[8] &= 0x3f;

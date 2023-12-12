@@ -18,11 +18,11 @@ export module MicrosoftBrowserLogin {
     /**
      * Wrapper for both remote and main.
      */
-    export function loginWithBrowserWindow(): Promise<string> {
+    export function loginInBrowser(): Promise<string> {
         if (Availa.isRemote()) {
             return ipcRenderer.invoke(Signals.MICROSOFT_LOGIN);
         } else {
-            return loginWithBrowserWindowMain();
+            return loginInBrowserMain();
         }
     }
 
@@ -35,7 +35,7 @@ export module MicrosoftBrowserLogin {
      * The first returned Promise is fulfilled when the window loading has complete. The
      * second fulfills when the code is present.
      */
-    export async function loginWithBrowserWindowMain(): Promise<string> {
+    export async function loginInBrowserMain(): Promise<string> {
         if (ipcRenderer) {
             console.error('This method can only be called from main process!');
             return '';

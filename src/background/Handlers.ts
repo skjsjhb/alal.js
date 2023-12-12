@@ -14,7 +14,7 @@ export module Handlers {
         [Signals.GET_APP_PATH]: getAppPath,
         [Signals.RELOAD_OPTIONS]: reloadOptions,
         [Signals.GET_LOCALE]: getLocale,
-        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginWithBrowserWindowMain,
+        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginInBrowserMain,
         [Signals.WEB_GET_FILE]: webGetFileMainProc,
         [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc,
         [Signals.FETCH_HEADERS_MAIN]: fetchHeadersMainProc,

@@ -7,6 +7,9 @@ ms-browser-login:
     b-yes: "I know what I'm doing!"
     b-no: "Continue login"
 
+ms-auth: Connecting to Microsoft account
+yggdrasil-auth: Connecting to Yggdrasil account
+
 download:
   batch: "Downloading Files"
 

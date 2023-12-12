@@ -8,6 +8,7 @@ ms-browser-login:
     b-no: "继续登录"
 
 ms-auth: 正在登录微软帐户
+yggdrasil-auth: 正在登录 Yggdrasil 帐户
 
 download:
   batch: "下载并验证"

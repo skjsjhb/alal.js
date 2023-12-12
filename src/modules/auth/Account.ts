@@ -9,6 +9,7 @@ export interface Account {
     host: string; // Authlib Injector
     playerName: string; // Authenticated player name
     email: string; // Authlib Injector
+    refreshToken: string; // MS and Authlib Injector
     uuid: string;
     accessToken: string;
     xuid: string; // Microsoft

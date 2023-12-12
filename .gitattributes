@@ -1,2 +1,2 @@
-src/renderer/themes/* linguist-vendored
 resources/static/* linguist-vendored
+resources/static/themes/* linguist-vendored

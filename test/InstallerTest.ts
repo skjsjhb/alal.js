@@ -2,7 +2,7 @@ import { ContainerManager } from '@/modules/container/ContainerManager';
 import { Container, ContainerTools } from '@/modules/container/ContainerTools';
 import { GameInstaller } from '@/modules/installer/GameInstaller';
 import { ProfileTools } from '@/modules/profile/ProfileTools';
-import { ensureDir, readdir } from 'fs-extra';
+import { ensureDir, mkdir, readdir } from 'fs-extra';
 import path from 'path';
 import { TestTools } from 'T/TestTools';
 import InstallVariant = GameInstaller.InstallVariant;
@@ -59,6 +59,9 @@ export async function testInstaller() {
     }
 
     await test('Container Detection', async () => {
+        if (shouldSimpleTest()) {
+            await mkdir('test-container/assets'); // Caveat
+        }
         const res = await ContainerManager.importContainer('test-container');
         assertNotEquals(res, null, 'Import container should success');
         assertFalse(res?.isolated, 'Import container should not be isolated');

@@ -11,7 +11,6 @@ import { Handlers } from './Handlers';
 import { WindowManager } from './WindowManager';
 
 export module BootLoader {
-
     /**
      * Bootloader main entry method.
      */
@@ -44,7 +43,7 @@ export module BootLoader {
         Handlers.createBindings();
 
         console.log('Loading config.');
-        Paths.detectRootPath();
+        Paths.configureRuntimeDataRoot();
         await Paths.retrieveAppPath();
         await Options.load();
         await Locale.initLocale();
@@ -53,7 +52,7 @@ export module BootLoader {
     function checkSingleInstance() {
         if (!app.requestSingleInstanceLock()) {
             console.log('Multiple instance detected, waking up the original one.');
-            app.quit();
+            app.exit();
         }
     }
 

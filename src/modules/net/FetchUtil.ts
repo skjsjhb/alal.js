@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Options } from '@/modules/data/Options';
 import { Availa } from '@/modules/util/Availa';
 import { ipcRenderer } from 'electron';
@@ -11,7 +11,7 @@ export async function fetchJSON(url: string, init?: RequestInit): Promise<any> {
     if (Availa.isRemote()) {
         const { Mirrors } = await import('@/modules/net/Mirrors');
         const mirror = Mirrors.apply(url);
-        return await ipcRenderer.invoke(Signals.FETCH_JSON_MAIN, mirror, init);
+        return await ipcRenderer.invoke(MAPI.FETCH_JSON_MAIN, mirror, init);
     } else {
         console.error('This method can only be called from the renderer.');
         return null;
@@ -25,7 +25,7 @@ export async function fetchHeaders(url: string): Promise<any> {
     if (Availa.isRemote()) {
         const { Mirrors } = await import('@/modules/net/Mirrors');
         const mirror = Mirrors.apply(url);
-        return await ipcRenderer.invoke(Signals.FETCH_HEADERS_MAIN, mirror);
+        return await ipcRenderer.invoke(MAPI.FETCH_HEADERS_MAIN, mirror);
     } else {
         console.error('This method can only be called from the renderer.');
         return null;

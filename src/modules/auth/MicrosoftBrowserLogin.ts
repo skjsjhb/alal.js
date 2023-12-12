@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { WindowManager } from '@/background/WindowManager';
 import Sources from '@/constra/sources.json';
 import { Availa } from '@/modules/util/Availa';
@@ -11,8 +11,6 @@ import { Locale } from '../i18n/Locale';
  * Unlike most modules, this can only be called on the background.
  */
 export module MicrosoftBrowserLogin {
-    const loginURL = Sources.microsoftLogin;
-
     const loginBrowserPart = 'persist:ms-login';
 
     /**
@@ -20,7 +18,7 @@ export module MicrosoftBrowserLogin {
      */
     export function loginInBrowser(): Promise<string> {
         if (Availa.isRemote()) {
-            return ipcRenderer.invoke(Signals.MICROSOFT_LOGIN);
+            return ipcRenderer.invoke(MAPI.MICROSOFT_LOGIN);
         } else {
             return loginInBrowserMain();
         }
@@ -50,7 +48,7 @@ export module MicrosoftBrowserLogin {
             window.webContents.on('did-stop-loading', checkURL);
             window.on('close', beforeLoginWindowClose);
             window.on('closed', () => {res('');}); // Fallback listener
-            void window.loadURL(loginURL);
+            void window.loadURL(Sources.microsoftLogin);
 
 
             // Check URL on page load, extract code

@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import OriginalRulesRaw from '@/constra/mirrors.json';
 import { Options } from '@/modules/data/Options';
 import { Registry } from '@/modules/data/Registry';
@@ -35,7 +35,7 @@ export module Mirrors {
     // This method also considers stability - an error will cause latency test to fail.
     // Can only be called on the renderer process.
     function testLatency(url: string): Promise<number> {
-        return ipcRenderer.invoke(Signals.TEST_LATENCY, url);
+        return ipcRenderer.invoke(MAPI.TEST_LATENCY, url);
     }
 
     async function sortRulesByLatency(ruleSet: Record<string, SourceRuleSet>): Promise<GeneratedRuleSet[]> {

@@ -3,10 +3,10 @@ import { Objects } from '@/modules/util/Objects';
 import { app, BrowserWindow, Event, ipcMain, screen, shell } from 'electron';
 import os from 'os';
 import path from 'path';
-import { Signals } from './Signals';
+import { MAPI } from './MAPI';
 
 /**
- * Multiple browser window management module.
+ * Main window management module.
  */
 export module WindowManager {
     let mainWindow: BrowserWindow | null = null;
@@ -31,6 +31,7 @@ export module WindowManager {
                 spellcheck: false,
                 defaultEncoding: 'utf-8',
                 backgroundThrottling: false,
+                autoplayPolicy: 'no-user-gesture-required',
                 webgl: true,
                 devTools: Options.get().dev ?? false
             },
@@ -46,19 +47,19 @@ export module WindowManager {
 
         // Minimum event listeners
         console.log('Binding main window event listeners.');
-        ipcMain.on(Signals.SHOW_MAIN_WINDOW, mainWindow.show.bind(mainWindow)); // If not bound a TypeError will occur
-        ipcMain.on(Signals.CLOSE_WINDOW_SOFT, closeWindowSoft); // Paired with userCloseWindowRequest & DOM close events
-        ipcMain.on(Signals.CLOSE_WINDOW_AND_QUIT, closeWindowAndQuit); // Paired with userQuitRequest
+        ipcMain.on(MAPI.SHOW_MAIN_WINDOW, mainWindow.show.bind(mainWindow)); // If not bound a TypeError will occur
+        ipcMain.on(MAPI.CLOSE_WINDOW_SOFT, closeWindowSoft); // Paired with userCloseWindowRequest & DOM close events
+        ipcMain.on(MAPI.CLOSE_WINDOW_AND_QUIT, closeWindowAndQuit); // Paired with userQuitRequest
         mainWindow.on('close', onUserCloseWindowReq);
         mainWindow.on('closed', () => {delete (globalThis as any).mainWindow;});
         mainWindow.on('resized', pushMainWindowResizeEvent);
         app.once('before-quit', onUserQuitReq); // This is done by WM to prevent early quit
 
-        // Open in browser
-        openNewWindowInBrowser(mainWindow);
+        // External links
+        enableExternalLinksPatch(mainWindow);
 
         // Network setup
-        unblockCORS(mainWindow);
+        enableCORSHeaderPatch(mainWindow);
 
         // Open Devtools in case window failures
         if (Options.get().dev) {
@@ -95,7 +96,7 @@ export module WindowManager {
     }
 
     function pushMainWindowResizeEvent() {
-        mainWindow?.webContents.send(Signals.WINDOW_RESIZE, mainWindow?.getSize());
+        mainWindow?.webContents.send(MAPI.WINDOW_RESIZE, mainWindow?.getSize());
     }
 
     // Called when the renderer is ready for closing gently. i.e. Hide on macOS and close on others.
@@ -114,7 +115,7 @@ export module WindowManager {
     }
 
     // Open new window in browser
-    function openNewWindowInBrowser(window: BrowserWindow) {
+    function enableExternalLinksPatch(window: BrowserWindow) {
         window.webContents.setWindowOpenHandler(({ url }) => {
             void shell.openExternal(url);
             return { action: 'deny' };
@@ -136,7 +137,7 @@ export module WindowManager {
         console.log('User is requesting for app quit. Yes, but gracefully...');
         e.preventDefault();
         mainWindow?.hide();
-        mainWindow?.webContents.send(Signals.USER_QUIT_REQUEST);
+        mainWindow?.webContents.send(MAPI.USER_QUIT_REQUEST);
     }
 
     // The user created window closing request (e.g. Alt+F4) is not dispatched on the renderer process.
@@ -145,12 +146,12 @@ export module WindowManager {
         console.log('User is requesting main window to close. I\'m exiting, gracefully...');
         e.preventDefault();
         mainWindow?.hide();
-        mainWindow?.webContents.send(Signals.USER_CLOSE_REQUEST);
+        mainWindow?.webContents.send(MAPI.USER_CLOSE_REQUEST);
     }
 
     // Proxy requests and add a CORS header
-    function unblockCORS(window: BrowserWindow) {
-        console.log('Unblocking CORS.');
+    function enableCORSHeaderPatch(window: BrowserWindow) {
+        console.log('Setting up CORS proxy.');
 
         window.webContents.session.webRequest.onBeforeSendHeaders(
             (details, callback) => {

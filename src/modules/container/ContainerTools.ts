@@ -112,7 +112,7 @@ export module ContainerTools {
     }
 
     function getGlobalAssetIndexPath(aid: string): string {
-        return Paths.getDataPath('sharedAssets', 'assets', 'indexes', aid + '.json');
+        return Paths.getRuntimeDataPath('sharedAssets', 'assets', 'indexes', aid + '.json');
     }
 
     function getLegacyAssetPath(c: Container, fileName: string): string {
@@ -141,7 +141,7 @@ export module ContainerTools {
     }
 
     function getGlobalAssetPath(hash: string): string {
-        return Paths.getDataPath('sharedAssets', 'assets', 'objects', hash.slice(0, 2), hash);
+        return Paths.getRuntimeDataPath('sharedAssets', 'assets', 'objects', hash.slice(0, 2), hash);
     }
 
     function getLocalLibraryPath(c: Container, p: string): string {
@@ -149,8 +149,6 @@ export module ContainerTools {
     }
 
     function getGlobalLibraryPath(p: string): string {
-        return Paths.getDataPath('maven', p);
+        return Paths.getRuntimeDataPath('maven', p);
     }
-
-
 }

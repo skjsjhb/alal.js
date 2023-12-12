@@ -4,25 +4,25 @@ import { Downloader, DownloadProfile } from '@/modules/net/Downloader';
 import { FetchUtil } from '@/modules/net/FetchUtil';
 import { app, dialog, ipcMain, IpcMainInvokeEvent, safeStorage } from 'electron';
 import fetch, { RequestInit } from 'electron-fetch';
-import { Signals } from './Signals';
+import { MAPI } from './MAPI';
 
 /**
  * Backend handlers registry module.
  */
 export module Handlers {
     const BINDINGS = {
-        [Signals.GET_APP_PATH]: getAppPath,
-        [Signals.RELOAD_OPTIONS]: reloadOptions,
-        [Signals.GET_LOCALE]: getLocale,
-        [Signals.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginInBrowserMain,
-        [Signals.WEB_GET_FILE]: webGetFileMainProc,
-        [Signals.FETCH_JSON_MAIN]: fetchJSONMainProc,
-        [Signals.FETCH_HEADERS_MAIN]: fetchHeadersMainProc,
-        [Signals.TEST_LATENCY]: testLatency,
-        [Signals.CHECK_ENCRYPT]: checkEncrypt,
-        [Signals.ENCRYPT]: encryptString,
-        [Signals.DECRYPT]: decryptString,
-        [Signals.SELECT_FOLDER]: selectFolder
+        [MAPI.GET_APP_PATH]: getAppPath,
+        [MAPI.RELOAD_OPTIONS]: reloadOptions,
+        [MAPI.GET_LOCALE]: getLocale,
+        [MAPI.MICROSOFT_LOGIN]: MicrosoftBrowserLogin.loginInBrowserMain,
+        [MAPI.WEB_GET_FILE]: webGetFileMainProc,
+        [MAPI.FETCH_JSON_MAIN]: fetchJSONMainProc,
+        [MAPI.FETCH_HEADERS_MAIN]: fetchHeadersMainProc,
+        [MAPI.TEST_LATENCY]: testLatency,
+        [MAPI.CHECK_ENCRYPT]: checkEncrypt,
+        [MAPI.ENCRYPT]: encryptString,
+        [MAPI.DECRYPT]: decryptString,
+        [MAPI.SELECT_FOLDER]: selectFolder
     };
 
     /**

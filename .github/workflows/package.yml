@@ -18,9 +18,16 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -l
-      - name: List Files
-        run: ls ./dist/release
+        run: yarn bundle && yarn make-release -l && yarn make-debug -l && yarn make-autotest -l
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Linux Packages
+          path: |
+            ./dist/release/*.tar.xz
+            ./dist/release/*.deb
+            ./dist/release/*.rpm
+            ./dist/debug/*.zip
+            ./dist/autotest/*.zip
 
   package-windows:
     runs-on: windows-latest
@@ -35,9 +42,15 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -w
-      - name: List Files
-        run: ls ./dist/release
+        run: yarn bundle && yarn make-release -w && yarn make-debug -w && yarn make-autotest -w
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Windows Packages
+          path: |
+            ./dist/release/*.exe
+            ./dist/release/*.zip
+            ./dist/debug/*.zip
+            ./dist/autotest/*.zip
 
   package-macos:
     runs-on: macos-latest
@@ -52,6 +65,12 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle-release && yarn make-release -m
-      - name: List Files
-        run: ls ./dist/release
+        run: yarn bundle && yarn make-release -m && yarn make-debug -m && yarn make-autotest -m
+      - uses: actions/upload-artifact@v3
+        with:
+          name: macOS Packages
+          path: |
+            ./dist/release/*.dmg
+            ./dist/release/*.zip
+            ./dist/debug/*.zip
+            ./dist/autotest/*.zip

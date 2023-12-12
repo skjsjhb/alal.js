@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Files } from '@/modules/data/Files';
 import { Options } from '@/modules/data/Options';
 import { Cacher } from '@/modules/net/Cacher';
@@ -177,7 +177,7 @@ export module Downloader {
 
     // Wrapped remote version
     export async function webGetFileRemote(p: DownloadProfile): Promise<string | null> {
-        return await ipcRenderer.invoke(Signals.WEB_GET_FILE, p);
+        return await ipcRenderer.invoke(MAPI.WEB_GET_FILE, p);
     }
 
     // Download a file using electron-fetch in main process

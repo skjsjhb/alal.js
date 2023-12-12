@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Availa } from '@/modules/util/Availa';
 import { app, ipcRenderer } from 'electron';
 import os from 'os';
@@ -26,7 +26,7 @@ export module Paths {
      * - macOS: `~/Library/Application Support/AlicornAgain`
      * - Others: `~/.alicorn-again`
      */
-    export function detectRootPath() {
+    export function configureRuntimeDataRoot() {
         switch (os.platform()) {
             case 'win32':
                 if (process.env.LOCALAPPDATA) {
@@ -42,7 +42,7 @@ export module Paths {
         if (!rootPath) {
             rootPath = path.resolve(os.homedir(), '.alicorn-again');
         }
-        console.log('Setting root path: ' + rootPath);
+        console.log('Setting runtime data root path: ' + rootPath);
     }
 
 
@@ -53,7 +53,7 @@ export module Paths {
      */
     export async function retrieveAppPath() {
         if (Availa.isRemote()) {
-            appPath = await ipcRenderer.invoke(Signals.GET_APP_PATH);
+            appPath = await ipcRenderer.invoke(MAPI.GET_APP_PATH);
         } else {
             appPath = app.getAppPath();
         }
@@ -64,8 +64,8 @@ export module Paths {
      * Resolve a given path in the data directory relative to the root path.
      * @param pt Relative path parts.
      */
-    export function getDataPath(...pt: string[]): string {
-        rootPath || detectRootPath();
+    export function getRuntimeDataPath(...pt: string[]): string {
+        rootPath || configureRuntimeDataRoot();
         return path.resolve(rootPath, ...pt);
     }
 

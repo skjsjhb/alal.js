@@ -3,13 +3,14 @@
 import Strategies from '@/constra/strategies.json';
 import MojangVersions from '@/constra/version-names.json';
 
-const PDRules = Strategies.profileDetection;
 
 /**
  * alal.js supports multiple variants of profiles. These profiles vary by their structures, version string formatting
  * and libraries. This module detected specific information about a profile.
  */
 export module ProfileDetector {
+    const PDRules = Strategies.profileDetection;
+
     /**
      * Check if the specified profile is a Mojang profile.
      *

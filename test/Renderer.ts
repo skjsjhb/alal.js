@@ -20,7 +20,7 @@ async function main() {
         ipcRenderer.send(SignalTest.LOG_ERR, ...args);
     };
 
-    Paths.detectRootPath();
+    Paths.configureRuntimeDataRoot();
     await Paths.retrieveAppPath();
     Options.get().dev = true;
     Options.get().download.maxTasks = 5;

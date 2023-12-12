@@ -43,10 +43,9 @@ export module DownloadManager {
     }
 
     function configure() {
-        pool = new Pool(32);
         const limit = Options.get().download.maxTasks;
         console.log('Max tasks for download: ' + limit);
-        pool.setLimit(limit);
+        pool = new Pool(limit);
     }
 
     async function downloadSingleInBatched(p: DownloadProfile): Promise<boolean> {

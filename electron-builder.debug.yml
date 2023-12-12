@@ -1,8 +1,8 @@
 appId: "skjsjhb.alal"
-productName: "alal"
+productName: "alal-debug"
 copyright: 'Copyright (C) 2023 Ted skjsjhb Gao'
 publish: null
-asar: false
+asarUnpack: [ 'natives/**/*' ]
 beforeBuild: tools/beforeBuild
 directories:
   app: "build/debug"

@@ -72,7 +72,7 @@ export module JavaGet {
      */
     export async function configure() {
         try {
-            jreStorePath = Paths.getDataPath('jre');
+            jreStorePath = Paths.getRuntimeDataPath('jre');
             await ensureDir(jreStorePath);
         } catch (e) {
             console.error('Could not create JRE store path: ' + e);

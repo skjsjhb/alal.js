@@ -17,7 +17,7 @@ export module Cacher {
     export async function configure(): Promise<void> {
         try {
             console.log('Configuring cache module.');
-            cacheRoot = Paths.getDataPath('cache');
+            cacheRoot = Paths.getRuntimeDataPath('cache');
             await ensureDir(cacheRoot);
         } catch (e) {
             console.error('Error during configuring cache: ' + e);

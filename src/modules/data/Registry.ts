@@ -19,7 +19,7 @@ export module Registry {
      * Load all tables from disk.
      */
     export async function loadTables(): Promise<void> {
-        const rootDir = Paths.getDataPath(registryRoot);
+        const rootDir = Paths.getRuntimeDataPath(registryRoot);
         await ensureDir(rootDir); // When running for the first time
 
         console.log('Loading registry tables.');
@@ -35,7 +35,7 @@ export module Registry {
 
         const promos = [];
         for (const [k, t] of regTables.entries()) {
-            const targetPath = Paths.getDataPath(registryRoot, k + regFileSuffix);
+            const targetPath = Paths.getRuntimeDataPath(registryRoot, k + regFileSuffix);
             promos.push(outputJSON(targetPath, t));
         }
         await Promise.all(promos);

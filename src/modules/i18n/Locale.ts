@@ -1,12 +1,12 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Options } from '@/modules/data/Options';
 import { Availa } from '@/modules/util/Availa';
 import { app, ipcRenderer } from 'electron';
 import { Objects } from '../util/Objects';
 
 // Language imports
-import enUS from './en-US.yml';
-import zhCN from './zh-CN.yml';
+import enUS from './lang/en-US.yml';
+import zhCN from './lang/zh-CN.yml';
 
 export module Locale {
     let currentLocale = '';
@@ -24,7 +24,7 @@ export module Locale {
         let userLocale;
         if (Availa.isRemote()) {
             // Remote
-            userLocale = Options.get().locale || await ipcRenderer.invoke(Signals.GET_LOCALE);
+            userLocale = Options.get().locale || await ipcRenderer.invoke(MAPI.GET_LOCALE);
         } else {
             // Background
             userLocale = Options.get().locale || app.getLocale();

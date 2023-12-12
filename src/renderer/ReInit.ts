@@ -4,7 +4,7 @@
  * The original Alicorn Renderer entry is bloat and over-integrated. This module replace it
  * with focus on a clean and fast initialization process.
  */
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Options } from '@/modules/data/Options';
 import { Paths } from '@/modules/data/Paths';
 import { Registry } from '@/modules/data/Registry';
@@ -48,13 +48,13 @@ export module ReInit {
      */
     export async function closeWindow(soft = true) {
         await beforeClose();
-        ipcRenderer.send(soft ? Signals.CLOSE_WINDOW_SOFT : Signals.CLOSE_WINDOW_AND_QUIT);
+        ipcRenderer.send(soft ? MAPI.CLOSE_WINDOW_SOFT : MAPI.CLOSE_WINDOW_AND_QUIT);
     }
 
     // Handle events for window closing
     function handleLifecycleEvents() {
-        ipcRenderer.on(Signals.USER_CLOSE_REQUEST, () => {void closeWindow(true);});
-        ipcRenderer.on(Signals.USER_QUIT_REQUEST, () => {void closeWindow(false);});
+        ipcRenderer.on(MAPI.USER_CLOSE_REQUEST, () => {void closeWindow(true);});
+        ipcRenderer.on(MAPI.USER_QUIT_REQUEST, () => {void closeWindow(false);});
     }
 
     // Init renderer-side modules
@@ -86,7 +86,7 @@ export module ReInit {
         root.render(React.createElement(App));
 
         console.log('All caught up! I\'m now showing the window.');
-        ipcRenderer.send(Signals.SHOW_MAIN_WINDOW);
+        ipcRenderer.send(MAPI.SHOW_MAIN_WINDOW);
     }
 
     function printVersionInfo() {

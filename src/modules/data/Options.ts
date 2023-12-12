@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Files } from '@/modules/data/Files';
 import { ipcRenderer } from 'electron';
 import { outputJSON, readJSON } from 'fs-extra';
@@ -24,7 +24,7 @@ export module Options {
      */
     export async function load() {
         try {
-            const optnPath = Paths.getDataPath(OPTIONS_FILE_PATH);
+            const optnPath = Paths.getRuntimeDataPath(OPTIONS_FILE_PATH);
             if (!await Files.exists(optnPath)) {
                 console.log('Options file not present, skipped.');
                 return;
@@ -54,7 +54,7 @@ export module Options {
      */
     export async function save() {
         try {
-            await outputJSON(Paths.getDataPath(OPTIONS_FILE_PATH), options, { spaces: 4 });
+            await outputJSON(Paths.getRuntimeDataPath(OPTIONS_FILE_PATH), options, { spaces: 4 });
         } catch (e) {
             console.error('Failed to save options file: ' + e);
         }
@@ -68,6 +68,6 @@ export module Options {
      */
     export async function requestMainReload() {
         await save();
-        await ipcRenderer.invoke(Signals.RELOAD_OPTIONS);
+        await ipcRenderer.invoke(MAPI.RELOAD_OPTIONS);
     }
 }

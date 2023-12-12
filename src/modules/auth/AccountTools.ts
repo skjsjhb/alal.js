@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import Sources from '@/constra/sources.json';
 import { Account, AccountType } from '@/modules/auth/Account';
 import { Registry } from '@/modules/data/Registry';
@@ -196,20 +196,20 @@ export module AccountTools {
 
     // Account -> Encrypted string
     async function dumpAccount(a: Account): Promise<string> {
-        if (!await ipcRenderer.invoke(Signals.CHECK_ENCRYPT)) {
+        if (!await ipcRenderer.invoke(MAPI.CHECK_ENCRYPT)) {
             console.warn('Encryption is not available. Credentials stored as plain text.');
             return JSON.stringify(a);
         } else {
-            return await ipcRenderer.invoke(Signals.ENCRYPT, JSON.stringify(a));
+            return await ipcRenderer.invoke(MAPI.ENCRYPT, JSON.stringify(a));
         }
     }
 
     // Encrypted string -> Account
     async function loadAccount(s: string): Promise<Account> {
-        if (!await ipcRenderer.invoke(Signals.CHECK_ENCRYPT)) {
+        if (!await ipcRenderer.invoke(MAPI.CHECK_ENCRYPT)) {
             return JSON.parse(s) as Account;
         } else {
-            return JSON.parse(await ipcRenderer.invoke(Signals.DECRYPT, s));
+            return JSON.parse(await ipcRenderer.invoke(MAPI.DECRYPT, s));
         }
     }
 

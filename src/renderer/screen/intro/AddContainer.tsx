@@ -1,4 +1,4 @@
-import { Signals } from '@/background/Signals';
+import { MAPI } from '@/background/MAPI';
 import { Locale } from '@/modules/i18n/Locale';
 import { Objects } from '@/modules/util/Objects';
 import { useMounted } from '@/renderer/util/Mount';
@@ -14,7 +14,7 @@ export function AddContainer(): React.ReactElement {
     const mounted = useMounted();
 
     async function promptSelectDir() {
-        const dirs = await ipcRenderer.invoke(Signals.SELECT_FOLDER, tr('select-title'));
+        const dirs = await ipcRenderer.invoke(MAPI.SELECT_FOLDER, tr('select-title'));
         if (mounted.current) {
             setContainerList(Objects.mergeArrays(containerList, dirs));
         }

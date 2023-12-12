@@ -1,9 +1,9 @@
 /**
  * Entry point of the new renderer for autotest bundles only.
  */
-import { Options } from '@/modules/data/Options';
-import { Paths } from '@/modules/data/Paths';
-import { ReInit } from '@/renderer/ReInit';
+import { opt, saveOptions } from '@/modules/data/Options';
+import { configureRuntimeDataRoot, retrieveAppPath } from '@/modules/data/Paths';
+import { initRenderer } from '@/renderer/ReInit';
 import { ipcRenderer } from 'electron';
 import { runRendererTests } from './RendererTestHost';
 import { SignalTest } from './SignalTest';
@@ -20,15 +20,14 @@ async function main() {
         ipcRenderer.send(SignalTest.LOG_ERR, ...args);
     };
 
-    Paths.configureRuntimeDataRoot();
-    await Paths.retrieveAppPath();
-    Options.get().dev = true;
-    Options.get().download.maxTasks = 5;
-    Options.get().download.tries = 20;
-    await Options.save();
+    configureRuntimeDataRoot();
+    await retrieveAppPath();
+    opt().dev = true;
+    opt().download.maxTasks = 5;
+    opt().download.tries = 20;
+    await saveOptions();
 
-    await ReInit.initRenderer();
-
+    await initRenderer();
 
     // Autotest modules entry
     console.warn('This is a test bundle built for automated tests. They are NOT intended for normal use.');

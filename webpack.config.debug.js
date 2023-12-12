@@ -8,38 +8,38 @@
  * This config generates debug build output.
  * Debug outputs are used during development. They builds fast, but are not optimized nor packed.
  */
-const [baseMain, baseRenderer, rendererOptimization, genConfig] = require("./webpack.config.base");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const [baseMain, baseRenderer, genConfig] = require('./webpack.config.base');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ReactRefreshTypeScript = require('react-refresh-typescript');
-const { DefinePlugin } = require("webpack");
+const { DefinePlugin } = require('webpack');
 
 const devCommon = {
-    devtool: "eval-cheap-module-source-map",
-    mode: "development"
+    devtool: 'eval-cheap-module-source-map',
+    mode: 'development'
 };
 
 const main = {
     ...baseMain,
     ...devCommon,
     entry: {
-        main: "./src/background/Main.ts"
+        main: './src/background/Main.ts'
     },
     output: {
-        filename: "[name].js",
+        filename: '[name].js',
         pathinfo: false,
-        path: path.resolve(__dirname, "build/debug")
+        path: path.resolve(__dirname, 'build/debug')
     },
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                ...genConfig(path.resolve(__dirname, "build/debug"))
+                ...genConfig(path.resolve(__dirname, 'build/debug'))
             ]
         }),
         new DefinePlugin({
-            "process.env.MODE": "'debug'"
+            'process.env.MODE': '\'debug\''
         })
     ]
 };
@@ -48,29 +48,28 @@ const main = {
 const renderer = {
     ...baseRenderer,
     ...devCommon,
-    ...rendererOptimization,
     entry: {
-        renderer: "./src/renderer/Main.ts"
+        renderer: './src/renderer/Main.ts'
     },
     output: {
-        filename: "[name].js",
+        filename: '[name].js',
         pathinfo: false,
-        path: path.resolve(__dirname, "build/debug")
+        path: path.resolve(__dirname, 'build/debug')
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "resources/build/template-dev.html"),
-            filename: "renderer.html"
+            template: path.resolve(__dirname, 'resources/build/template-dev.html'),
+            filename: 'renderer.html'
         }),
         new ReactRefreshWebpackPlugin(),
         new DefinePlugin({
-            "process.env.MODE": "'debug'"
+            'process.env.MODE': '\'debug\''
         })
     ],
     devServer: {
         hot: true,
         port: 9000,
-        static: path.resolve(__dirname, "build/debug")
+        static: path.resolve(__dirname, 'build/debug')
     }
 };
 

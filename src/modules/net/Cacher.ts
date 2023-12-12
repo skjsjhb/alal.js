@@ -1,5 +1,5 @@
 import Keyring from '@/constra/keyring.json';
-import { Paths } from '@/modules/data/Paths';
+import { getRuntimeDataPath } from '@/modules/data/Paths';
 import { access, copyFile, ensureDir, remove } from 'fs-extra';
 import path from 'path';
 import * as uuid from 'uuid';
@@ -7,73 +7,71 @@ import * as uuid from 'uuid';
 /**
  * File cache module.
  */
-export module Cacher {
-    let cacheRoot: string;
-    const cacheUUID = Keyring.uuid.cache;
+let cacheRoot: string;
+const cacheUUID = Keyring.uuid.cache;
 
-    /**
-     * Gets the root directory and ensures its existence.
-     */
-    export async function configure(): Promise<void> {
-        try {
-            console.log('Configuring cache module.');
-            cacheRoot = Paths.getRuntimeDataPath('cache');
-            await ensureDir(cacheRoot);
-        } catch (e) {
-            console.error('Error during configuring cache: ' + e);
-        }
+/**
+ * Gets the root directory and ensures its existence.
+ */
+export async function initCache(): Promise<void> {
+    try {
+        console.log('Configuring cache module.');
+        cacheRoot = getRuntimeDataPath('cache');
+        await ensureDir(cacheRoot);
+    } catch (e) {
+        console.error('Error during configuring cache: ' + e);
     }
+}
 
-    // Gets the uuid of the specified key
-    function getUUID(key: string): string {
-        return uuid.v5(key, cacheUUID);
+// Gets the uuid of the specified key
+function getUUID(key: string): string {
+    return uuid.v5(key, cacheUUID);
+}
+
+/**
+ * Add a file to cache using the specified key.
+ * @param key Unique key.
+ * @param source File path.
+ */
+export async function addCache(key: string, source: string): Promise<void> {
+    try {
+        const dest = path.join(cacheRoot, getUUID(key));
+        await copyFile(source, dest);
+    } catch (e) {
+        console.error('Could not append cache: ' + e);
     }
+}
 
-    /**
-     * Add a file to cache using the specified key.
-     * @param key Unique key.
-     * @param source File path.
-     */
-    export async function addCache(key: string, source: string): Promise<void> {
-        try {
-            const dest = path.join(cacheRoot, getUUID(key));
-            await copyFile(source, dest);
-        } catch (e) {
-            console.error('Could not append cache: ' + e);
-        }
+/**
+ * Tries to apply specified cache to the destination. Returns `true` if the cache is applied, `false` if either
+ * the cache file is not found or I/O error occurred.
+ * @param key Unique key of the cache to be used.
+ * @param dest Target location.
+ */
+export async function applyCache(key: string, dest: string): Promise<boolean> {
+    const src = path.join(cacheRoot, getUUID(key));
+    try {
+        await access(src);
+    } catch {
+        return false; // File does not exist
     }
-
-    /**
-     * Tries to apply specified cache to the destination. Returns `true` if the cache is applied, `false` if either
-     * the cache file is not found or I/O error occurred.
-     * @param key Unique key of the cache to be used.
-     * @param dest Target location.
-     */
-    export async function applyCache(key: string, dest: string): Promise<boolean> {
-        const src = path.join(cacheRoot, getUUID(key));
-        try {
-            await access(src);
-        } catch {
-            return false; // File does not exist
-        }
-        try {
-            await copyFile(src, dest);
-            return true;
-        } catch (e) {
-            // This is not expected
-            console.error('Error during applying cache: ' + e);
-            return false;
-        }
+    try {
+        await copyFile(src, dest);
+        return true;
+    } catch (e) {
+        // This is not expected
+        console.error('Error during applying cache: ' + e);
+        return false;
     }
+}
 
-    /**
-     * Remove specified cache file.
-     */
-    export async function removeCache(key: string): Promise<void> {
-        try {
-            await remove(path.join(cacheRoot, getUUID(key)));
-        } catch (e) {
-            console.warn('Could not remove cache: ' + e);
-        }
+/**
+ * Remove specified cache file.
+ */
+export async function removeCache(key: string): Promise<void> {
+    try {
+        await remove(path.join(cacheRoot, getUUID(key)));
+    } catch (e) {
+        console.warn('Could not remove cache: ' + e);
     }
 }

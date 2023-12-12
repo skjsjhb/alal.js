@@ -1,11 +1,10 @@
-import { ContainerManager } from '@/modules/container/ContainerManager';
-import { Container, ContainerTools } from '@/modules/container/ContainerTools';
-import { GameInstaller } from '@/modules/installer/GameInstaller';
-import { ProfileTools } from '@/modules/profile/ProfileTools';
-import { ensureDir, mkdir, readdir } from 'fs-extra';
+import { importContainer } from '@/modules/container/ContainerManager';
+import { Container } from '@/modules/container/ContainerTools';
+import { GameInstallVariant, installGame } from '@/modules/installer/GameInstaller';
+import { syncMojangProfileManifest } from '@/modules/profile/ProfileTools';
+import { ensureDir, readdir } from 'fs-extra';
 import path from 'path';
 import { TestTools } from 'T/TestTools';
-import InstallVariant = GameInstaller.InstallVariant;
 import assertFalse = TestTools.assertFalse;
 import assertNotEquals = TestTools.assertNotEquals;
 import assertTrue = TestTools.assertTrue;
@@ -14,15 +13,15 @@ import test = TestTools.test;
 
 export async function testInstaller() {
     await ensureDir('test-container');
-    const ct: Container = {
+    const ct: Container = new Container({
         rootDir: path.resolve('test-container'),
         locked: false,
         shared: false,
         isolated: false
-    };
+    });
     if (shouldSimpleTest()) {
         await test('Simplified Game Installation', async () => {
-            const allVersions = await ProfileTools.getMojangManifest();
+            const allVersions = await syncMojangProfileManifest();
             if (!allVersions) {
                 console.warn('Manifest not available. Skipped test.');
                 return;
@@ -33,15 +32,15 @@ export async function testInstaller() {
             for (const v of versions) {
                 i++;
                 console.debug(`Test installing ${v} (${i}/${versions.length})`);
-                await GameInstaller.installGame(ct, v, InstallVariant.LIBS).wait();
-                const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v));
+                await installGame(ct, v, GameInstallVariant.LIBS).wait();
+                const dirs = await readdir(ct.getNativesDirectory(v));
                 assertTrue(dirs.length > 0, 'Natives dir is not empty');
             }
             await checkContainerContents(true);
         });
     } else {
         await test('Full Game Installation', async () => {
-            const allVersions = await ProfileTools.getMojangManifest();
+            const allVersions = await syncMojangProfileManifest();
             if (!allVersions) {
                 console.warn('Manifest not available. Skipped test.');
                 return;
@@ -50,8 +49,8 @@ export async function testInstaller() {
             for (const v of allVersions.versions) {
                 i++;
                 console.debug(`Test installing ${v.id} (${i}/${allVersions.versions.length})`);
-                await GameInstaller.installGame(ct, v.id).wait();
-                const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v.id));
+                await installGame(ct, v.id).wait();
+                const dirs = await readdir(ct.getNativesDirectory(v.id));
                 assertTrue(dirs.length > 0, 'Natives dir is not empty');
             }
             await checkContainerContents();
@@ -60,9 +59,9 @@ export async function testInstaller() {
 
     await test('Container Detection', async () => {
         if (shouldSimpleTest()) {
-            await mkdir('test-container/assets'); // Caveat
+            await ensureDir('test-container/assets'); // Caveat
         }
-        const res = await ContainerManager.importContainer('test-container');
+        const res = await importContainer('test-container');
         assertNotEquals(res, null, 'Import container should success');
         assertFalse(res?.isolated, 'Import container should not be isolated');
     });

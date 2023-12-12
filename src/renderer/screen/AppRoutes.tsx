@@ -1,13 +1,13 @@
 import { AcceptMirrors } from '@/renderer/screen/intro/AcceptMirrors';
-import { AddContainer } from '@/renderer/screen/intro/AddContainer';
 import { Portal } from '@/renderer/screen/intro/Portal';
 import { SelectMode } from '@/renderer/screen/intro/SelectMode';
 import { SelectTheme } from '@/renderer/screen/intro/SelectTheme';
 import { WelcomeToAlicornAgain } from '@/renderer/screen/intro/WelcomeToAlicornAgain';
 import { TaskList } from '@/renderer/screen/TaskList';
+import { useSafeState } from '@/renderer/util/Mount';
 import { css } from '@emotion/react';
 import { classNames } from 'primereact/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 /**
@@ -15,8 +15,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
  */
 export function AppRoutes(): React.ReactElement {
     const routeLocation = useLocation();
-    const [displayLocation, setDisplayLocation] = useState(routeLocation);
-    const [transitionStage, setTransitionStage] = useState<'fadeIn' | 'fadeOut'>('fadeIn');
+    const [displayLocation, setDisplayLocation] = useSafeState(routeLocation);
+    const [transitionStage, setTransitionStage] = useSafeState<'fadeIn' | 'fadeOut'>('fadeIn');
 
     const animationTimeout = 190;
 
@@ -29,9 +29,10 @@ export function AppRoutes(): React.ReactElement {
                 setDisplayLocation(routeLocation);
             }, animationTimeout);
         }
-        return () => {clearTimeout(t);};
+        return () => {
+            clearTimeout(t);
+        };
     }, [routeLocation, displayLocation]);
-
 
     const appTransitions = css`
         @keyframes enter {
@@ -66,23 +67,24 @@ export function AppRoutes(): React.ReactElement {
     `;
 
     const startPage = '/Intro/Portal'; // TODO test code
-    // const startPage = Options.get().ui.playIntro ? "/Intro/Portal" : "/TaskList";
+    // const startPage = opt().ui.playIntro ? "/Intro/Portal" : "/TaskList";
 
-    return <span css={appTransitions} className={'h-full p-0 m-0'}>
-        <div className={classNames(transitionStage, 'h-full p-0 m-0')}>
-            <Routes location={displayLocation}>
-                {/* Intro setup */}
-                <Route index element={<Navigate to={startPage} replace />} />
-                <Route path={'/Intro/Portal'} element={<Portal />} />
-                <Route path={'/Intro/WelcomeToAlicornAgain'} element={<WelcomeToAlicornAgain />} />
-                <Route path={'/Intro/SelectMode'} element={<SelectMode />} />
-                <Route path={'/Intro/AcceptMirrors'} element={<AcceptMirrors />} />
-                <Route path={'/Intro/SelectTheme'} element={<SelectTheme />} />
-                <Route path={'/Intro/AddContainer'} element={<AddContainer />} />
+    return (
+        <span css={appTransitions} className={'h-full p-0 m-0'}>
+            <div className={classNames(transitionStage, 'h-full p-0 m-0')}>
+                <Routes location={displayLocation}>
+                    {/* Intro setup */}
+                    <Route index element={<Navigate to={startPage} replace />} />
+                    <Route path={'/Intro/Portal'} element={<Portal />} />
+                    <Route path={'/Intro/WelcomeToAlicornAgain'} element={<WelcomeToAlicornAgain />} />
+                    <Route path={'/Intro/SelectMode'} element={<SelectMode />} />
+                    <Route path={'/Intro/AcceptMirrors'} element={<AcceptMirrors />} />
+                    <Route path={'/Intro/SelectTheme'} element={<SelectTheme />} />
 
-                {/* System pages */}
-                <Route path={'/TaskList'} element={<TaskList />} />
-            </Routes>
-        </div>
-    </span>;
+                    {/* System pages */}
+                    <Route path={'/TaskList'} element={<TaskList />} />
+                </Routes>
+            </div>
+        </span>
+    );
 }

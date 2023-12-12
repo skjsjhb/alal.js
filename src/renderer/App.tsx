@@ -1,11 +1,10 @@
-import { Locale } from '@/modules/i18n/Locale';
+import { getLocale } from '@/modules/i18n/Locale';
 import { AppRoutes } from '@/renderer/screen/AppRoutes';
-import { ThemeManager } from '@/renderer/themes/ThemeManager';
+import { setDefaultColorMode } from '@/renderer/themes/ThemeManager';
 import { Board } from '@/renderer/widgets/Board';
 import { MenuBar } from '@/renderer/widgets/MenuBar';
 import { VersionFooter } from '@/renderer/widgets/VersionFooter';
 import { css } from '@emotion/react';
-import primeflex from 'primeflex/primeflex.css';
 import primeicons from 'primeicons/primeicons.css';
 import { PrimeReactProvider } from 'primereact/api';
 import { Card } from 'primereact/card';
@@ -22,7 +21,8 @@ export function App(): React.ReactElement {
         top: 2.5em;
         bottom: 2.5em;
 
-        & .p-card-body, & .p-card-content {
+        & .p-card-body,
+        & .p-card-content {
             height: 100%;
         }
 
@@ -35,21 +35,19 @@ export function App(): React.ReactElement {
         }
 
         & code {
-            font-family: "JetBrains Mono", monospace;
+            font-family: 'JetBrains Mono', monospace;
         }
     `;
 
     useEffect(() => {
-        ThemeManager.setDefaultColorMode();
-        primeflex.use();
+        void setDefaultColorMode();
         primeicons.use();
         return () => {
-            primeflex.unuse();
             primeicons.unuse();
         };
     }, []);
 
-    const needCJKIconCorrection = cjkIconCorrectionList.includes(Locale.getLocale());
+    const needCJKIconCorrection = cjkIconCorrectionList.includes(getLocale());
 
     return (
         <PrimeReactProvider>

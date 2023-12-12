@@ -2,17 +2,17 @@
  * The base common config for webpack builds.
  * Note that this cannot be used for build directly.
  */
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
-const resources = fs.readFileSync("resources/build/resource-map.json");
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+const resources = fs.readFileSync('resources/build/resource-map.json');
 
 const moduleResolution = {
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                include: [path.resolve(__dirname, "src"), path.resolve(__dirname, "test")],
+                include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'test')],
                 use: [
                     {
                         loader: 'ts-loader',
@@ -25,36 +25,51 @@ const moduleResolution = {
             },
             {
                 test: /\.ya?ml$/,
-                include: path.resolve(__dirname, "src"),
-                use: "yaml-loader"
+                include: path.resolve(__dirname, 'src'),
+                use: 'yaml-loader'
             },
             {
                 test: /\.css$/i,
                 use: [
                     {
-                        loader: "style-loader",
-                        options: { injectType: "lazyStyleTag" }
+                        loader: 'style-loader',
+                        options: { injectType: 'lazyStyleTag' }
                     },
-                    "css-loader"
+                    'css-loader'
                 ]
             }
         ]
     },
     resolve: {
         symlinks: false,
-        extensions: [".ts", ".js", ".json", ".tsx"],
+        extensions: ['.ts', '.js', '.json', '.tsx'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
-            'R': path.resolve(__dirname, 'resources'),
-            'T': path.resolve(__dirname, "test")
+            R: path.resolve(__dirname, 'resources'),
+            T: path.resolve(__dirname, 'test')
         }
     },
     externals: [
         (ctx, callback) => {
-            if (ctx.context.endsWith("lzma-native") && ctx.request === "node-gyp-build") {
-                callback(null, "global node_gyp_build_lzma");
+            if (ctx.context.includes('lzma-native') && ctx.request === 'node-gyp-build') {
+                callback(null, 'global node_gyp_build_lzma');
                 return;
             }
+            if (ctx.context.includes('electron-fetch') && ctx.request === 'encoding') {
+                callback(null, 'global native_encoding');
+                return;
+            }
+            if (process.env.NODE_ENV === 'production') {
+                if (ctx.request === 'react') {
+                    callback(null, 'global React');
+                    return;
+                }
+                if (ctx.request === 'react-dom') {
+                    callback(null, 'global ReactDOM');
+                    return;
+                }
+            }
+
             callback();
         }
     ]
@@ -63,40 +78,21 @@ const moduleResolution = {
 const baseConfig = {
     main: {
         ...moduleResolution,
-        target: "electron-main"
+        target: 'electron-main'
     },
     renderer: {
         ...moduleResolution,
-        target: "electron-renderer"
-    }
-};
-
-const rendererOptimization = {
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                reactVendor: {
-                    test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom|react-router)[\\/]/,
-                    name: 'vendor-react',
-                    chunks: 'all'
-                },
-                primereactVendor: {
-                    test: /[\\/]node_modules[\\/](primereact|primeicons|primeflex)[\\/]/,
-                    name: 'vendor-primereact',
-                    chunks: 'all'
-                }
-            }
-        }
+        target: 'electron-renderer'
     }
 };
 
 function generateCopyPluginConfig(output) {
     const out = [];
     const ro = JSON.parse(resources.toString());
-    const plat = os.platform() + "-" + os.arch();
+    const plat = os.platform() + '-' + os.arch();
     for (let [from, to] of Object.entries(ro)) {
-        from = from.replace("${platform}", plat);
-        to = to.replace("${platform}", plat);
+        from = from.replace('${platform}', plat);
+        to = to.replace('${platform}', plat);
         if (fs.existsSync(from)) {
             out.push({
                 from: from,
@@ -107,4 +103,4 @@ function generateCopyPluginConfig(output) {
     return out;
 }
 
-module.exports = [baseConfig.main, baseConfig.renderer, rendererOptimization, generateCopyPluginConfig];
+module.exports = [baseConfig.main, baseConfig.renderer, generateCopyPluginConfig];

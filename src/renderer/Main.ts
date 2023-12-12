@@ -1,10 +1,10 @@
 /**
  * Entry point of the new renderer.
  */
-import { ReInit } from './ReInit';
+import { initRenderer } from '@/renderer/ReInit';
 
 async function main() {
-    await ReInit.initRenderer();
+    await initRenderer();
 }
 
 void main();

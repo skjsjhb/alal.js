@@ -10,7 +10,7 @@ function processArgs(args: any[]): any[] {
     return args;
 }
 
-export function runMainTests() {
+export async function runMainTests() {
     console.log('Automate tests for main process.');
 
     ipcMain.on(SignalTest.LOG_DEBUG, (_event, ...args) => {

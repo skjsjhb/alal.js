@@ -93,9 +93,9 @@ following scenarios:
   node tools/sync.js
   ```
 
-- `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially supported), as the library does not come with a valid prebuilt (either missing or malfunctioned). We use a JS-based implementation under this case. Usages of LZMA are also reduced.
+- `lzma-native` is disabled by default for platform `win32-arm64` and `darwin-arm64` (and other platforms not officially supported), as the library does not come with a valid prebuilt (either missing or malfunctioned). Features requiring LZMA decompression are not available on these platforms.
   
-  However, the software version is comparably slow and (more importantly) unreliable due to the lack of maintenance of the package. You might want to enable `lzma-native` manually. To do that:
+  You might want to build and enable `lzma-native` manually. To do that:
   
   1. Confirm that `lzma-native` has been built successfully (`yarn` and check for any errors).
   

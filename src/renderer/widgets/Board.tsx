@@ -1,12 +1,13 @@
-import { ThemeManager } from '@/renderer/themes/ThemeManager';
+import { getColorMode } from '@/renderer/themes/ThemeManager';
+import { useSafeState } from '@/renderer/util/Mount';
 import { css } from '@emotion/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * A board bringing gradient backgrounds.
  */
 export function Board() {
-    const [colorMode, setColorMode] = useState(ThemeManager.getColorMode);
+    const [colorMode, setColorMode] = useSafeState(getColorMode());
     useEffect(() => {
         const fun = (e: Event) => {
             if (e instanceof CustomEvent) {
@@ -25,9 +26,10 @@ export function Board() {
         top: 0,
         bottom: 0,
         zIndex: -10,
-        background: colorMode == 'light' ?
-            'linear-gradient(to right, #ffb3ee, #fceec6);' :
-            'linear-gradient(to right, #4e79c2, #9a30b7);'
+        background:
+            colorMode == 'light'
+                ? 'linear-gradient(to right, #ffb3ee, #fceec6);'
+                : 'linear-gradient(to right, #4e79c2, #9a30b7);'
     });
     return <div css={boardCSS} />;
 }

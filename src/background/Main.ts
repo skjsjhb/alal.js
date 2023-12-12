@@ -1,10 +1,10 @@
 /**
  * The entry point of the new bootloader.
  */
-import { BootLoader } from './BootLoader';
+import { bootloaderMain } from './BootLoader';
 
 function main() {
-    void BootLoader.bootloaderMain();
+    void bootloaderMain();
 }
 
 void main();

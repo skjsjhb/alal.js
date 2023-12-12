@@ -1,73 +1,67 @@
+/**
+ * App options module.
+ */
 import { MAPI } from '@/background/MAPI';
-import { Files } from '@/modules/data/Files';
+import { hasFile } from '@/modules/data/Files';
+import { getRuntimeDataPath } from '@/modules/data/Paths';
+import { mergeObjects } from '@/modules/util/Objects';
 import { ipcRenderer } from 'electron';
 import { outputJSON, readJSON } from 'fs-extra';
 import OptionsTemplate from '../../constra/options.json';
-import { Objects } from '../util/Objects';
-import { Paths } from './Paths';
+
+type OptionsModel = typeof OptionsTemplate;
+
+const OPTIONS_FILE_PATH = 'options.json';
+const options: OptionsModel = OptionsTemplate;
 
 /**
- * ReOptions, aka. Config v2. The newly designed options system for alal.js.
- *
- * This module is designed to solve major issues in Alicorn Config:
- * - Config handling is cumbersome for both main process and renderer process.
- * - The lack of type system for config files.
+ * Loads options from `options.json`.
  */
-export module Options {
-    type OptionsModel = typeof OptionsTemplate;
-
-    const OPTIONS_FILE_PATH = 'options.json';
-    const options: OptionsModel = OptionsTemplate;
-
-    /**
-     * Loads options from `options.json`.
-     */
-    export async function load() {
-        try {
-            const optnPath = Paths.getRuntimeDataPath(OPTIONS_FILE_PATH);
-            if (!await Files.exists(optnPath)) {
-                console.log('Options file not present, skipped.');
-                return;
-            }
-            console.log('Loading options file.');
-            const overrides = await readJSON(optnPath);
-            Objects.merge(options, overrides);
-        } catch (e) {
-            console.error('Failed to load options file: ' + e);
+export async function loadOptions() {
+    try {
+        const optnPath = getRuntimeDataPath(OPTIONS_FILE_PATH);
+        if (!(await hasFile(optnPath))) {
+            console.log('Options file not present, skipped.');
+            return;
         }
+        console.log('Loading options file.');
+        const overrides = await readJSON(optnPath);
+        mergeObjects(options, overrides);
+    } catch (e) {
+        console.error('Failed to load options file: ' + e);
     }
+}
 
-    /**
-     * Get the options file as model.
-     *
-     * A common practice of using this method is unpacking the data, e.g.
-     * ```js
-     * const {width, height} = ReOptions.get().windowSize;
-     * ```
-     */
-    export function get(): OptionsModel {
-        return options;
-    }
+/**
+ * Get the options file as model.
+ */
+export function getOptions(): OptionsModel {
+    return options;
+}
 
-    /**
-     * Save the option file.
-     */
-    export async function save() {
-        try {
-            await outputJSON(Paths.getRuntimeDataPath(OPTIONS_FILE_PATH), options, { spaces: 4 });
-        } catch (e) {
-            console.error('Failed to save options file: ' + e);
-        }
-    }
+/**
+ * Alias for {@link getOptions}.
+ */
+export const opt = getOptions;
 
-    /**
-     * Notify the main process to reload the options.
-     *
-     * Changes only happen in render process, by syncing to the main process some of them
-     * take effect instantly.
-     */
-    export async function requestMainReload() {
-        await save();
-        await ipcRenderer.invoke(MAPI.RELOAD_OPTIONS);
+/**
+ * Save the option file.
+ */
+export async function saveOptions() {
+    try {
+        await outputJSON(getRuntimeDataPath(OPTIONS_FILE_PATH), options, { spaces: 4 });
+    } catch (e) {
+        console.error('Failed to save options file: ' + e);
     }
+}
+
+/**
+ * Notify the main process to reload the options.
+ *
+ * Changes only happen in render process, by syncing to the main process some of them
+ * take effect instantly.
+ */
+export async function reloadMainOptions() {
+    await saveOptions();
+    await ipcRenderer.invoke(MAPI.RELOAD_OPTIONS);
 }

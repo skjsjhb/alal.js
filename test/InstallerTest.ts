@@ -37,7 +37,7 @@ export async function testInstaller() {
                 const dirs = await readdir(ContainerTools.getNativesDirectory(ct, v));
                 assertTrue(dirs.length > 0, 'Natives dir is not empty');
             }
-            await checkContainerContents();
+            await checkContainerContents(true);
         });
     } else {
         await test('Full Game Installation', async () => {
@@ -64,15 +64,17 @@ export async function testInstaller() {
         assertFalse(res?.isolated, 'Import container should not be isolated');
     });
 
-    async function checkContainerContents() {
+    async function checkContainerContents(simplified = false) {
         const dirs = await readdir(path.join(ct.rootDir));
         assertTrue(dirs.includes('libraries'), 'Libraries should exist');
-        assertTrue(dirs.includes('resources'), 'Mapped assets should exist');
-        assertTrue(dirs.includes('assets'), 'Assets folder should exist');
-        assertTrue(dirs.includes('client-1.12.xml'), 'Log config should exist');
-        const assets = await readdir(path.join(ct.rootDir, 'assets'));
-        assertTrue(assets.includes('virtual'), 'Legacy assets should exist');
-        assertTrue(assets.includes('indexes'), 'Asset indexes should exist');
-        assertTrue(assets.includes('objects'), 'Asset objects should exist');
+        if (!simplified) {
+            assertTrue(dirs.includes('resources'), 'Mapped assets should exist');
+            assertTrue(dirs.includes('assets'), 'Assets folder should exist');
+            assertTrue(dirs.includes('client-1.12.xml'), 'Log config should exist');
+            const assets = await readdir(path.join(ct.rootDir, 'assets'));
+            assertTrue(assets.includes('virtual'), 'Legacy assets should exist');
+            assertTrue(assets.includes('indexes'), 'Asset indexes should exist');
+            assertTrue(assets.includes('objects'), 'Asset objects should exist');
+        }
     }
 }

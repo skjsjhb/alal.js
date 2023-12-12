@@ -100,7 +100,7 @@ export module Downloader {
             console.log('Try: ' + p.url);
         }
         // You failed!
-        console.log('Drp: ' + p.url);
+        console.warn('Drp: ' + p.url);
         return false;
     }
 

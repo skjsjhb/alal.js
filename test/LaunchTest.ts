@@ -6,6 +6,7 @@ import path from 'path';
 import { TestTools } from 'T/TestTools';
 import assertEquals = TestTools.assertEquals;
 import assertTrue = TestTools.assertTrue;
+import shouldSimpleTest = TestTools.shouldSimpleTest;
 import test = TestTools.test;
 
 export async function testLaunch() {
@@ -19,7 +20,10 @@ export async function testLaunch() {
         for (const v of ['1.20.2', '1.6.4', '1.5.2']) {
             const profile = await ProfileTools.loadProfile(ct, v);
             if (profile) {
-                const ai = await ProfileTools.loadAssetIndex(ct, profile);
+                let ai = shouldSimpleTest() ? {
+                    map_to_resources: false,
+                    objects: {}
+                } : await ProfileTools.loadAssetIndex(ct, profile);
                 const args = Launcher.synthesizeArguments(ct, profile, ai);
                 assertTrue(args.length > 0, 'Arguments should not be empty');
             }

@@ -10,5 +10,12 @@
         return require(src);
     }
 
+    const no_pac_proxy_agent = {
+        PacProxyAgent: {
+            protocols: [],
+        }
+    }
+
     window.node_gyp_build_lzma = node_gyp_build_lzma;
+    window.no_pac_proxy_agent = no_pac_proxy_agent;
 })();

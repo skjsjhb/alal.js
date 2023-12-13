@@ -55,6 +55,15 @@ const moduleResolution = {
                 callback(null, 'global node_gyp_build_lzma');
                 return;
             }
+            if (ctx.request === 'pac-proxy-agent') {
+                callback(null, 'global no_pac_proxy_agent');
+                return;
+            }
+            if (ctx.request === 'web-streams-polyfill/dist/ponyfill.es2018.js') {
+                // Electron always bundles Node > 16.x and therefore web streams are available
+                callback(null, 'global undefined');
+                return;
+            }
             if (process.env.NODE_ENV === 'production') {
                 if (ctx.request === 'react') {
                     callback(null, 'global React');

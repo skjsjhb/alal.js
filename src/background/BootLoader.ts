@@ -15,6 +15,7 @@ import { createBindings } from './Handlers';
  */
 export async function bootloaderMain() {
     console.log('This is alal.js bootloader. Newer bootloader brings better performance.');
+    injectGlobals();
     await prepareRun();
     await app.whenReady();
 
@@ -32,6 +33,15 @@ export async function bootloaderMain() {
 
     // Initialize the main window and wait until it loads
     await initMainWindow();
+}
+
+function injectGlobals() {
+    // @ts-expect-error Hacks are not typed
+    globalThis.no_pac_proxy_agent = {
+        PacProxyAgent: {
+            protocols: []
+        }
+    };
 }
 
 function bindErrorHandlers() {}

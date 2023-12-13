@@ -1642,10 +1642,10 @@ __metadata:
     css-loader: "npm:^6.8.1"
     electron: "npm:^28.0.0"
     electron-builder: "npm:^24.9.4"
-    electron-fetch: "npm:^1.9.1"
     eslint: "npm:^8.55.0"
     fs-extra: "npm:^11.2.0"
     html-webpack-plugin: "npm:^5.5.4"
+    https-proxy-agent: "npm:^7.0.2"
     lzma-native: "npm:^8.0.6"
     nanoid: "npm:^5.0.4"
     node-fetch: "npm:^3.3.2"
@@ -3098,15 +3098,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-fetch@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "electron-fetch@npm:1.9.1"
-  dependencies:
-    encoding: "npm:^0.1.13"
-  checksum: 650d91e7957ed9d7e054a5cf2d3f57ed2fae859cbe51e6910b75699f33fcf08a9cd812d418d14280da6fc58e6914dfc3177ca7b081308c4074326ced47409cd8
-  languageName: node
-  linkType: hard
-
 "electron-publish@npm:24.9.4":
   version: 24.9.4
   resolution: "electron-publish@npm:24.9.4"
@@ -4365,7 +4356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:^7.0.1":
+"https-proxy-agent@npm:^7.0.1, https-proxy-agent@npm:^7.0.2":
   version: 7.0.2
   resolution: "https-proxy-agent@npm:7.0.2"
   dependencies:

@@ -55,10 +55,6 @@ const moduleResolution = {
                 callback(null, 'global node_gyp_build_lzma');
                 return;
             }
-            if (ctx.context.includes('electron-fetch') && ctx.request === 'encoding') {
-                callback(null, 'global native_encoding');
-                return;
-            }
             if (process.env.NODE_ENV === 'production') {
                 if (ctx.request === 'react') {
                     callback(null, 'global React');

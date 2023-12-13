@@ -1,8 +1,9 @@
-import { MAPI } from '@/background/MAPI';
 import OriginalRulesRaw from '@/constra/mirrors.json';
 import { opt } from '@/modules/data/Options';
-import { getRegTable, setRegTable } from '@/modules/data/Registry';
-import { ipcRenderer } from 'electron';
+import { getRegTable } from '@/modules/data/Registry';
+import { getProxyAgent } from '@/modules/net/ProxyMan';
+import { repeat } from '@/modules/util/Objects';
+import fetch from 'node-fetch';
 
 /**
  * Mirrors latency test, resolve and management module.
@@ -14,69 +15,105 @@ interface SourceRuleSet {
 
 type GeneratedRuleSet = {
     name: string;
-    latency: number;
+    speed: number;
 } & SourceRuleSet;
 
-const mirrorsRegId = 'mirrors';
+const mirrorsRegId = 'mirrors_v2';
 const originalRules = OriginalRulesRaw as Record<string, SourceRuleSet>;
 
+const updatePeriod = 1000 * 60 * 60 * 24; // Update once per day
+
+interface MirrorRecords {
+    rules: GeneratedRuleSet[];
+    lastUpdate: number;
+}
+
 /**
- * Tests the latency of specified mirror.
+ * Tests the speed of specified mirror.
  */
-export function testMirrorLatency(name: string): Promise<number> {
-    return testLatency(originalRules[name].test);
+export function testMirrorSpeed(name: string): Promise<number> {
+    return testSpeed(originalRules[name].test);
 }
 
 // Synthesized rules with priority applied
 let synthRules: Map<string, string | null>;
 
-// Tests the header latency and returns in ms.
-// This method also considers stability - an error will cause latency test to fail.
-// Can only be called on the renderer process.
-function testLatency(url: string): Promise<number> {
-    return ipcRenderer.invoke(MAPI.TEST_LATENCY, url);
+const latencyTestTries = 10;
+const latencyTestTimeout = 20000; // 20s for a file around 1MiB
+
+async function testSpeed(url: string): Promise<number> {
+    const proxyAgent = await getProxyAgent(url);
+    const results = await Promise.all(
+        repeat(latencyTestTries).map(async () => {
+            const controller = new AbortController();
+            const tid = setTimeout(() => controller.abort('Timeout'), latencyTestTimeout);
+            try {
+                const start = Date.now(); // Test speed for body
+                const res = await fetch(url, { signal: controller.signal, agent: proxyAgent });
+                const buf = Buffer.from(await res.arrayBuffer());
+                clearTimeout(tid);
+                return buf.length / (Date.now() - start); // Bytes per ms
+            } catch (e) {
+                console.log('Error during speed test: ' + e);
+                return -1;
+            }
+        })
+    );
+    if (results.includes(-1)) {
+        return -1;
+    }
+    return Math.round(results.reduce((a, b) => a + b) / results.length);
 }
 
-async function sortRulesByLatency(ruleSet: Record<string, SourceRuleSet>): Promise<GeneratedRuleSet[]> {
+async function sortRules(ruleSet: Record<string, SourceRuleSet>): Promise<GeneratedRuleSet[]> {
     const rules = Object.entries(ruleSet);
     const genRules: GeneratedRuleSet[] = [];
 
-    console.log('Updating mirror latency. This may take several seconds.');
     // Generate latency map
     await Promise.all(
         rules.map(async ([name, rule]) => {
-            const latency = await testLatency(rule.test);
-            if (latency < 0) {
+            const speed = await testSpeed(rule.test);
+            if (speed < 0) {
                 console.warn(`Mirror ${name} unreachable, skipped.`);
                 return;
             } else {
-                console.log('Latency of ' + name + ': ' + latency + ' ms');
+                console.log('Speed of %s: %d KB/s', name, (speed * 1000) / 1024);
             }
             genRules.push({
                 ...rule,
                 name,
-                latency
+                speed: speed
             });
         })
     );
-    return genRules.sort((a, b) => a.latency - b.latency);
+    return genRules.sort((a, b) => a.speed - b.speed);
 }
 
+const defaultMirrorRec = {
+    lastUpdate: -1,
+    rules: []
+};
+
 /**
- * Update the mirror rules by testing the latency and set the table value.
+ * Update the mirror rules on demand by testing the speed and set the table value.
  * Note that this method will clear any previously set rules and use the new one.
- * Mirrors are updates regardless of whether it's enabled.
  */
 export async function updateMirrors() {
-    const res = await sortRulesByLatency(originalRules);
-    setRegTable(mirrorsRegId, res);
-    console.log('Saved mirror rules.');
+    const rec = getRegTable<MirrorRecords>(mirrorsRegId, defaultMirrorRec);
+    if (rec.rules.length == 0 || rec.lastUpdate < Date.now() - updatePeriod) {
+        console.log('Expired or missing mirror rules. Updating.');
+        rec.rules = await sortRules(originalRules);
+        rec.lastUpdate = Date.now();
+        console.log('Updated mirror rules.');
+    } else {
+        console.log('Skipped up-to-date mirror testing.');
+    }
 }
 
 function synthesizeRules() {
     synthRules = new Map();
-    const rules = getRegTable<GeneratedRuleSet[]>(mirrorsRegId, []);
-    for (const rule of rules.toReversed()) {
+    const rec = getRegTable<MirrorRecords>(mirrorsRegId, defaultMirrorRec);
+    for (const rule of rec.rules) {
         for (const [k, v] of Object.entries(rule.overrides)) {
             synthRules.set(k, v);
         }

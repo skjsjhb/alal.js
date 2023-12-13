@@ -37,7 +37,7 @@ async function allTests() {
     });
     await test('Mirror Latency Test', () => {
         // This is executed after a full initialization. Mirrors should be usable.
-        assertNotEquals(getRegTable('mirrors', []).length, 0, 'Mirrors list not empty');
+        assertNotEquals(getRegTable('mirrors_v2', { rules: [] }).rules.length, 0, 'Mirrors list not empty');
     });
     const testFile =
         'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-debugimage_x64_windows_hotspot_17.0.9_9.zip.json';

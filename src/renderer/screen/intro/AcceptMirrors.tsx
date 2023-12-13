@@ -1,6 +1,6 @@
 import { opt } from '@/modules/data/Options';
 import { getLocaleSection } from '@/modules/i18n/Locale';
-import { testMirrorLatency } from '@/modules/net/Mirrors';
+import { testMirrorSpeed } from '@/modules/net/Mirrors';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { useMounted, useSafeState } from '@/renderer/util/Mount';
 import { Radio } from '@/renderer/widgets/Radio';
@@ -16,21 +16,18 @@ export function AcceptMirrors(): React.ReactElement {
     const tr = getLocaleSection('accept-mirrors');
     const [allowMirrors, setAllowMirrors] = useSafeState(true);
     const userSelected = useRef(false);
-    const [mirrorLatency, setMirrorLatency] = useSafeState<number>(-2);
-    const [originLatency, setOriginLatency] = useSafeState<number>(-2);
+    const [mirrorLatency, setMirrorSpeed] = useSafeState<number>(-2);
+    const [originLatency, setOriginalSpeed] = useSafeState<number>(-2);
     const [suggestMirror, setSuggestMirror] = useSafeState(false);
     const next = useIntroNav('AcceptMirrors');
     const mounted = useMounted();
 
     useEffect(() => {
         (async () => {
-            const [ogl, mil] = await Promise.all([
-                testMirrorLatency('minecraft-libraries'),
-                testMirrorLatency('mcbbs')
-            ]);
+            const [ogl, mil] = await Promise.all([testMirrorSpeed('minecraft-libraries'), testMirrorSpeed('mcbbs')]);
             if (mounted.current) {
-                setOriginLatency(ogl);
-                setMirrorLatency(mil);
+                setOriginalSpeed(ogl);
+                setMirrorSpeed(mil);
                 const sm = mil != -2 && mil != -1 && mil < (ogl ?? 0);
                 setSuggestMirror(sm);
                 userSelected.current || setAllowMirrors(sm);
@@ -45,7 +42,7 @@ export function AcceptMirrors(): React.ReactElement {
     function toReadableLatencyText(l: number): string {
         if (l == -2) return tr('latency-testing');
         if (l == -1) return tr('latency-invalid');
-        return l + 'ms';
+        return l + ' KB/s';
     }
 
     // Color the latency test as success if suggested, otherwise warning

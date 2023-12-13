@@ -3,13 +3,14 @@ import Sources from '@/constra/sources.json';
 import { Account, AccountType } from '@/modules/auth/Account';
 import { getRegTable } from '@/modules/data/Registry';
 import { TR } from '@/modules/i18n/Locale';
-import { fetchHeaders, fetchJSON } from '@/modules/net/FetchUtil';
+import { fetchJSON } from '@/modules/net/FetchUtil';
+import { getProxyAgent } from '@/modules/net/ProxyMan';
 import { Task } from '@/modules/task/Task';
 import { hashString } from '@/modules/util/Hash';
 import { createHash } from 'crypto';
 import { ipcRenderer } from 'electron';
 import { nanoid } from 'nanoid';
-import path from 'path';
+import fetch from 'node-fetch';
 
 const accountTableId = 'accounts';
 
@@ -193,16 +194,14 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
 
 // Use ALI to get the API location
 async function resolveYggdrasilLocation(host: string): Promise<string> {
-    const hostURL = new URL(host);
-    const headers = await fetchHeaders(host);
-    const location = Object.entries(headers).find(([k]) => k.toLowerCase() == 'x-authlib-injector-api-location');
-    if (location) {
-        const url = String(location[1]);
-        if (url.includes('://')) {
-            return url;
+    try {
+        const res = await fetch(host, { method: 'HEAD', agent: await getProxyAgent(host) });
+        const location = res.headers.get('x-authlib-injector-api-location');
+        if (location) {
+            return new URL(location, host).toString();
         }
-        hostURL.pathname = path.join(hostURL.pathname, url);
-        return hostURL.toString();
+    } catch (e) {
+        console.error('Could not resolve Yggdrasil API location for %s: %s', host, e);
     }
     return host;
 }

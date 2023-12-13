@@ -63,7 +63,7 @@ accept-mirrors:
   title: "你的下载由 BMCLAPI 加速"
   body: |
     BMCLAPI 可以大幅提升下载速度，不过也请注意，它的数据更新可能存在延迟。
-  latency: 实时延迟：BMCLAPI ${m1} / Mojang 官方 ${m2}
+  latency: 速度：BMCLAPI ${m1} / Mojang 官方 ${m2}
   latency-testing: 正在测定...
   latency-invalid: 不可达
   choices:

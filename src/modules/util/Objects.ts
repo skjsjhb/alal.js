@@ -93,3 +93,14 @@ export function doesArrayOverlap<T>(a: T[], b: T[]): boolean {
     }
     return false;
 }
+
+/**
+ * Returns an array with given number of elements.
+ */
+export function repeat(i: number): never[] {
+    const o = [];
+    for (let j = 0; j < i; j++) {
+        o.push(0);
+    }
+    return o as never[];
+}

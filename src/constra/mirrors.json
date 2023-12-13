@@ -1,6 +1,6 @@
 {
   "minecraft-libraries": {
-    "test": "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",
+    "test": "https://piston-data.mojang.com/v1/objects/5c292ff7d3161977041116698e295083fd5ec8f5/client.txt",
     "overrides": {
       "https://launchermeta.mojang.com": null,
       "https://piston-meta.mojang.com": null,
@@ -11,7 +11,7 @@
     }
   },
   "mcbbs": {
-    "test": "https://download.mcbbs.net/mc/game/version_manifest_v2.json",
+    "test": "https://download.mcbbs.net/v1/objects/5c292ff7d3161977041116698e295083fd5ec8f5/client.txt",
     "overrides": {
       "https://launchermeta.mojang.com": "https://download.mcbbs.net",
       "https://piston-meta.mojang.com": "https://download.mcbbs.net",
@@ -31,35 +31,35 @@
     }
   },
   "fabric": {
-    "test": "https://meta.fabricmc.net/v1/versions",
+    "test": "https://maven.fabricmc.net/net/fabricmc/sponge-mixin/0.12.5+mixin.0.8.5/sponge-mixin-0.12.5+mixin.0.8.5.jar",
     "overrides": {
       "https://meta.fabricmc.net": null,
       "https://maven.fabricmc.net": null
     }
   },
   "forge": {
-    "test": "https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml",
+    "test": "https://maven.minecraftforge.net/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar",
     "overrides": {
       "https://maven.minecraftforge.net": null,
       "https://files.minecraftforge.net/maven": null
     }
   },
   "neoforged": {
-    "test": "https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml",
+    "test": "https://maven.neoforged.net/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar",
     "overrides": {
       "https://maven.neoforged.net/releases/net/neoforged/forge": null,
       "https://maven.neoforged.net/releases/net/neoforged/neoforge": null
     }
   },
   "quilt": {
-    "test": "https://meta.quiltmc.org/v3/versions",
+    "test": "https://maven.quiltmc.org/repository/release/org/quiltmc/enigma/1.9.1/enigma-1.9.1.jar",
     "overrides": {
       "https://maven.quiltmc.org/repository/release": null,
       "https://meta.quiltmc.org": null
     }
   },
   "authlib-injector": {
-    "test": "https://authlib-injector.yushi.moe",
+    "test": "https://authlib-injector.yushi.moe/artifact/52/authlib-injector-1.2.4.jar",
     "overrides": {
       "https://authlib-injector.yushi.moe": null
     }

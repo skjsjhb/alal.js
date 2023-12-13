@@ -64,7 +64,7 @@ accept-mirrors:
   title: BMCLAPI Speeds up the Download
   body: |
     Download faster with BMCLAPI. Please note that file synchronization might be delayed.
-  latency: "Latency: BMCLAPI ${m1} / Mojang Official ${m2}"
+  latency: "Speed: BMCLAPI ${m1} / Mojang Official ${m2}"
   latency-testing: Testing...
   latency-invalid: UNREACHABLE
   choices:

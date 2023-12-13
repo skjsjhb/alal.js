@@ -1,46 +1,24 @@
-import { MAPI } from '@/background/MAPI';
 import { opt } from '@/modules/data/Options';
-import { isRemote } from '@/modules/util/Availa';
-import { ipcRenderer } from 'electron';
-import fetch, { RequestInit } from 'electron-fetch';
+import { applyMirrors } from '@/modules/net/Mirrors';
+import { getProxyAgent } from '@/modules/net/ProxyMan';
+import fetch, { RequestInit } from 'node-fetch';
 
 /**
  * A simple wrapper to `fetch` with JSON returned and mirrors applied. Errors are properly handled.
  */
 export async function fetchJSON(url: string, init?: RequestInit): Promise<any> {
-    if (isRemote()) {
-        const { applyMirrors } = await import('@/modules/net/Mirrors');
-        const mirror = applyMirrors(url);
-        return await ipcRenderer.invoke(MAPI.FETCH_JSON_MAIN, mirror, init);
-    } else {
-        console.error('This method can only be called from the renderer.');
-        return null;
-    }
-}
+    const mirror = applyMirrors(url);
 
-/**
- * Fetch headers using GET request on the given URL.
- */
-export async function fetchHeaders(url: string): Promise<any> {
-    if (isRemote()) {
-        const { applyMirrors } = await import('@/modules/net/Mirrors');
-        const mirror = applyMirrors(url);
-        return await ipcRenderer.invoke(MAPI.FETCH_HEADERS_MAIN, mirror);
-    } else {
-        console.error('This method can only be called from the renderer.');
-        return null;
-    }
-}
-
-// Fetch on main proc with tries
-export async function fetchJSONMain(url: string, init?: RequestInit): Promise<any> {
     const tries = opt().download.tries;
     let lastError;
     for (const _i of Array(tries)) {
         try {
-            const response = await fetch(url, init);
+            const response = await fetch(mirror, {
+                ...init,
+                agent: await getProxyAgent(mirror)
+            });
             if (!response.ok) {
-                lastError = 'Invalid status received for ' + url + ': ' + response.status;
+                lastError = 'Invalid status received for ' + mirror + ': ' + response.status;
                 if (response.status == 404) {
                     break; // No need to retry
                 }
@@ -51,25 +29,6 @@ export async function fetchJSONMain(url: string, init?: RequestInit): Promise<an
             lastError = e;
         }
     }
-    console.error('Could not fetch ' + url + ': ' + lastError);
-    return null;
-}
-
-export async function fetchHeadersMain(url: string): Promise<any> {
-    const tries = opt().download.tries;
-    let lastError;
-    for (const _i of Array(tries)) {
-        try {
-            const response = await fetch(url);
-            const val: Record<string, string> = {};
-            response.headers.forEach((v, k) => {
-                val[k] = v;
-            });
-            return val;
-        } catch (e) {
-            lastError = e;
-        }
-    }
-    console.error('Could not fetch ' + url + ': ' + lastError);
+    console.error('Could not fetch ' + mirror + ': ' + lastError);
     return null;
 }

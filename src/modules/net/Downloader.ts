@@ -3,15 +3,13 @@
  *
  * This module runs on the main process, but all methods are also compatible for renderer use.
  */
-import { MAPI } from '@/background/MAPI';
 import { checkFileIntegrity } from '@/modules/data/Files';
 import { opt } from '@/modules/data/Options';
 import { addCache, applyCache, removeCache } from '@/modules/net/Cacher';
 import { applyMirrors } from '@/modules/net/Mirrors';
-import { isRemote } from '@/modules/util/Availa';
-import { ipcRenderer } from 'electron';
-import fetch from 'electron-fetch';
+import { getProxyAgent } from '@/modules/net/ProxyMan';
 import { createWriteStream, ensureDir, stat } from 'fs-extra';
+import fetch from 'node-fetch';
 import path from 'path';
 import { PassThrough, Transform, TransformCallback } from 'stream';
 import { pipeline } from 'stream/promises';
@@ -156,39 +154,18 @@ async function addDownloadCache(p: DownloadProfile): Promise<void> {
  * @param p Download profile.
  */
 export async function webGetFile(p: DownloadProfile): Promise<string | null> {
-    const { url } = p;
-    console.log('Get: ' + url);
-    let err;
-    if (isRemote()) {
-        err = await webGetFileRemote(p);
-    } else {
-        err = await webGetFileMain(p);
-    }
-    if (err == null) {
-        console.log('Res: ' + url);
-        return null;
-    } else {
-        console.log(`Err: ${url} (${err})`);
-        return err;
-    }
-}
-
-// Wrapped remote version
-export async function webGetFileRemote(p: DownloadProfile): Promise<string | null> {
-    return await ipcRenderer.invoke(MAPI.WEB_GET_FILE, p);
-}
-
-// Download a file using electron-fetch in main process
-// Returns the error message, or `null` if successful.
-export async function webGetFileMain(p: DownloadProfile): Promise<string | null> {
     const { url, location, headerTimeout, minSpeed } = p;
+    console.log('Get: ' + url);
+
     const timeoutController = new AbortController();
     const tlc = setTimeout(() => {
         timeoutController.abort('Timeout');
     }, headerTimeout);
+
     try {
         const res = await fetch(url, {
-            signal: timeoutController.signal
+            signal: timeoutController.signal,
+            agent: await getProxyAgent(url)
         });
         if (!res.ok) {
             return res.status.toString();
@@ -201,8 +178,10 @@ export async function webGetFileMain(p: DownloadProfile): Promise<string | null>
         const meter = getSpeedMeter(minSpeed);
         await ensureDir(path.dirname(location));
         await pipeline(res.body, meter, createWriteStream(location));
+        console.log('Res: ' + url);
         return null;
     } catch (e) {
+        console.log(`Err: ${url} (${e})`);
         return String(e);
     }
 }

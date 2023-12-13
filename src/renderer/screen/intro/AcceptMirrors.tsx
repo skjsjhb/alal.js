@@ -28,7 +28,7 @@ export function AcceptMirrors(): React.ReactElement {
             if (mounted.current) {
                 setOriginalSpeed(ogl);
                 setMirrorSpeed(mil);
-                const sm = mil != -2 && mil != -1 && mil < (ogl ?? 0);
+                const sm = mil != -2 && mil != -1 && mil > (ogl ?? 0);
                 setSuggestMirror(sm);
                 userSelected.current || setAllowMirrors(sm);
             }

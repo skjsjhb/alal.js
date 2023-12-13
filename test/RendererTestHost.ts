@@ -31,8 +31,8 @@ async function allTests() {
     await test('Renderer Exists', () => {
         assertTrue(ipcRenderer, 'Value ipcRenderer exists');
     });
-    await test('Locale Loading', () => {
-        setActiveLocale('en-US');
+    await test('Locale Loading', async () => {
+        await setActiveLocale('en-US');
         assertEquals(TR('name'), 'English (US)', 'Translation key should match');
     });
     await test('Mirror Latency Test', () => {

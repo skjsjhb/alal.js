@@ -24,11 +24,6 @@ const moduleResolution = {
                 exclude: /node_modules/
             },
             {
-                test: /\.ya?ml$/,
-                include: path.resolve(__dirname, 'src'),
-                use: 'yaml-loader'
-            },
-            {
                 test: /\.css$/i,
                 use: [
                     {

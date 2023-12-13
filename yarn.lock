@@ -1677,7 +1677,6 @@ __metadata:
     webpack-cli: "npm:^5.1.4"
     webpack-dev-server: "npm:^4.15.1"
     yaml: "npm:^2.3.4"
-    yaml-loader: "npm:^0.8.0"
   languageName: unknown
   linkType: soft
 
@@ -4828,13 +4827,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"javascript-stringify@npm:^2.0.1":
-  version: 2.1.0
-  resolution: "javascript-stringify@npm:2.1.0"
-  checksum: 374e74ebff29b94de78da39daa6e530999c58a145aeb293dc21180c4584459b14d9e5721d9bc6ed4eba319c437ef0145c157c946b70ecddcff6668682a002bcc
-  languageName: node
-  linkType: hard
-
 "jest-worker@npm:^27.4.5":
   version: 27.5.1
   resolution: "jest-worker@npm:27.5.1"
@@ -5004,7 +4996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^2.0.0, loader-utils@npm:^2.0.4":
+"loader-utils@npm:^2.0.4":
   version: 2.0.4
   resolution: "loader-utils@npm:2.0.4"
   dependencies:
@@ -8083,17 +8075,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml-loader@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "yaml-loader@npm:0.8.0"
-  dependencies:
-    javascript-stringify: "npm:^2.0.1"
-    loader-utils: "npm:^2.0.0"
-    yaml: "npm:^2.0.0"
-  checksum: f0b585d79b3d7ee707443d5ea2df51da296816f206ea2c883768bcef335d4235ba71851311b8121eee233eb9ca8a4d5bca79a2f6ac47a1b914969e14591cb427
-  languageName: node
-  linkType: hard
-
 "yaml@npm:^1.10.0":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
@@ -8101,7 +8082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.0.0, yaml@npm:^2.3.4":
+"yaml@npm:^2.3.4":
   version: 2.3.4
   resolution: "yaml@npm:2.3.4"
   checksum: cf03b68f8fef5e8516b0f0b54edaf2459f1648317fc6210391cf606d247e678b449382f4bd01f77392538429e306c7cba8ff46ff6b37cac4de9a76aff33bd9e1

@@ -71,10 +71,10 @@ export function getRuntimeDataPath(...pt: string[]): string {
  * Resolve a given app resource path.
  * @param pt Relative path.
  */
-export function getResourcePath(pt: string) {
+export function getResourcePath(...pt: string[]) {
     if (!appPath) {
         console.error('Paths used with app path uninitialized. Skipped.');
         return '';
     }
-    return path.resolve(appPath, pt);
+    return path.resolve(appPath, ...pt);
 }

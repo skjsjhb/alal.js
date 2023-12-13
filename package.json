@@ -53,8 +53,7 @@
     "webpack": "^5.89.0",
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
-    "yaml-loader": "^0.8.0"
+    "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

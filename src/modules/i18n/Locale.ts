@@ -1,18 +1,14 @@
 import { MAPI } from '@/background/MAPI';
 import { opt } from '@/modules/data/Options';
+import { getResourcePath } from '@/modules/data/Paths';
 import { isRemote } from '@/modules/util/Availa';
 import { getObjectPropertyByKey } from '@/modules/util/Objects';
 import { app, ipcRenderer } from 'electron';
-
-// Language imports
-import enUS from './lang/en-US.yml';
-import zhCN from './lang/zh-CN.yml';
+import { readFile } from 'fs-extra';
+import yaml from 'yaml';
 
 let currentLocale = '';
-const locales: Record<string, any> = {
-    'en-US': enUS,
-    'zh-CN': zhCN
-};
+const locales: Record<string, object> = {};
 
 /**
  * Initializes the locale module: loads locale files from a pre-set directory, then set the current locale
@@ -27,7 +23,16 @@ export async function initLocale() {
         // Background
         userLocale = opt().locale || app.getLocale();
     }
-    setActiveLocale(userLocale);
+    await setActiveLocale(userLocale);
+}
+
+async function readLocale(id: string): Promise<void> {
+    try {
+        const f = getResourcePath('lang', id + '.yml');
+        locales[id] = yaml.parse((await readFile(f)).toString());
+    } catch (e) {
+        console.error('Could not load locale %s: %s', id, e);
+    }
 }
 
 /**
@@ -37,9 +42,13 @@ export async function initLocale() {
  * This method does not require the target locale to have been built. The locale retrieval is only done
  * when the translation method is called.
  */
-export function setActiveLocale(id: string) {
+export async function setActiveLocale(id: string) {
     console.log('Active locale: ' + id);
     currentLocale = id;
+    if (!locales[currentLocale]) {
+        console.log('Loading locale: ' + currentLocale);
+        await readLocale(currentLocale);
+    }
 }
 
 /**

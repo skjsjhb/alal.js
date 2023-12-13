@@ -1,7 +1,3 @@
-function isObject(item: any) {
-    return item && typeof item === 'object' && !Array.isArray(item);
-}
-
 /**
  * A recursive deep merge of two objects.
  * @param target Object to be assigned to.
@@ -23,6 +19,10 @@ export function mergeObjects(target: Record<string, any>, ...sources: Record<str
         }
     }
     return target;
+}
+
+function isObject(item: any) {
+    return item && typeof item === 'object' && !Array.isArray(item);
 }
 
 /**

@@ -34,16 +34,13 @@ const main = {
     },
     plugins: [
         new CopyWebpackPlugin({
-            patterns: [
-                ...genConfig(path.resolve(__dirname, 'build/debug'))
-            ]
+            patterns: [...genConfig(path.resolve(__dirname, 'build/debug'))]
         }),
         new DefinePlugin({
-            'process.env.MODE': '\'debug\''
+            'process.env.MODE': "'debug'"
         })
     ]
 };
-
 
 const renderer = {
     ...baseRenderer,
@@ -63,13 +60,24 @@ const renderer = {
         }),
         new ReactRefreshWebpackPlugin(),
         new DefinePlugin({
-            'process.env.MODE': '\'debug\''
+            'process.env.MODE': "'debug'"
         })
     ],
     devServer: {
         hot: true,
         port: 9000,
         static: path.resolve(__dirname, 'build/debug')
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                node_modules: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'node_modules',
+                    chunks: 'all'
+                }
+            }
+        }
     }
 };
 
@@ -87,6 +95,5 @@ renderer.module.rules[0] = {
         }
     ]
 };
-
 
 module.exports = [main, renderer];

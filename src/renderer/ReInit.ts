@@ -67,11 +67,11 @@ async function initModules() {
     await loadOptions();
     await initLocale();
     await loadRegTables();
-    await initJavaGet();
 }
 
 // Tasks to run after renderer initialization
 async function postInit() {
+    await initJavaGet();
     await initCache();
     await updateMirrors();
 }

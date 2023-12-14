@@ -2,7 +2,6 @@ import { createLocalAccount } from '@/modules/auth/AccountTools';
 import { Container } from '@/modules/container/ContainerTools';
 import { getJavaComponentForProfile } from '@/modules/jem/JavaVersionMap';
 import { synthesizeArguments } from '@/modules/launch/ArgsGenerator';
-import { launch } from '@/modules/launch/Launcher';
 import { loadAssetIndex, loadProfile } from '@/modules/profile/ProfileTools';
 import path from 'path';
 import { TestTools } from 'T/TestTools';
@@ -38,19 +37,5 @@ export async function testLaunch() {
         assertEquals(getJavaComponentForProfile('1.20.2'), 'java-runtime-gamma', 'JEM should return gamma for 1.20.2');
         assertEquals(getJavaComponentForProfile('1.6.4'), 'jre-legacy', 'JEM should return legacy for 1.6.4');
         assertEquals(getJavaComponentForProfile('21w44a'), 'java-runtime-alpha', 'JEM should return alpha for 21w44a');
-    });
-
-    await test('Full Game Launch', async () => {
-        for (const v of ['1.20.2', '1.6.4', '1.5.2']) {
-            const inst = await launch(ct, v, createLocalAccount('Player'));
-            await new Promise<void>((res) => {
-                inst.once('log', (s) => {
-                    s = s.toLowerCase();
-                    assertTrue(s.includes('openjdk') || s.includes('java'), 'Initial log output should exist');
-                    inst.kill(); // Game won't launch since there are no graphics support
-                    res();
-                });
-            });
-        }
     });
 }

@@ -21,6 +21,7 @@
     "launch-autotest": "cd build/autotest && npx electron .",
     "lint": "npx eslint",
     "test": "node tools/launchTest.js",
+    "simple-test": "cross-env ALAL_TEST_SIMPLE=1 yarn test",
     "clean": "yarn rimraf build dist"
   },
   "devDependencies": {

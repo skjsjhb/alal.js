@@ -9,32 +9,33 @@
  */
 export interface VersionProfile {
     arguments: {
-        game: Argument[],
-        jvm: Argument[]
+        game: Argument[];
+        jvm: Argument[];
     };
     assetIndex: Artifact & {
-        id: string,
-        totalSize: number
+        id: string;
+        totalSize: number;
     };
     assets: string;
     complianceLevel: number;
     downloads: {
-        client: Artifact,
-        client_mappings: Artifact,
-        server: Artifact,
-        server_mappings: Artifact
+        client: Artifact;
+        client_mappings: Artifact;
+        server: Artifact;
+        server_mappings: Artifact;
     };
-    id: string;
-    javaVersion: JVMComponent,
+    id: string; // Profile ID.
+    origin?: string; // Original ID for profile isolation
+    javaVersion: JVMComponent;
     libraries: Library[];
     logging: {
         client: {
-            argument: string,
+            argument: string;
             file: Artifact & {
-                id: string,
-            },
-            type: string
-        }
+                id: string;
+            };
+            type: string;
+        };
     };
     mainClass: string;
     minimumLauncherVersion: number;
@@ -44,48 +45,50 @@ export interface VersionProfile {
 }
 
 export interface AssetIndex {
-    map_to_resources?: boolean,
-    objects: Record<string, { hash: string, size: number }>;
+    map_to_resources?: boolean;
+    objects: Record<string, { hash: string; size: number }>;
 }
 
 export type ProfileReleaseType = 'release' | 'snapshot' | 'old_beta' | 'old_alpha';
 
 export interface ProfileRule {
-    action: 'allow' | 'disallow',
+    action: 'allow' | 'disallow';
     features?: {
-        [key: string]: boolean
-    },
+        [key: string]: boolean;
+    };
     os?: {
-        name?: string,
-        version?: string,
-        arch?: string,
-    }
+        name?: string;
+        version?: string;
+        arch?: string;
+    };
 }
 
-export type Argument = string | {
-    rules: ProfileRule[],
-    value: string | string[]
-}
+export type Argument =
+    | string
+    | {
+          rules: ProfileRule[];
+          value: string | string[];
+      };
 
 export interface Library {
     downloads: {
-        artifact: DownloadArtifact,
+        artifact: DownloadArtifact;
     };
-    name: string,
-    rules?: ProfileRule[]
+    name: string;
+    rules?: ProfileRule[];
 }
 
 export interface JVMComponent {
-    component: string,
-    majorVersion: number
+    component: string;
+    majorVersion: number;
 }
 
 export interface Artifact {
-    sha1: string,
-    size: number,
-    url: string
+    sha1: string;
+    size: number;
+    url: string;
 }
 
 export type DownloadArtifact = Artifact & {
-    path: string
-}
+    path: string;
+};

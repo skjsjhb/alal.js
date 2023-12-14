@@ -47,6 +47,17 @@ export class Container {
     }
 
     /**
+     * Gets the runtime root directory (aka. `--rootDir`) for the given profile. With isolation support.
+     */
+    getRuntimeRoot(id: string): string {
+        if (this.isolated) {
+            return path.join(this.rootDir, 'versions', id);
+        } else {
+            return this.rootDir;
+        }
+    }
+
+    /**
      * Gets the path to the client.
      *
      * Note that client file might not exist if there is no `downloads.client` key.

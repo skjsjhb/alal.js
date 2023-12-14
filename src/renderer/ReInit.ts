@@ -110,6 +110,6 @@ async function beforeClose() {
 
 if (process.env.MODE == 'debug') {
     console.warn('Enabling HMR. This is for development only and brings severe risks if used in production.');
-    // @ts-expect-error Webpack Module API is not typed
-    module.hot && module.hot.accept();
+    const mod = module as any;
+    mod.hot && mod.hot.accept();
 }

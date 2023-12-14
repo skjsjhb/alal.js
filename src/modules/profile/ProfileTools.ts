@@ -242,7 +242,10 @@ function mergeProfileFrom(base: any, head: any) {
         base.libraries = [...head.libraries, ...base.libraries];
     }
 
-    // Profile IDs are not merged - this is worked as intended
+    // Origin IDs
+    base.origin = head.origin || head.id;
+
+    // Profile IDs are not merged - this is worked as intended or profiles depending on `version_name` won't work.
 }
 
 // Merge classifiers and generate libraries with new id.

@@ -55,6 +55,8 @@ export function installGame(
         try {
             const profile = await installProfile(ct, id).link(task).wait();
             const java = profile.javaVersion?.component || defaultJre;
+            const assetIndex = await installAssetIndex(ct, profile).link(task).wait();
+
             if (variant == GameInstallVariant.FULL) {
                 if (!hasJavaComponent(java)) {
                     await installJavaComponent(java).link(task).wait();
@@ -70,8 +72,7 @@ export function installGame(
             }
 
             if (variant == GameInstallVariant.FULL) {
-                const ai = await installAssetIndex(ct, profile).link(task).wait();
-                await installAssets(ct, profile.assetIndex.id, ai).link(task).wait();
+                await installAssets(ct, profile.assetIndex.id, assetIndex!).link(task).wait();
                 if (hasLogConfig(profile)) {
                     await installLogConfig(ct, profile).link(task).wait();
                 } else {

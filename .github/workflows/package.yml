@@ -19,7 +19,7 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle && yarn make-release -l && yarn make-debug -l && yarn make-autotest -l
+        run: yarn bundle-all && yarn make-release -l && yarn make-debug -l && yarn make-autotest -l
       - uses: actions/upload-artifact@v3
         with:
           name: Linux Packages
@@ -43,7 +43,7 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle && yarn make-release -w && yarn make-debug -w && yarn make-autotest -w
+        run: yarn bundle-all && yarn make-release -w && yarn make-debug -w && yarn make-autotest -w
       - uses: actions/upload-artifact@v3
         with:
           name: Windows Packages
@@ -66,7 +66,7 @@ jobs:
       - name: Rebuild Natives
         run: yarn electron-rebuild
       - name: Build
-        run: yarn bundle && yarn make-release -m && yarn make-debug -m && yarn make-autotest -m
+        run: yarn bundle-all && yarn make-release -m && yarn make-debug -m && yarn make-autotest -m
       - uses: actions/upload-artifact@v3
         with:
           name: macOS Packages

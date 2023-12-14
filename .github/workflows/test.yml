@@ -17,10 +17,8 @@ jobs:
           node-version: "18"
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
-      - name: Enable Simple Test
-        run: echo "ALAL_TEST_SIMPLE=1" >> $env:GITHUB_ENV
       - name: Test
-        run: yarn test
+        run: cross-env ALAL_TEST_SIMPLE=1 yarn test
 
   test-macos:
     runs-on: macos-latest
@@ -33,7 +31,7 @@ jobs:
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
-        run: ALAL_TEST_SIMPLE=1 yarn test
+        run: cross-env ALAL_TEST_SIMPLE=1 yarn test
 
   test-linux:
     runs-on: ubuntu-latest
@@ -48,4 +46,4 @@ jobs:
       - name: Build
         run: corepack enable && yarn && yarn electron-rebuild && yarn bundle-autotest
       - name: Test
-        run: ALAL_TEST_SIMPLE=1 xvfb-run yarn test
+        run: cross-env ALAL_TEST_SIMPLE=1 xvfb-run yarn test

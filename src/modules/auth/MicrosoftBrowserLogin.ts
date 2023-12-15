@@ -22,18 +22,18 @@ const loginBrowserPart = 'persist:ms-login';
  * The first returned Promise is fulfilled when the window loading has complete. The
  * second fulfills when the code is present.
  */
-export function openMicrosoftLoginWindow(): Promise<string> {
+export function runMicrosoftBrowserLogin(): Promise<string> {
     if (isRemote()) {
         return ipcRenderer.invoke(MAPI.MICROSOFT_LOGIN);
     } else {
-        return openMicrosoftLoginWindowMain();
+        return runMicrosoftBrowserLoginMain();
     }
 }
 
 /**
- * Main process implementation of {@link openMicrosoftLoginWindow}.
+ * Main process implementation of {@link runMicrosoftBrowserLogin}.
  */
-export async function openMicrosoftLoginWindowMain(): Promise<string> {
+export async function runMicrosoftBrowserLoginMain(): Promise<string> {
     if (ipcRenderer) {
         console.error('This method can only be called from main process!');
         return '';

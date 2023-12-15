@@ -2,17 +2,16 @@ import { opt } from '@/modules/data/Options';
 import { useNavigate } from 'react-router-dom';
 
 const steps = {
-    easy: ['Portal', 'WelcomeToAlicornAgain', 'SelectMode', 'SelectTheme', 'AddAccountEasy', 'PostSetup'],
+    easy: ['Portal', 'WelcomeToAlicornAgain', 'SelectMode', 'SelectTheme', 'AddAccount', 'PostSetup'],
     advanced: [
         'Portal',
         'WelcomeToAlicornAgain',
         'SelectMode',
         'SelectTheme',
         'AcceptMirrors',
+        'AddAccount',
         'AddContainer',
         'SetupContainerSharing',
-        'SetupJava',
-        'AddAccount',
         'PostSetup'
     ]
 };

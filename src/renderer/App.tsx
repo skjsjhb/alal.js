@@ -31,7 +31,8 @@ export function App(): React.ReactElement {
         }
 
         & > .p-card-body > .p-card-content {
-            padding: 0 !important;
+            padding-top: 0.5rem !important;
+            padding-left: 0 !important;
         }
 
         & code {

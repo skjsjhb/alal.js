@@ -104,3 +104,32 @@ add-container:
 
 task-list:
   title: Task List
+
+add-account:
+  title: Login Your Account
+  body: |
+    Login to play Minecraft. Please select one from the following.
+  wait: Please wait...
+  greet: Welcome back，${name}！
+  fail: Login Failed - Check your network, username and password, then try again.
+  ms:
+    title: Microsoft Account
+    hint: Login to Microsoft account to play Minecraft。
+    button: Login
+  yggdrasil:
+    title: 3rd-Party Login
+    hint: |
+      Use a custom third party auth server to login.<br/>
+      <b>Please read the documents before start!</b>
+    server: Server Address
+    user: Username or Email
+    pwd: Password
+  local:
+    title: Offline Mode
+    hint: |
+      Use offline mode to play the game. Suitable if you cannot connect to the login server.<br/>
+      Skins won't be available and you'll be kicked by most official servers.
+    user: Player Name
+    error: |
+      Invalid player name.
+      Player name lengths 3-16 characters with underscore (_).

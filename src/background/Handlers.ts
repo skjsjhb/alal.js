@@ -1,5 +1,5 @@
 import { MAPI } from '@/background/MAPI';
-import { openMicrosoftLoginWindowMain } from '@/modules/auth/MicrosoftBrowserLogin';
+import { runMicrosoftBrowserLoginMain } from '@/modules/auth/MicrosoftBrowserLogin';
 import { loadOptions } from '@/modules/data/Options';
 import { app, dialog, ipcMain, IpcMainInvokeEvent, safeStorage } from 'electron';
 
@@ -10,7 +10,7 @@ const BINDINGS = {
     [MAPI.GET_APP_PATH]: getAppPath,
     [MAPI.RELOAD_OPTIONS]: reloadOptions,
     [MAPI.GET_LOCALE]: getLocale,
-    [MAPI.MICROSOFT_LOGIN]: openMicrosoftLoginWindowMain,
+    [MAPI.MICROSOFT_LOGIN]: runMicrosoftBrowserLoginMain,
     [MAPI.GET_PROXY]: getProxy,
     [MAPI.CHECK_ENCRYPT]: checkEncrypt,
     [MAPI.ENCRYPT]: encryptString,

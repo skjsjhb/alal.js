@@ -60,6 +60,7 @@ export class GameInstance extends TypedEmitter<GameInstanceEvents> {
         this.setMaxListeners(0);
         this.bindListeners();
         this.proc.once('spawn', () => {
+            console.log('Created game instance %s PID %s', this.id, this.proc.pid);
             this.status = GameInstanceStatus.RUNNING;
         });
     }

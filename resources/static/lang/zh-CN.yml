@@ -101,3 +101,32 @@ add-container:
 
 task-list:
   title: 任务列表
+
+add-account:
+  title: 登录你的帐户
+  body: |
+    登录帐户以开始游玩 Minecraft，请从下面选择一项。
+  wait: 请稍等...
+  greet: 欢迎回来，${name}！
+  fail: 登录失败。请检查网络连接，确认帐户名称和密码，然后再试一次。
+  ms:
+    title: 微软帐户
+    hint: 登录微软帐户，即可畅玩你拥有的 Minecraft。
+    button: 现在登录
+  yggdrasil:
+    title: 外置登录
+    hint: |
+      自定义登录服务器，使用第三方皮肤站或认证服务器进行登录。<br/>
+      <b>请务必仔细阅读服务器提供商的指南，再来这里登录！</b>
+    server: 服务器地址
+    user: 用户名或邮箱
+    pwd: 密码
+  local:
+    title: 离线登录
+    hint: |
+      使用临时的帐户在本地游玩游戏。<br/>
+      你将无法使用皮肤，亦无法登入大多数官方服务器。
+    user: 玩家名
+    error: |
+      玩家名无效。
+      玩家名为 3 至 16 个大小写英文字符、数字及下划线（_）。

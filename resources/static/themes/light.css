@@ -7254,6 +7254,14 @@
     transform: translateY(6.5%);
 }
 
+.no-cjk-icon-correction .pi {
+    transform: none;
+}
+
+.p-tabview-nav-link .pi {
+    transform: none;
+}
+
 .p-buttonset .p-button:first-of-type {
     border-radius: 6px 0 0 6px;
 }

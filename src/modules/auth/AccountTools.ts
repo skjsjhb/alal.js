@@ -143,7 +143,6 @@ interface YggdrasilProfile {
  * For Yggdrasil servers there could possibly be multiple 'accounts' (i.e. profiles) for one user. This
  * method returns them all, with the selected profile always on the first.
  */
-// TODO convert to task
 export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<Account> {
     const taskExec = async (task: Task<Account>) => {
         try {
@@ -184,6 +183,7 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
                 type: AccountType.Yggdrasil,
                 refreshToken
             });
+            console.log('Yggdrasil login complete for ' + selectedProfile.name);
         } catch (e) {
             task.reject(e);
         }
@@ -194,6 +194,9 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
 
 // Use ALI to get the API location
 async function resolveYggdrasilLocation(host: string): Promise<string> {
+    if (!host.startsWith('http://') && !host.startsWith('https://')) {
+        host = 'https://' + host;
+    }
     try {
         const res = await fetch(host, { method: 'HEAD', agent: await getProxyAgent(host) });
         const location = res.headers.get('x-authlib-injector-api-location');

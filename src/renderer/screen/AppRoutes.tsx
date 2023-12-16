@@ -1,3 +1,4 @@
+import { About } from '@/renderer/screen/About';
 import { AcceptMirrors } from '@/renderer/screen/intro/AcceptMirrors';
 import { AddAccount } from '@/renderer/screen/intro/AddAccount';
 import { Portal } from '@/renderer/screen/intro/Portal';
@@ -72,7 +73,7 @@ export function AppRoutes(): React.ReactElement {
 
     return (
         <span css={appTransitions} className={'h-full p-0 m-0'}>
-            <div className={classNames(transitionStage, 'h-full p-0 m-0')}>
+            <div className={classNames(transitionStage, 'h-full p-0 m-0 overflow-y-auto')}>
                 <Routes location={displayLocation}>
                     {/* Intro setup */}
                     <Route index element={<Navigate to={startPage} replace />} />
@@ -85,6 +86,7 @@ export function AppRoutes(): React.ReactElement {
 
                     {/* System pages */}
                     <Route path={'/TaskList'} element={<TaskList />} />
+                    <Route path={'/About'} element={<About />} />
                 </Routes>
             </div>
         </span>

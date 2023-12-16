@@ -133,3 +133,28 @@ add-account:
     error: |
       Invalid player name.
       Player name lengths 3-16 characters with underscore (_).
+
+about:
+  title: About alal.js
+  body: |
+    alal.js "${versionName}" Version ${version}<br/>
+    By ${author}<br/><br/>
+    Sources and issues: <a href="https://github.com/skjsjhb/alal.js">https://github.com/skjsjhb/alal.js</a><br/>
+    alal.js is a non-official successor of Alicorn Launcher.<br/><br/>
+    Powered by these NPM packages:<br/><br/>
+    <code>${packages}</code><br/><br/>
+    This alal.js does not have super cow powers.
+    <br/><br/><hr/><br/>
+    Dedicated to
+    <h2>Sorakoi</h2>
+    <b>Lyrics: James Date</b><br/><br/>
+    You are<br/>
+    The greatest girl<br/>
+    Even far apart<br/>
+    It must be reached you<br/>
+    So that I can<br/>
+    Keep my promise<br/>
+    When we hook the pinky<br/>
+    Even from here, I'll sing<br/>
+    Let's hoist high love<br/>
+    In the cloudless blue sky<br/>

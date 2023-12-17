@@ -89,17 +89,15 @@ select-theme:
 
 
 add-container:
-  title: Where Do You Want to Place Minecraft?
+  title: Where Do You Wish to Store Game Files?
   body: |
-    Select a folder to store game files.
-  add: Add Folder
-  add-more: Add More
-  nothing: Nothing here...
-  select-title: Select Location for Minecraft
-  hint: |
-    Many folders? You can just add as many as you like!
-  warn: |
-    Contents are not shared between folders.
+    Select a location to store game files - or as many as you like!
+  add: Click to Select
+  select-title: Game Files Location
+  warn1: |
+    Contents are not shared among different directories.
+  warn2: |
+    Select only one directory will make our life easier. You can remove a directory by clicking it.
   next: Next
 
 task-list:

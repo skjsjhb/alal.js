@@ -24,7 +24,7 @@ export function Portal(): React.ReactElement {
     const next = useIntroNav('Portal');
     const tr = getLocaleSection('portal');
     return (
-        <div className={'flex flex-column justify-content-center h-full mb-8'}>
+        <div className={'flex flex-column justify-content-center h-full'}>
             <div className={'flex justify-content-center text-primary'}>
                 <div className={'text-6xl'}>{tr('title')}</div>
             </div>

@@ -88,15 +88,13 @@ select-theme:
 add-container:
   title: 你想将 Minecraft 存放在哪里？
   body: |
-    选择存储 Minecraft 的位置。
-  add: 选择文件夹
-  add-more: 选择更多
-  nothing: 还没有选择...
+    选择存储 Minecraft 的位置。有好多文件夹？没关系，想添加多少个都可以！
+  add: 点按此处来添加
   select-title: 选择 Minecraft 的位置
-  hint: |
-    有好多文件夹？没关系，想添加多少个都可以！
-  warn: |
+  warn1: |
     不同文件夹中的内容不能共享。
+  warn2: |
+    建议只使用一个文件夹，这样处理起来会方便很多。单击已经添加的文件夹可以删除它。
   next: 下一步
 
 task-list:
@@ -130,6 +128,8 @@ add-account:
     error: |
       玩家名无效。
       玩家名为 3 至 16 个大小写英文字符、数字及下划线（_）。
+  hint: 请至少添加一个帐户，我们才能继续。
+  next: 下一步
 
 about:
   title: 关于 alal.js

@@ -1,5 +1,5 @@
 import { createLocalAccount } from '@/modules/auth/AccountTools';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
 import { getJavaComponentForProfile } from '@/modules/jem/JavaVersionMap';
 import { synthesizeArguments } from '@/modules/launch/ArgsGenerator';
 import { loadAssetIndex, loadProfile } from '@/modules/profile/ProfileTools';
@@ -12,6 +12,7 @@ import test = TestTools.test;
 
 export async function testLaunch() {
     const ct = new Container({
+        id: 'test',
         rootDir: path.resolve('test-container'),
         locked: false,
         shared: false,

@@ -5,6 +5,11 @@ import path from 'path';
 
 export class Container {
     /**
+     * Container name.
+     */
+    id: string;
+
+    /**
      * Root directory.
      */
     rootDir: string;
@@ -32,7 +37,8 @@ export class Container {
      */
     shared: boolean;
 
-    constructor(o: { rootDir: string; locked: boolean; isolated: boolean; shared: boolean }) {
+    constructor(o: { id: string; rootDir: string; locked: boolean; isolated: boolean; shared: boolean }) {
+        this.id = o.id;
         this.rootDir = o.rootDir;
         this.locked = o.locked;
         this.isolated = o.isolated;

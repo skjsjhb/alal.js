@@ -1,8 +1,9 @@
 import { authMicrosoft, authYggdrasil, createLocalAccount, saveAccount } from '@/modules/auth/AccountTools';
 import { runMicrosoftBrowserLogin } from '@/modules/auth/MicrosoftBrowserLogin';
 import { getLocaleSection } from '@/modules/i18n/Locale';
+import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { useState } from '@/renderer/util/Mount';
-import { HTMLText, WarningText } from '@/renderer/widgets/Texts';
+import { HTMLText, InfoText, WarningText } from '@/renderer/widgets/Texts';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -15,7 +16,6 @@ export function AddAccount(): React.ReactElement {
     const [mLoginActive, setMLoginActive] = useState(false);
     const [msUserName, setMSUserName] = useState<string | null>('');
 
-    const [lLoginActive, setLLoginActive] = useState(false);
     const [localName, setLocalName] = useState<string | null>(null);
     const localNameError = localName != null && !validateUserName(localName);
 
@@ -27,7 +27,10 @@ export function AddAccount(): React.ReactElement {
 
     const yggdrasilError = yggdrasilServer.length == 0 || yggdrasilUser.length == 0 || yggdrasilPwd.length == 0;
 
-    const disabled = mLoginActive || lLoginActive || yLoginActive;
+    const disabled = mLoginActive || yLoginActive;
+    const setupComplete = !!(msUserName || (localName && !localNameError) || yggdrasilPlayerName);
+
+    const next = useIntroNav('AddAccount');
 
     async function msLogin() {
         setMLoginActive(true);
@@ -65,10 +68,8 @@ export function AddAccount(): React.ReactElement {
     }
 
     async function localLogin() {
-        setLLoginActive(true);
         const account = createLocalAccount(localName ?? '');
         await saveAccount(account);
-        setLLoginActive(false);
     }
 
     return (
@@ -149,11 +150,28 @@ export function AddAccount(): React.ReactElement {
                                 onChange={(e) => setLocalName(e.target.value)}
                             />
                         </span>
-                        <Button disabled={localNameError || disabled} icon={'pi pi-check'} onClick={localLogin} />
                     </div>
                     {localNameError && <HTMLText className={'mt-3 text-warning'} html={tr('local.error')} />}
                 </TabPanel>
             </TabView>
+
+            {/* Hint */}
+            {setupComplete || <InfoText text={tr('hint')} />}
+
+            {/* Next page */}
+            <div className={'flex justify-content-end mt-5'}>
+                <Button
+                    disabled={!setupComplete}
+                    icon={'pi pi-arrow-right'}
+                    label={tr('next')}
+                    onClick={() => {
+                        if (localName) {
+                            void localLogin();
+                        }
+                        next();
+                    }}
+                />
+            </div>
         </div>
     );
 }

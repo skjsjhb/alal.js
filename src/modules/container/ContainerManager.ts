@@ -1,5 +1,6 @@
 import Strategies from '@/constra/strategies.json';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
+import { opt } from '@/modules/data/Options';
 import { getRegTable } from '@/modules/data/Registry';
 import { doesArrayOverlap } from '@/modules/util/Objects';
 import { OSType } from '@/modules/util/OSType';
@@ -35,22 +36,18 @@ export function unlink(id: string): void {
 }
 
 /**
- * Tries to import a container with given path. Returns built object if container is found.
- *
- * Generated containers are always with properties `locked: false, shared: false` and `isolated` defined
- * by the check results.
+ * Creates a container with default settings for given path.
  */
-export async function importContainer(t: string): Promise<Container | null> {
-    if (await isLikelyContainer(t)) {
-        console.log('Found possible container at ' + t);
-        return new Container({
-            rootDir: t,
-            locked: false,
-            shared: false,
-            isolated: await isLikelyIsolated(t)
-        });
-    }
-    return null;
+export function createContainer(id: string, src: string): Container {
+    const c = new Container({
+        id,
+        rootDir: src,
+        locked: false,
+        isolated: opt().container.defaultIsolated,
+        shared: opt().container.defaultShared
+    });
+    addContainer(id, c);
+    return c;
 }
 
 // Checks if the given container path is possibly isolated (usually contains `saves` directory in `versions`)

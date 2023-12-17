@@ -1,20 +1,15 @@
-import { opt } from '@/modules/data/Options';
 import { useNavigate } from 'react-router-dom';
 
-const steps = {
-    easy: ['Portal', 'WelcomeToAlicornAgain', 'SelectMode', 'SelectTheme', 'AddAccount', 'PostSetup'],
-    advanced: [
-        'Portal',
-        'WelcomeToAlicornAgain',
-        'SelectMode',
-        'SelectTheme',
-        'AcceptMirrors',
-        'AddAccount',
-        'AddContainer',
-        'SetupContainerSharing',
-        'PostSetup'
-    ]
-};
+const steps = [
+    'Portal',
+    'WelcomeToAlicornAgain',
+    'SelectMode',
+    'SelectTheme',
+    'AddAccount',
+    'AcceptMirrors',
+    'AddContainer',
+    'PostSetup'
+];
 
 /**
  * Wrapped `useNavigate()` method for intros.
@@ -27,6 +22,5 @@ export function useIntroNav(now: string) {
 }
 
 function getNextIntroPage(now: string): string {
-    const host = opt().ui.easyMode ? steps.easy : steps.advanced;
-    return host[host.indexOf(now) + 1];
+    return steps[steps.indexOf(now) + 1];
 }

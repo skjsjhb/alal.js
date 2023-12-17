@@ -14,6 +14,10 @@
     "colorMode": "dark",
     "playIntro": true
   },
+  "container": {
+    "defaultShared": false,
+    "defaultIsolated": false
+  },
   "jem": {
     "optimize": true
   },

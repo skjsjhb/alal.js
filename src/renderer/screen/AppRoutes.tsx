@@ -1,6 +1,7 @@
 import { About } from '@/renderer/screen/About';
 import { AcceptMirrors } from '@/renderer/screen/intro/AcceptMirrors';
 import { AddAccount } from '@/renderer/screen/intro/AddAccount';
+import { AddContainer } from '@/renderer/screen/intro/AddContainer';
 import { Portal } from '@/renderer/screen/intro/Portal';
 import { SelectMode } from '@/renderer/screen/intro/SelectMode';
 import { SelectTheme } from '@/renderer/screen/intro/SelectTheme';
@@ -83,6 +84,7 @@ export function AppRoutes(): React.ReactElement {
                     <Route path={'/Intro/AcceptMirrors'} element={<AcceptMirrors />} />
                     <Route path={'/Intro/SelectTheme'} element={<SelectTheme />} />
                     <Route path={'/Intro/AddAccount'} element={<AddAccount />} />
+                    <Route path={'/Intro/AddContainer'} element={<AddContainer />} />
 
                     {/* System pages */}
                     <Route path={'/TaskList'} element={<TaskList />} />

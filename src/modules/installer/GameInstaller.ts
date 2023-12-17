@@ -1,6 +1,6 @@
 import Sources from '@/constra/sources.json';
 import Strategies from '@/constra/strategies.json';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
 import { TR } from '@/modules/i18n/Locale';
 import { hasJavaComponent, installJavaComponent } from '@/modules/jem/JavaGet';
 import { createDownload, DownloadProfile } from '@/modules/net/Downloader';

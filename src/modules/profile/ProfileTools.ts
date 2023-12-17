@@ -2,7 +2,7 @@
 
 import Sources from '@/constra/sources.json';
 import Strategies from '@/constra/strategies.json';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
 import { fetchJSON } from '@/modules/net/FetchUtil';
 import { resolveRules } from '@/modules/profile/Rules';
 import { Argument, AssetIndex, DownloadArtifact, Library, VersionProfile } from '@/modules/profile/VersionProfile';

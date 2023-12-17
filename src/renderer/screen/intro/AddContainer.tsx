@@ -1,8 +1,11 @@
 import { MAPI } from '@/background/MAPI';
+import { addContainer, createContainer, getDefaultContainerPath } from '@/modules/container/ContainerManager';
 import { getLocaleSection } from '@/modules/i18n/Locale';
+import { hashString } from '@/modules/util/Hash';
 import { mergeArrays } from '@/modules/util/Objects';
+import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { useMounted, useSafeState } from '@/renderer/util/Mount';
-import { HTMLText, InfoText, WarningText } from '@/renderer/widgets/Texts';
+import { HTMLText, WarningText } from '@/renderer/widgets/Texts';
 import { ipcRenderer } from 'electron';
 import { Button } from 'primereact/button';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
@@ -10,8 +13,9 @@ import React from 'react';
 
 export function AddContainer(): React.ReactElement {
     const tr = getLocaleSection('add-container');
-    const [containerList, setContainerList] = useSafeState<string[]>([]);
+    const [containerList, setContainerList] = useSafeState<string[]>([getDefaultContainerPath()]);
     const mounted = useMounted();
+    const next = useIntroNav('AddContainer');
 
     async function promptSelectDir() {
         const dirs = await ipcRenderer.invoke(MAPI.SELECT_FOLDER, tr('select-title'));
@@ -33,43 +37,52 @@ export function AddContainer(): React.ReactElement {
             <div className={'text-5xl font-bold'}>{tr('title')}</div>
             <HTMLText html={tr('body')} />
 
-            {/* Select Button */}
-            <Splitter className={'h-15rem'}>
-                <SplitterPanel className={'flex justify-content-center'} size={60}>
-                    {/* Display selected container list */}
-                    {containerList.length > 0 ? (
-                        <div className={'flex flex-column w-full m-4 gap-2 overflow-y-auto'}>
-                            {containerList.map((c) => {
-                                return (
-                                    <div key={c} className={'flex w-full'}>
-                                        <i className={'pi pi-folder mr-2'} />
-                                        <code className={'text-sm'}>{breakString(c, 40)}</code>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <p>{tr('nothing')}</p>
-                    )}
+            {/* Select dirs */}
+
+            <Splitter>
+                <SplitterPanel
+                    size={90}
+                    style={{ height: '10rem' }}
+                    className={'flex flex-column m-4 gap-2 overflow-y-auto'}
+                >
+                    {containerList.map((c) => {
+                        return (
+                            <div
+                                key={c}
+                                className={'flex'}
+                                onClick={() => {
+                                    setContainerList(containerList.filter((d) => d != c));
+                                }}
+                            >
+                                <i className={'pi pi-folder mr-2'} />
+                                <code className={'text-sm'}>{breakString(c, 80)}</code>
+                            </div>
+                        );
+                    })}
                 </SplitterPanel>
-                <SplitterPanel className={'flex align-items-center justify-content-center gap-3'} size={40}>
-                    {/* Add and next button */}
-                    <Button
-                        icon={'pi pi-plus'}
-                        label={tr(containerList.length > 0 ? 'add-more' : 'add')}
-                        onClick={promptSelectDir}
-                    />
-                    <Button
-                        icon={'pi pi-arrow-right'}
-                        disabled={containerList.length == 0}
-                        label={tr('next')}
-                        /* TODO onClick */
-                    />
+                <SplitterPanel size={10} className={'flex justify-content-center align-items-center'}>
+                    <Button onClick={promptSelectDir} icon={'pi pi-plus'} />
                 </SplitterPanel>
             </Splitter>
 
-            <InfoText text={tr('hint')} />
-            <WarningText text={tr('warn')} />
+            {containerList.length > 1 && <WarningText text={tr('warn1')} />}
+            {containerList.length > 1 && <WarningText text={tr('warn2')} />}
+
+            {/* Next page */}
+            <div className={'flex justify-content-end mt-5'}>
+                <Button
+                    disabled={containerList.length == 0}
+                    icon={'pi pi-arrow-right'}
+                    label={tr('next')}
+                    onClick={() => {
+                        containerList.forEach((c) => {
+                            const id = hashString(c);
+                            addContainer(id, createContainer(id, c));
+                        });
+                        next();
+                    }}
+                />
+            </div>
         </div>
     );
 }

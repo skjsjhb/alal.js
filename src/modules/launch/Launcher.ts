@@ -1,5 +1,5 @@
 import { Account } from '@/modules/auth/Account';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
 import { getJavaExecutable } from '@/modules/jem/JavaGet';
 import { getJavaComponentForProfile } from '@/modules/jem/JavaVersionMap';
 import { synthesizeArguments } from '@/modules/launch/ArgsGenerator';

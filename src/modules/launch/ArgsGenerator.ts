@@ -1,7 +1,7 @@
 import Keyring from '@/constra/keyring.json';
 import Strategies from '@/constra/strategies.json';
 import { Account } from '@/modules/auth/Account';
-import { Container } from '@/modules/container/ContainerTools';
+import { Container } from '@/modules/container/Container';
 import { opt } from '@/modules/data/Options';
 import { getProfileEffectiveLibraries, hasLogConfig, isLegacyAssetName } from '@/modules/profile/ProfileTools';
 import { resolveRules } from '@/modules/profile/Rules';

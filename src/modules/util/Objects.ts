@@ -55,6 +55,26 @@ export function getObjectPropertyByKey(target: any, k: string): any {
 }
 
 /**
+ * Writable version of {@link getObjectPropertyByKey}.
+ */
+export function setObjectPropertyByKey(target: any, k: string, v: any): void {
+    const keys = k.split('.');
+    let current: any = target;
+    if (!current) {
+        return;
+    }
+    const fink = keys[keys.length - 1]; // Refers to the final key
+    keys.pop();
+    for (const key of keys) {
+        if (typeof current != 'object' || !(key in current)) {
+            current[key] = {};
+        }
+        current = current[key];
+    }
+    current[fink] = v;
+}
+
+/**
  * Merge multiple arrays together without modifying any.
  */
 export function mergeArrays(a: any[], ...b: any[][]): any[] {

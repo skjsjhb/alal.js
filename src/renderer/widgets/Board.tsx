@@ -19,17 +19,31 @@ export function Board() {
             window.removeEventListener('colorModeChanged', fun);
         };
     }, []);
-    const boardCSS = css({
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        zIndex: -10,
-        background:
-            colorMode == 'light'
-                ? 'linear-gradient(to right, #ffb3ee, #fceec6);'
-                : 'linear-gradient(to right, #4e79c2, #9a30b7);'
-    });
+    const boardCSS = css`
+        @keyframes board-flow {
+            0% {
+                background-position: 0;
+            }
+            50% {
+                background-position: 100%;
+            }
+            100% {
+                background-position: 200%;
+            }
+        }
+
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -10;
+        background: ${colorMode == 'dark'
+            ? 'linear-gradient(to right, #4e79c2 0%, #9a30b7 50%, #4e79c2 100%)'
+            : 'linear-gradient(to right, #ffb3ee 0%, #fceec6 50%, #ffb3ee 100%)'};
+        background-size: 200%, 100%;
+        animation: board-flow 8s infinite linear;
+    `;
+
     return <div css={boardCSS} />;
 }

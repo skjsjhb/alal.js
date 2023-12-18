@@ -3,9 +3,7 @@ import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { useSafeState } from '@/renderer/util/Mount';
 import { Radio } from '@/renderer/widgets/Radio';
-import { InfoText } from '@/renderer/widgets/Texts';
 import { Button } from 'primereact/button';
-import { Panel } from 'primereact/panel';
 import React, { useEffect } from 'react';
 
 export function SelectMode(): React.ReactElement {
@@ -18,19 +16,18 @@ export function SelectMode(): React.ReactElement {
     }, [easyMode]);
 
     return (
-        <div className={'ml-4 mr-4 mt-2'}>
-            <div className={'text-5xl font-bold'}>{tr('title')}</div>
+        <div className={'ml-4 mr-4 mt-2 text-center'}>
+            <div className={'flex justify-content-center align-items-center'} style={{ height: '12rem' }}>
+                <i className={'pi pi-user-plus text-8xl'} />
+            </div>
+
+            <div className={'text-4xl font-bold'}>{tr('title')}</div>
 
             {/* Selection Radio Group */}
-            <Panel header={tr('choices.title')} className={'mt-4'}>
-                <div className={'flex flex-column'}>
+            <div className={'flex justify-content-center mt-5'}>
+                <div className={'flex flex-column gap-3 text-left'} style={{ maxWidth: '60%' }}>
                     {/* Easy */}
                     <Radio checked={easyMode} onChange={(e) => setEasyMode(!!e.checked)} label={tr('choices.easy')} />
-                    {easyMode ? (
-                        <div className={'text-success mt-3 mb-3'}>{tr('trivia.easy')}</div>
-                    ) : (
-                        <div className={'mt-3'} />
-                    )}
 
                     {/* Advanced */}
                     <Radio
@@ -38,17 +35,17 @@ export function SelectMode(): React.ReactElement {
                         onChange={(e) => setEasyMode(!e.checked)}
                         label={tr('choices.advanced')}
                     />
-                    {easyMode || <div className={'text-warning mt-3'}>{tr('trivia.advanced')}</div>}
-                </div>
-            </Panel>
 
-            {/* Hint */}
-            <InfoText text={tr('hint')} />
+                    {easyMode ? (
+                        <div className={'text-success'}>{tr('trivia.easy')}</div>
+                    ) : (
+                        <div className={'text-warning'}>{tr('trivia.advanced')}</div>
+                    )}
+                </div>
+            </div>
 
             {/* Next page */}
-            <div className={'flex justify-content-end mt-5'}>
-                <Button icon={'pi pi-arrow-right'} label={tr('next')} onClick={next} />
-            </div>
+            <Button icon={'pi pi-arrow-right'} className={'mt-4'} onClick={next} />
         </div>
     );
 }

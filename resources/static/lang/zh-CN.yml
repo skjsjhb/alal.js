@@ -36,11 +36,9 @@ portal:
 alicorn-again:
   title: "这次会有所不同。"
   body: |
-    欢迎使用 alal.js，这是 Alicorn 的非官方后继项目。<br/><br/>
-    穿越星空与雾海，踏遍樱云与夜咲，优雅地来到你的面前。alal.js 完全从头开始，重新设计，再度新生。<br/><br/>
-    在接下来的向导中，我们会做一个简短的介绍，并带你重新认识 Alicorn。<br/><br/>
-    请按右侧的按钮。
-  next: 下一步
+    欢迎使用 alal.js，这是 Alicorn 的非官方后继项目，很高兴能与你再次见面。
+    
+    在接下来的向导中，我们会做一个简短的介绍，并带你重新认识 Alicorn。
   skip: 跳过初始化设置
   skip-popup:
     body: 使用默认设置，确定？
@@ -48,31 +46,21 @@ alicorn-again:
     reject: 取消
 
 select-mode:
-  title: "开始之前..."
+  title: 你是老玩家吗？
   choices:
-    title: 下面哪一项描述你最合适？
     easy: 我是萌新（不了解 Minecraft 和启动器）
-    advanced: 我是老玩家（我，无所不知）
+    advanced: 我觉得我是
   trivia:
     easy: 界面简洁，操作简化，以及更详细的引导。
-    advanced: 显示所有功能 —— 看我操作！
-  hint: 你可以稍后在设置中更改。
-  next: 下一步
+    advanced: 不太注重引导，更倾向于有效率的排版。
 
 accept-mirrors:
   title: "你的下载由 BMCLAPI 加速"
   body: |
-    BMCLAPI 可以大幅提升下载速度，不过也请注意，它的数据更新可能存在延迟。
-  latency: 速度：BMCLAPI ${m1} / Mojang 官方 ${m2}
-  latency-testing: 正在测定...
-  latency-invalid: 不可达
-  choices:
-    title: 使用 BMCLAPI 吗？
-    accept: 使用 BMCLAPI（加快下载速度）
-    deny: 不使用（速度较慢）
+    alal.js 将根据网络状况，自动选择合适的连接通道。
+    你可能想了解一下 BMCLAPI：<a href="https://bmclapidoc.bangbang93.com">https://bmclapidoc.bangbang93.com</a>
   disclaimer: |
     BMCLAPI 是社区组建的服务，不保证可靠。部分文件仍需从源站点下载。
-  next: 下一步
 
 select-theme:
   title: 这个主题合适吗？
@@ -82,28 +70,19 @@ select-theme:
     light: 樱云（浅色）
     dark: 夜咲（深色）
   hint: |
-    作为本版本的特别主题，樱云将在下个版本替换为标准亮色主题。夜咲将作为常驻主题保留。
-  next: 下一步
+    作为本版本的特别主题，樱云将在下个版本替换为标准亮色主题。
 
 add-container:
   title: 你想将 Minecraft 存放在哪里？
-  body: |
-    选择存储 Minecraft 的位置。有好多文件夹？没关系，想添加多少个都可以！
-  add: 点按此处来添加
   select-title: 选择 Minecraft 的位置
-  warn1: |
-    不同文件夹中的内容不能共享。
-  warn2: |
-    建议只使用一个文件夹，这样处理起来会方便很多。单击已经添加的文件夹可以删除它。
-  next: 下一步
+  warn: |
+    建议只使用一个文件夹，这样处理起来会方便很多。单击已经添加的文件夹可以删除它。 
 
 task-list:
   title: 任务列表
 
 add-account:
   title: 登录你的帐户
-  body: |
-    登录帐户以开始游玩 Minecraft，请从下面选择一项。
   wait: 请稍等...
   greet: 欢迎回来，${name}！
   fail: 登录失败。请检查网络连接，确认帐户名称和密码，然后再试一次。
@@ -114,46 +93,100 @@ add-account:
   yggdrasil:
     title: 外置登录
     hint: |
-      自定义登录服务器，使用第三方皮肤站或认证服务器进行登录。<br/>
-      <b>请务必仔细阅读服务器提供商的指南，再来这里登录！</b>
+      自定义登录服务器，使用第三方皮肤站或认证服务器进行登录。
     server: 服务器地址
     user: 用户名或邮箱
     pwd: 密码
   local:
     title: 离线登录
     hint: |
-      使用临时的帐户在本地游玩游戏。<br/>
+      使用临时的帐户在本地游玩游戏。
       你将无法使用皮肤，亦无法登入大多数官方服务器。
     user: 玩家名
     error: |
-      玩家名无效。
       玩家名为 3 至 16 个大小写英文字符、数字及下划线（_）。
-  hint: 请至少添加一个帐户，我们才能继续。
-  next: 下一步
+
+post-setup:
+  title: 这就 OK 了
+  body: |
+    你的启动器已经准备就绪。
+
+options:
+  warn-dialog:
+    title: 等一下！
+    message: |
+      <b class="text-danger" style="font-size:x-large">随意乱设会出事的！</b>
+      默认设置即是推荐设置，继续之前请三思。
+    yes: 我知道我在做什么！
+    no: 使用默认设置
+  ui:
+    easyMode:
+      title: 新手模式
+      detail: 调整界面和操作流程以更适合新手。
+    colorMode:
+      title: 界面主题
+      detail: 选择所用的主题。
+      light: 樱云（浅色）
+      dark: 夜咲（深色）
+  jem:
+    optimize:
+      title: 优化 JRE 下载
+      detail: 通过移除软件包中的无用文件来加快下载。
+  launch:
+    showLauncherName:
+      title: 显示启动器名称
+      detail: 在游戏主界面上显示 alal.js 的名称，关闭后显示游戏版本信息。
+  download:
+    allowMirror:
+      title: 使用镜像
+      detail: 搜索并使用可用的镜像，能加快下载速度，但文件可能不是最新的。
+    timeout:
+      title: 连接等待时间
+      detail: 从下载请求开始至接收第一个字节为止的最长等待时间。
+    minSpeed:
+      title: 最小下载速度
+      detail: 低于此传输速度的连接将被断开并重连。
+    tries:
+      title: 重试次数
+      detail: 放弃下载前的重试次数，像是 404 等不可恢复错误不会重试。
+    maxTasks:
+      title: 最大任务数
+      detail: 同时下载的连接数目上限，请勿将此值设得太大，以免引起卡顿或网络拥塞。
+  dev:
+    title: 开发人员模式
+    detail: 启用开发人员模式，有助于调试，但会降低安全性和性能。
+
 
 about:
   title: 关于 alal.js
   body: |
-    alal.js "${versionName}" 版本 ${version}<br/>
-    ${author} 作品<br/><br/>
-    源代码和 Issue 请参见 <a href="https://github.com/skjsjhb/alal.js">https://github.com/skjsjhb/alal.js</a><br/>
-    alal.js 是 Alicorn 的非官方后继项目。<br/><br/>
-    由以下 NPM 包强力支持：<br/><br/>
-    <code>${packages}</code><br/><br/>
+    alal.js "${versionName}" 版本 ${version}
+    ${author} 作品
+    源代码和 Issue 请参见 <a href="https://github.com/skjsjhb/alal.js">https://github.com/skjsjhb/alal.js</a>
+    alal.js 是 Alicorn 的非官方后继项目。
+    
+    由以下 NPM 包强力支持：
+    
+    <code>${packages}</code>
+    
     本 alal.js 没有超级牛力。
-    <br/><br/><hr/><br/>
+    
+    <hr/>
+    主题“樱云”是以游戏《樱色之云：绯色之恋》为印象构筑的配色。
+    
+    <hr/>
     谨以此作献给 
-    <h2>空恋</h2>
-    <b>作词：James Date</b><br/>
-    <b>翻译（非官方）：skjsjhb</b><br/><br/>
-    你是我<br/>
-    此生的唯一<br/>
-    天涯万里<br/>
-    心弦相连<br/>
-    拉拉手指<br/>
-    许下诺言<br/>
-    深念的韵律<br/>
-    未曾改变<br/>
-    晴云之上<br/>
-    飞过的祈愿<br/>
+    <h2>空恋</h2><b>作词：James Date</b>
+    <b>翻译（非官方）：skjsjhb</b>
+    
+    你是我
+    此生的唯一
+    天涯万里
+    心弦相连
+    拉拉手指
+    许下诺言
+    深念的韵律
+    未曾改变
+    晴云之上
+    飞过的祈愿
     名为空恋

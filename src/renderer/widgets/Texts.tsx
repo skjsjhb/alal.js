@@ -47,9 +47,10 @@ export function HTMLText(
     } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement | HTMLParagraphElement>, HTMLDivElement | HTMLParagraphElement>
 ): React.ReactElement {
     const { compact, ...rest } = props;
+    const html = props.html.replaceAll('\n', '<br/>');
     if (compact) {
-        return <div {...rest} dangerouslySetInnerHTML={{ __html: props.html }} />;
+        return <div {...rest} dangerouslySetInnerHTML={{ __html: html }} />;
     } else {
-        return <p {...rest} dangerouslySetInnerHTML={{ __html: props.html }} />;
+        return <p {...rest} dangerouslySetInnerHTML={{ __html: html }} />;
     }
 }

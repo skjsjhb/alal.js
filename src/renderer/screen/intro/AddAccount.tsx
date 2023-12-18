@@ -3,7 +3,8 @@ import { runMicrosoftBrowserLogin } from '@/modules/auth/MicrosoftBrowserLogin';
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { useState } from '@/renderer/util/Mount';
-import { HTMLText, InfoText, WarningText } from '@/renderer/widgets/Texts';
+import { HTMLText, WarningText } from '@/renderer/widgets/Texts';
+import { css } from '@emotion/react';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -73,11 +74,24 @@ export function AddAccount(): React.ReactElement {
     }
 
     return (
-        <div className={'ml-4 mr-4 mt-2'}>
-            <div className={'text-5xl font-bold'}>{tr('title')}</div>
-            <HTMLText html={tr('body')} />
+        <div className={'ml-4 mr-4 mt-2 text-center'}>
+            <div className={'flex justify-content-center align-items-center'} style={{ height: '6rem' }}>
+                <i className={'pi pi-user-plus text-6xl'} />
+            </div>
 
-            <TabView>
+            <div className={'text-4xl font-bold'}>{tr('title')}</div>
+            <TabView
+                className={'mt-3'}
+                css={css`
+                    & .p-tabview-nav {
+                        justify-content: center;
+                    }
+
+                    & .p-tabview-panels {
+                        padding-bottom: 1rem !important;
+                    }
+                `}
+            >
                 {/* Microsoft Login */}
                 <TabPanel header={tr('ms.title')} leftIcon={'pi pi-microsoft mr-2'} disabled={disabled}>
                     <HTMLText compact html={tr('ms.hint')} />
@@ -141,7 +155,7 @@ export function AddAccount(): React.ReactElement {
                 {/* Local Login */}
                 <TabPanel header={tr('local.title')} leftIcon={'pi pi-user-edit mr-2'} disabled={disabled}>
                     <HTMLText compact html={tr('local.hint')} />
-                    <div className={'mt-3 flex gap-2'}>
+                    <div className={'mt-3 flex gap-2 justify-content-center'}>
                         <span className={'p-input-icon-left no-cjk-icon-correction'}>
                             <i className={'pi pi-user'} />
                             <InputText
@@ -151,27 +165,21 @@ export function AddAccount(): React.ReactElement {
                             />
                         </span>
                     </div>
-                    {localNameError && <HTMLText className={'mt-3 text-warning'} html={tr('local.error')} />}
+                    {localNameError && <HTMLText compact className={'mt-2 text-warning'} html={tr('local.error')} />}
                 </TabPanel>
             </TabView>
 
-            {/* Hint */}
-            {setupComplete || <InfoText text={tr('hint')} />}
-
             {/* Next page */}
-            <div className={'flex justify-content-end mt-5'}>
-                <Button
-                    disabled={!setupComplete}
-                    icon={'pi pi-arrow-right'}
-                    label={tr('next')}
-                    onClick={() => {
-                        if (localName) {
-                            void localLogin();
-                        }
-                        next();
-                    }}
-                />
-            </div>
+            <Button
+                disabled={!setupComplete}
+                icon={'pi pi-arrow-right'}
+                onClick={() => {
+                    if (localName) {
+                        void localLogin();
+                    }
+                    next();
+                }}
+            />
         </div>
     );
 }

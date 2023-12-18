@@ -3,9 +3,11 @@ import { AcceptMirrors } from '@/renderer/screen/intro/AcceptMirrors';
 import { AddAccount } from '@/renderer/screen/intro/AddAccount';
 import { AddContainer } from '@/renderer/screen/intro/AddContainer';
 import { Portal } from '@/renderer/screen/intro/Portal';
+import { PostSetup } from '@/renderer/screen/intro/PostSetup';
 import { SelectMode } from '@/renderer/screen/intro/SelectMode';
 import { SelectTheme } from '@/renderer/screen/intro/SelectTheme';
 import { WelcomeToAlicornAgain } from '@/renderer/screen/intro/WelcomeToAlicornAgain';
+import { Options } from '@/renderer/screen/options/Options';
 import { TaskList } from '@/renderer/screen/TaskList';
 import { useSafeState } from '@/renderer/util/Mount';
 import { css } from '@emotion/react';
@@ -85,9 +87,11 @@ export function AppRoutes(): React.ReactElement {
                     <Route path={'/Intro/SelectTheme'} element={<SelectTheme />} />
                     <Route path={'/Intro/AddAccount'} element={<AddAccount />} />
                     <Route path={'/Intro/AddContainer'} element={<AddContainer />} />
+                    <Route path={'/Intro/PostSetup'} element={<PostSetup />} />
 
                     {/* System pages */}
                     <Route path={'/TaskList'} element={<TaskList />} />
+                    <Route path={'/Options'} element={<Options />} />
                     <Route path={'/About'} element={<About />} />
                 </Routes>
             </div>

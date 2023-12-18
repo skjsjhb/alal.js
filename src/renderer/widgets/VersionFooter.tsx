@@ -7,10 +7,13 @@ import pkg from '../../../package.json';
  */
 export function VersionFooter(): React.ReactElement {
     const styles = css`
-        right: 1em;
+        right: 0.5em;
         bottom: 0.5em;
+        font-size: smaller;
     `;
-    return <div css={styles} className={'fixed text-color'}>
-        alal.js {pkg.version} "{pkg.versionName}"
-    </div>;
+    return (
+        <div css={styles} className={'fixed text-color'}>
+            alal.js {pkg.version} "{pkg.versionName}"
+        </div>
+    );
 }

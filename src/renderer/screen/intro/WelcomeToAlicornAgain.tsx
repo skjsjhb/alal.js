@@ -12,17 +12,16 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
     const [confirmPopupVisible, setConfirmPopupVisible] = useSafeState(false);
 
     return (
-        <div className={'ml-4 mr-4 mt-2'}>
-            <div className={'text-5xl font-bold'}>{tr('title')}</div>
+        <div className={'ml-4 mr-4 mt-2 text-center'}>
+            <ALALLogo />
+            <div className={'text-4xl font-bold'}>{tr('title')}</div>
             <HTMLText html={tr('body')} />
 
             {/* Next page */}
-            <div className={'flex justify-content-end mt-5'}>
-                <Button icon={'pi pi-arrow-right'} label={tr('next')} onClick={next} />
-            </div>
+            <Button className={'mt-5'} icon={'pi pi-arrow-right'} onClick={next} />
 
             {/* Skip setup*/}
-            <div className={'flex justify-content-end mt-5'}>
+            <div className={'flex justify-content-end mt-4'}>
                 <Button
                     className={'p-1'}
                     severity={'secondary'}
@@ -44,6 +43,23 @@ export function WelcomeToAlicornAgain(): React.ReactNode {
                     // TODO skip
                 }}
             />
+        </div>
+    );
+}
+
+function ALALLogo(): React.ReactElement {
+    return (
+        <div
+            className={'flex justify-content-center align-items-center text-7xl'}
+            style={{
+                height: '12rem'
+            }}
+        >
+            <div>
+                <span style={{ color: '#cedffc' }}>Alicorn</span>&nbsp;&nbsp;
+                <span style={{ color: '#fff4ff' }}>Ag</span>
+                <span style={{ color: '#fdeca6' }}>ain</span>
+            </div>
         </div>
     );
 }

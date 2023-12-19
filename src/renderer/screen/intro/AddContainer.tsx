@@ -1,5 +1,5 @@
 import { MAPI } from '@/background/MAPI';
-import { addContainer, createContainer, getDefaultContainerPath } from '@/modules/container/ContainerManager';
+import { createContainer, getDefaultContainerPath } from '@/modules/container/ContainerManager';
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { hashString } from '@/modules/util/Hash';
 import { mergeArrays } from '@/modules/util/Objects';
@@ -79,7 +79,7 @@ export function AddContainer(): React.ReactElement {
                 onClick={() => {
                     containerList.forEach((c) => {
                         const id = hashString(c);
-                        addContainer(id, createContainer(id, c));
+                        createContainer(id, c);
                     });
                     next();
                 }}

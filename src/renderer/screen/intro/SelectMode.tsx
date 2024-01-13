@@ -1,7 +1,7 @@
 import { opt } from '@/modules/data/Options';
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { Radio } from '@/renderer/widgets/Radio';
 import { Button } from 'primereact/button';
 import React, { useEffect } from 'react';

@@ -156,6 +156,12 @@ options:
     title: 开发人员模式
     detail: 启用开发人员模式，有助于调试，但会降低安全性和性能。
 
+launchpad:
+  profiles:
+    title: 选择一个版本...
+  actions:
+    title: 或者...
+
 
 about:
   title: 关于 alal.js

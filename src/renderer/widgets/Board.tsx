@@ -1,5 +1,5 @@
 import { getColorMode } from '@/renderer/themes/ThemeManager';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { css } from '@emotion/react';
 import React, { useEffect } from 'react';
 

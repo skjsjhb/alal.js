@@ -1,6 +1,6 @@
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { Task } from '@/modules/task/Task';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { Title } from '@/renderer/widgets/Title';
 import { css } from '@emotion/react';
 import { ProgressBar } from 'primereact/progressbar';

@@ -67,6 +67,24 @@ export function isOptiFineProfile(src: any): boolean {
 }
 
 /**
+ * Tries to infer the loader of the specified profile.
+ *
+ * Returns a value of: Mojang, Forge, NeoForged, Fabric, Quilt, LiteLoader, OptiFine, Unknown.
+ *
+ * Fabric / Quilt profiles take priority, then the Forge series.
+ */
+export function getProfileLoader(src: any): string {
+    if (isQuiltProfile(src)) return 'Quilt';
+    if (isFabricProfile(src)) return 'Fabric';
+    if (isNeoForgedProfile(src)) return 'NeoForged';
+    if (isForgeProfile(src)) return 'Forge';
+    if (isLiteLoaderProfile(src)) return 'LiteLoader';
+    if (isOptiFineProfile(src)) return 'OptiFine';
+    if (isMojangProfile(src)) return '';
+    return 'Unknown';
+}
+
+/**
  * Checks if the passed id is likely a Mojang version name.
  *
  * This method uses a list of known Mojang versions to check and then the regex.

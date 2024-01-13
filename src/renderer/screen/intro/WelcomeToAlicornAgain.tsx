@@ -1,6 +1,6 @@
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { HTMLText } from '@/renderer/widgets/Texts';
 import { Button } from 'primereact/button';
 import { ConfirmPopup } from 'primereact/confirmpopup';

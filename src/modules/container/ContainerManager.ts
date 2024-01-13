@@ -19,6 +19,14 @@ export function getContainer(id: string): Container | null {
 }
 
 /**
+ * Gets all containers as an array.
+ */
+export function getContainerList(): Container[] {
+    initOnDemand();
+    return Object.values(containers);
+}
+
+/**
  * Adds a container.
  */
 export function addContainer(id: string, c: Container): void {
@@ -105,8 +113,20 @@ export function getDefaultContainerPath(): string {
     return '';
 }
 
+interface ContainerProps {
+    id: string;
+    rootDir: string;
+    isolated: boolean;
+    shared: boolean;
+    locked: boolean;
+}
+
 function initOnDemand() {
     if (!containers) {
-        containers = getRegTable<Record<string, Container>>(containersRegId, {});
+        containers = {};
+        const containerProps = getRegTable<Record<string, ContainerProps>>(containersRegId, {});
+        for (const [k, v] of Object.entries(containerProps)) {
+            containers[k] = new Container(v);
+        }
     }
 }

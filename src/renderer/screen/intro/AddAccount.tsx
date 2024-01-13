@@ -2,7 +2,7 @@ import { authMicrosoft, authYggdrasil, createLocalAccount, saveAccount } from '@
 import { runMicrosoftBrowserLogin } from '@/modules/auth/MicrosoftBrowserLogin';
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
-import { useState } from '@/renderer/util/Mount';
+import { useState } from '@/renderer/util/Hooks';
 import { HTMLText, WarningText } from '@/renderer/widgets/Texts';
 import { css } from '@emotion/react';
 import { Button } from 'primereact/button';

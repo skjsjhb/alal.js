@@ -1,6 +1,7 @@
 import { getRuntimeDataPath } from '@/modules/data/Paths';
-import { isLegacyAssetName } from '@/modules/profile/ProfileTools';
-import { AssetIndex } from '@/modules/profile/VersionProfile';
+import { isLegacyAssetName, loadProfile } from '@/modules/profile/ProfileTools';
+import { AssetIndex, VersionProfile } from '@/modules/profile/VersionProfile';
+import { readdir } from 'fs-extra';
 import path from 'path';
 
 export class Container {
@@ -138,6 +139,21 @@ export class Container {
      */
     getAssetIndexPath(aid: string): string {
         return this.shared ? getGlobalAssetIndexPath(aid) : this.getLocalAssetIndexPath(aid);
+    }
+
+    /**
+     * Scans and loads all contained profiles.
+     */
+    async scanProfiles(): Promise<VersionProfile[]> {
+        const files = await readdir(path.join(this.rootDir, 'versions'));
+        const res = await Promise.allSettled(files.map((f) => loadProfile(this, f)));
+        const profiles = [];
+        for (const r of res) {
+            if (r.status == 'fulfilled' && r.value != null) {
+                profiles.push(r.value);
+            }
+        }
+        return profiles;
     }
 
     protected getLocalAssetIndexPath(aid: string): string {

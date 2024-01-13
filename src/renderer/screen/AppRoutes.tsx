@@ -7,9 +7,10 @@ import { PostSetup } from '@/renderer/screen/intro/PostSetup';
 import { SelectMode } from '@/renderer/screen/intro/SelectMode';
 import { SelectTheme } from '@/renderer/screen/intro/SelectTheme';
 import { WelcomeToAlicornAgain } from '@/renderer/screen/intro/WelcomeToAlicornAgain';
+import { LaunchPad } from '@/renderer/screen/launchpad/LaunchPad';
 import { Options } from '@/renderer/screen/options/Options';
 import { TaskList } from '@/renderer/screen/TaskList';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { css } from '@emotion/react';
 import { classNames } from 'primereact/utils';
 import React, { useEffect } from 'react';
@@ -93,6 +94,7 @@ export function AppRoutes(): React.ReactElement {
                     <Route path={'/TaskList'} element={<TaskList />} />
                     <Route path={'/Options'} element={<Options />} />
                     <Route path={'/About'} element={<About />} />
+                    <Route path={'/LaunchPad'} element={<LaunchPad />} />
                 </Routes>
             </div>
         </span>

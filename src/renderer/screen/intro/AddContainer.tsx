@@ -4,7 +4,7 @@ import { getLocaleSection } from '@/modules/i18n/Locale';
 import { hashString } from '@/modules/util/Hash';
 import { mergeArrays } from '@/modules/util/Objects';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
-import { useMounted, useSafeState } from '@/renderer/util/Mount';
+import { useMounted, useSafeState } from '@/renderer/util/Hooks';
 import { WarningText } from '@/renderer/widgets/Texts';
 import { ipcRenderer } from 'electron';
 import { Button } from 'primereact/button';

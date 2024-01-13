@@ -2,7 +2,7 @@ import { opt } from '@/modules/data/Options';
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { getObjectPropertyByKey, setObjectPropertyByKey } from '@/modules/util/Objects';
 import { applyColorMode, getColorMode } from '@/renderer/themes/ThemeManager';
-import { useSafeState, useState } from '@/renderer/util/Mount';
+import { useSafeState, useState } from '@/renderer/util/Hooks';
 import { HTMLText, InfoText, WarningText } from '@/renderer/widgets/Texts';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { InputNumber } from 'primereact/inputnumber';

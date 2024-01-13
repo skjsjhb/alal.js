@@ -1,7 +1,7 @@
 import { getLocaleSection } from '@/modules/i18n/Locale';
 import { useIntroNav } from '@/renderer/screen/intro/IntroSteps';
 import { applyColorMode, getColorMode } from '@/renderer/themes/ThemeManager';
-import { useSafeState } from '@/renderer/util/Mount';
+import { useSafeState } from '@/renderer/util/Hooks';
 import { HTMLText, InfoText } from '@/renderer/widgets/Texts';
 import { Button } from 'primereact/button';
 import { SelectButton } from 'primereact/selectbutton';

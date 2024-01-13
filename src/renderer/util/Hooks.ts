@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 /**
  * A hook to tell whether the current element is mounted.
@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 export function useMounted(): React.MutableRefObject<boolean> {
     const mounted = useRef(false);
 
-    useEffect(() => {
+    React.useEffect(() => {
         mounted.current = true;
         return () => {
             mounted.current = false;
@@ -29,6 +29,16 @@ export function useSafeState<T>(init: T): [T, React.Dispatch<React.SetStateActio
 }
 
 /**
- * Alias for better code completion.
+ * Async version of `useEffect` at the cost of losing the ability to return a cleanup callback.
+ * If it's not necessary, an async iife can be omitted by using this method.
+ */
+export function useAsyncEffect(what: () => any, deps?: any[]): void {
+    React.useEffect(() => {
+        what();
+    }, deps);
+}
+
+/**
+ * Aliases for better code completion.
  */
 export const useState = useSafeState;

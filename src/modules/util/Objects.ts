@@ -66,6 +66,7 @@ export function setObjectPropertyByKey(target: any, k: string, v: any): void {
     const fink = keys[keys.length - 1]; // Refers to the final key
     keys.pop();
     for (const key of keys) {
+        if (key == '__proto__' || key == 'constructor') continue;
         if (typeof current != 'object' || !(key in current)) {
             current[key] = {};
         }

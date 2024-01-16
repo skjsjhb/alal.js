@@ -1,3 +1,4 @@
+import Icons from '@/constra/icons.json';
 import React, { DetailedHTMLProps, HTMLProps } from 'react';
 
 /**
@@ -9,11 +10,10 @@ export function ProfileImage(
     } & DetailedHTMLProps<HTMLProps<HTMLImageElement>, HTMLImageElement>
 ): React.ReactElement {
     const { profileType, ...rest } = props;
-    let src = '';
-    switch (profileType) {
-        case 'Mojang':
-            src = 'img/CraftingTable.webp';
-            break;
+    let image = (Icons as Record<string, string>)[profileType];
+    if (!image) {
+        image = 'GrassBlock.webp';
     }
+    const src = 'img/' + image;
     return <img {...rest} src={src} alt={profileType}></img>;
 }

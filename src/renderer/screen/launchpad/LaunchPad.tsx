@@ -1,6 +1,6 @@
 import { getContainerList } from '@/modules/container/ContainerManager';
 import { getLocaleSection } from '@/modules/i18n/Locale';
-import { getProfileLoader } from '@/modules/profile/ProfileDetector';
+import { getProfileLoader, isMojangProfile } from '@/modules/profile/ProfileDetector';
 import { VersionProfile } from '@/modules/profile/VersionProfile';
 import { useAsyncEffect, useState } from '@/renderer/util/Hooks';
 import { CenterSpinner } from '@/renderer/widgets/CenterSpinner';
@@ -33,6 +33,7 @@ export function LaunchPad(): React.ReactElement {
 interface DisplayProfile {
     container: string; // Container path
     profile: VersionProfile;
+    type: string; // Type for displaying icon
 }
 
 function ActionsDisplay(): React.ReactElement {
@@ -52,7 +53,11 @@ function ProfileDisplay(): React.ReactElement {
         const pf: DisplayProfile[] = [];
         for (const c of getContainerList()) {
             for (const f of await c.scanProfiles()) {
-                pf.push({ container: c.rootDir, profile: f });
+                pf.push({
+                    container: c.rootDir,
+                    profile: f,
+                    type: isMojangProfile(f) ? 'Mojang' : getProfileLoader(f)
+                });
             }
         }
         setProfiles(pf);
@@ -82,13 +87,13 @@ function ProfileDisplay(): React.ReactElement {
     const itemTemplate = (p: DisplayProfile) => (
         <div css={itemStyles} className={'launchpad-profile flex align-items-center col-12 mt-2 gap-3 h-4rem'}>
             <div className={'ml-2'}>
-                <ProfileImage profileType={'Mojang'} style={{ height: '3rem', marginTop: '10%' }} />
+                <ProfileImage profileType={p.type} style={{ height: '3rem', marginTop: '10%' }} />
             </div>
             <div className={'flex-1'}>
                 <div className={'flex flex-column justify-content-center'}>
                     <div className={'text-xl font-bold'}>{p.profile.id + ' ' + getProfileLoader(p.profile)}</div>
-                    <div className={'p-text-secondary text-base'}>
-                        <code> {p.profile.origin || p.profile.id}</code>
+                    <div className={'p-text-secondary text-xs'}>
+                        <code> {p.container + '/' + (p.profile.origin || p.profile.id)}</code>
                     </div>
                 </div>
             </div>
@@ -98,7 +103,7 @@ function ProfileDisplay(): React.ReactElement {
     return (
         <div className={'flex flex-column'} style={{ maxHeight: '90%' }}>
             <div className={'text-4xl ml-2'}>{tr('profiles.title')}</div>
-            <div className={'overflow-y-scroll mt-2'}>
+            <div className={'overflow-y-scroll mt-1'}>
                 <DataView className={'flex-1 mt-3 mr-2'} rows={5} value={profiles} itemTemplate={itemTemplate} />
             </div>
         </div>

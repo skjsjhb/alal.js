@@ -162,6 +162,11 @@ launchpad:
   actions:
     title: 或者...
 
+launch:
+  title: 正在启动 ${profile}
+
+tips:
+  这是一条 Tip
 
 about:
   title: 关于 alal.js

@@ -7,6 +7,7 @@ import { PostSetup } from '@/renderer/screen/intro/PostSetup';
 import { SelectMode } from '@/renderer/screen/intro/SelectMode';
 import { SelectTheme } from '@/renderer/screen/intro/SelectTheme';
 import { WelcomeToAlicornAgain } from '@/renderer/screen/intro/WelcomeToAlicornAgain';
+import { Launch } from '@/renderer/screen/launchpad/Launch';
 import { LaunchPad } from '@/renderer/screen/launchpad/LaunchPad';
 import { Options } from '@/renderer/screen/options/Options';
 import { TaskList } from '@/renderer/screen/TaskList';
@@ -95,6 +96,7 @@ export function AppRoutes(): React.ReactElement {
                     <Route path={'/Options'} element={<Options />} />
                     <Route path={'/About'} element={<About />} />
                     <Route path={'/LaunchPad'} element={<LaunchPad />} />
+                    <Route path={'/Launch/:container/:profile'} element={<Launch />} />
                 </Routes>
             </div>
         </span>

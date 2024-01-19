@@ -8,7 +8,7 @@ import { loadAssetIndex, loadProfile } from '@/modules/profile/ProfileTools';
 
 /**
  * Launches given profile on the given container.
- * @param c Container instance..
+ * @param c Container instance.
  * @param profId Profile ID.
  * @param a Authed account.
  */

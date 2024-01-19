@@ -8,6 +8,7 @@ import { ProfileImage } from '@/renderer/widgets/ProfileImage';
 import { css } from '@emotion/react';
 import { DataView } from 'primereact/dataview';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Display game versions found for launching.
@@ -31,7 +32,10 @@ export function LaunchPad(): React.ReactElement {
 }
 
 interface DisplayProfile {
-    container: string; // Container path
+    container: {
+        id: string;
+        path: string;
+    };
     profile: VersionProfile;
     type: string; // Type for displaying icon
 }
@@ -49,12 +53,17 @@ function ProfileDisplay(): React.ReactElement {
     const [profiles, setProfiles] = useState<DisplayProfile[] | null>(null);
     const tr = getLocaleSection('launchpad');
 
+    const nav = useNavigate();
+
     useAsyncEffect(async () => {
         const pf: DisplayProfile[] = [];
         for (const c of getContainerList()) {
             for (const f of await c.scanProfiles()) {
                 pf.push({
-                    container: c.rootDir,
+                    container: {
+                        id: c.id,
+                        path: c.rootDir
+                    },
                     profile: f,
                     type: isMojangProfile(f) ? 'Mojang' : getProfileLoader(f)
                 });
@@ -85,15 +94,21 @@ function ProfileDisplay(): React.ReactElement {
     `;
 
     const itemTemplate = (p: DisplayProfile) => (
-        <div css={itemStyles} className={'launchpad-profile flex align-items-center col-12 mt-2 gap-3 h-4rem'}>
+        <div
+            css={itemStyles}
+            className={'launchpad-profile flex align-items-center col-12 mt-2 gap-3 h-6rem'}
+            onClick={() => nav(`/Launch/${p.container.id}/${p.profile.origin || p.profile.id}`)} // Goto launch page when clicked
+        >
             <div className={'ml-2'}>
-                <ProfileImage profileType={p.type} style={{ height: '3rem', marginTop: '10%' }} />
+                <ProfileImage profileType={p.type} style={{ height: '4rem', marginTop: '10%' }} />
             </div>
             <div className={'flex-1'}>
                 <div className={'flex flex-column justify-content-center'}>
                     <div className={'text-xl font-bold'}>{p.profile.id + ' ' + getProfileLoader(p.profile)}</div>
-                    <div className={'p-text-secondary text-xs'}>
-                        <code> {p.container + '/' + (p.profile.origin || p.profile.id)}</code>
+                    <div className={'p-text-secondary'}>
+                        <code className={'text-sm'}> {p.profile.origin || p.profile.id}</code>
+                        <br />
+                        <code className={'text-xs'}> {p.container.path}</code>
                     </div>
                 </div>
             </div>

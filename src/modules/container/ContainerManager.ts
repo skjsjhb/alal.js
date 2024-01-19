@@ -32,6 +32,7 @@ export function getContainerList(): Container[] {
 export function addContainer(id: string, c: Container): void {
     initOnDemand();
     containers[id] = c;
+    syncContainerToReg(c);
     console.log('Added container ' + c.rootDir);
 }
 
@@ -129,4 +130,17 @@ function initOnDemand() {
             containers[k] = new Container(v);
         }
     }
+}
+
+// Containers are class-based objects and cannot be saved directly.
+// This method sync them to the registry.
+function syncContainerToReg(c: Container) {
+    const rec = getRegTable<Record<string, ContainerProps>>(containersRegId, {});
+    rec[c.id] = {
+        id: c.id,
+        rootDir: c.rootDir,
+        isolated: c.isolated,
+        shared: c.shared,
+        locked: c.locked
+    };
 }

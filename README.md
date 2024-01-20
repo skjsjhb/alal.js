@@ -106,13 +106,13 @@ following scenarios:
      ```json5
      [
          //... Other rules
-         {
-           "enable": true,
-           "platform": "^win32-arm64$", // Or your platform name
-           "value": [
-             "lzma-native"
-           ]
-         }
+         {
+           "enable": true,
+           "platform": "^win32-arm64$", // Or your platform name
+           "value": [
+             "lzma-native"
+           ]
+         }
      ]
      ```
   

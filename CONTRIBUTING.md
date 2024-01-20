@@ -2,11 +2,11 @@
 
 ## Development Workflow
 
-alal.js uses React and Electron to build the entire app. This empowers the overall performance, but also brings significant amout of works to do during development.
+alal.js uses React and Electron to build the entire app. This empowers the overall performance, but also brings significant amount of works to do during development.
 
 In the past days, getting alal.js to run updated code is a cumbersome job. Write the code, run several build commands, wait half a minute for the compilation, launch the application, repeat all operations done before, check for any errors. Then again. This swallows one's patience really fast and slows down the development progress.
 
-Luckliy for us, we've recently managed to upgrade our build system for development and introduced the HMR (Hot Module Reload) feature. Development has become much easier since this change.
+Luckily for us, we've recently managed to upgrade our build system for development and introduced the HMR (Hot Module Reload) feature. Development has become much easier since this change.
 
 Below shows how we develop alal.js. These steps are only a reference, you can modify them freely to fit your styles as long as not breaking the build system.
 
@@ -69,13 +69,13 @@ There are several hints during the build process we think worth noticing:
 
 - HMR does not work for the background scripts (i.e. generated `main.js`). A full restart is required for them to take effect.
 
-- `dev-server` does **NOT** emit files and we haven't intended to let it do so. Considering this, `bundle-debug` is still required to create `main.js` as an entry point for Electron (which is not reloadable, obviously). Running both in parallel brings the best development experience, but might cause significant stuck on low-end machines.
+- `dev-server` does **NOT** emit files, and we haven't intended to let it do so. Considering this, `bundle-debug` is still required to create `main.js` as an entry point for Electron (which is not reloadable, obviously). Running both in parallel brings the best development experience, but might cause significant stuck on low-end machines.
   
   Whether to use `dev-server` is totally a personal choice, you can still use the traditional **write, build, launch, build, launch...** It's totally acceptable.
 
 - Build steps like `node tools/sync.js` which are optional for users are **mandatory** for our developers.
 
-- You may use a custom pakcage manager to install dependencies. However, we've verified that `pnpm` does **not** work. Also, when commiting code, `yarn` is still required.
+- You may use a custom package manager to install dependencies. However, we've verified that `pnpm` does **not** work. Also, when committing code, `yarn` is still required.
 
 ## Pull Request Workflow
 
@@ -87,7 +87,7 @@ Here shows how to purpose your changes and let us know so that we can review the
 
 3. Test locally and push to the forked repository.
 
-4. Open a pull request, desribing what this PR solves and what has changed, especially breaking changes or libraries newly introduced.
+4. Open a pull request, describing what this PR solves and what has changed, especially breaking changes or libraries newly introduced.
 
 5. We'll review your changes and give our opinions. Either using conversations or comments.
 
@@ -129,7 +129,7 @@ We don't have strict requirements like "do not use chained methods". However, th
 
 - Avoid using JavaScript files, which do not come with type declarations.
 
-- Avoid over complexed method or component.
+- Avoid over complex method or component.
 
 - Do not use `continue <label>` or `break <label>`.
 
@@ -153,7 +153,7 @@ A pull request might not end up being merged, out of the following reasons:
   
   We'll try our best to make the code reliable, but we can't always achieve this. If the code quality is too low to be fixed, then we have no choice but to reject it.
 
-- The feature is irrelevant or not worthing its cost.
+- The feature is irrelevant or not worth its cost.
   
   Not all PRs are considered cost-effective. Let alone irrelevant commits!
 
@@ -167,4 +167,4 @@ A pull request might not end up being merged, out of the following reasons:
 
 - Other special circumstances.
 
-Please understand that your PR might not ended up being merged out of these reasons. Whether this happens or not, please don't let it discourage you from raising possible suggestions or starting a new one. Each issue or PR helps us to find our faults and improve the project. Even if your code does not ultimately appear in the repository, as long as they are purposed out of good intentions, your contributionwill still be recorded and mentioned.
+Please understand that your PR might not end up being merged out of these reasons. Whether this happens or not, please don't let it discourage you from raising possible suggestions or starting a new one. Each issue or PR helps us find our faults and improve the project. Even if your code does not ultimately appear in the repository, as long as they are purposed out of good intentions, your contribution will still be recorded and mentioned.

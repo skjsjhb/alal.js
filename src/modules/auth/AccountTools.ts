@@ -15,6 +15,22 @@ import fetch from 'node-fetch';
 const accountTableId = 'accounts';
 
 /**
+ * Refresh the account using existing refresh token.
+ *
+ * An exception is thrown if the account is outdated.
+ */
+export async function activateAccount(a: Account): Promise<Account> {
+    switch (a.type) {
+        case AccountType.Microsoft:
+            return authMicrosoft(a.refreshToken, 'refresh').wait();
+        case AccountType.Local:
+            return a; // Skip local activate
+        case AccountType.Yggdrasil:
+            return refreshYggdrasil(a);
+    }
+}
+
+/**
  * Generates local account from given name.
  * A fake access token is generated. UUID is calculated as mentioned here: https://wiki.vg/Protocol#Login
  */
@@ -138,6 +154,32 @@ interface YggdrasilProfile {
 }
 
 /**
+ * Refresh specified Yggdrasil account.
+ */
+export async function refreshYggdrasil(a: Account) {
+    const authAPI = a.host + '/authserver/refresh';
+    const {
+        accessToken,
+        selectedProfile
+    }: {
+        accessToken: string;
+        selectedProfile: YggdrasilProfile;
+    } = await postJSON(authAPI, {
+        accessToken: a.accessToken
+    });
+    return {
+        uuid: selectedProfile.id,
+        xuid: '',
+        accessToken,
+        type: a.type,
+        email: a.email,
+        playerName: selectedProfile.name,
+        refreshToken: '',
+        host: a.host
+    };
+}
+
+/**
  * Authenticate with Yggdrasil server.
  *
  * For Yggdrasil servers there could possibly be multiple 'accounts' (i.e. profiles) for one user. This
@@ -155,11 +197,9 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
 
             const {
                 accessToken,
-                selectedProfile,
-                refreshToken
+                selectedProfile
             }: {
                 accessToken: string;
-                refreshToken: string;
                 selectedProfile: YggdrasilProfile;
             } = await postJSON(authAPI, {
                 username: user,
@@ -181,7 +221,7 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
                 playerName: selectedProfile.name,
                 email: user,
                 type: AccountType.Yggdrasil,
-                refreshToken
+                refreshToken: ''
             });
             console.log('Yggdrasil login complete for ' + selectedProfile.name);
         } catch (e) {
@@ -217,6 +257,16 @@ async function resolveYggdrasilLocation(host: string): Promise<string> {
 export async function saveAccount(a: Account) {
     const accountKey = hashString(a.host + a.uuid + a.email);
     getRegTable<Record<string, string>>(accountTableId, {})[accountKey] = await dumpAccount(a);
+}
+
+/**
+ * Gets a list of saved accounts.
+ */
+export async function getAccountList(): Promise<Account[]> {
+    const encryptedList = Object.values(getRegTable<Record<string, string>>(accountTableId, {}));
+    const decryptedList = await Promise.all(encryptedList.map(loadAccount));
+    decryptedList.sort((a, b) => (a.playerName < b.playerName ? -1 : 1));
+    return decryptedList;
 }
 
 // Account -> Encrypted string

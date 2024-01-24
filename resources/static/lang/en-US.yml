@@ -162,11 +162,20 @@ options:
     title: Development Mode
     detail: Enable development mode for debugging at the cost of performance and security.
 
+account:
+  select-account: Select an Account
+
 launchpad:
   profiles:
     title: Select a Profile...
   actions:
     title: OR...
+
+launch:
+  title: Launching ${profile}
+
+tips:
+  This is a tip!
 
 about:
   title: About alal.js

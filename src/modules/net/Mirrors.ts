@@ -28,17 +28,10 @@ interface MirrorRecords {
     lastUpdate: number;
 }
 
-/**
- * Tests the speed of specified mirror.
- */
-export function testMirrorSpeed(name: string): Promise<number> {
-    return testSpeed(originalRules[name].test);
-}
-
 // Synthesized rules with priority applied
 let synthRules: Map<string, string | null>;
 
-const latencyTestTries = 10;
+const latencyTestTries = 5;
 const latencyTestTimeout = 20000; // 20s for a file around 1MiB
 
 async function testSpeed(url: string): Promise<number> {

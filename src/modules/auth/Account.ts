@@ -1,7 +1,7 @@
 export enum AccountType {
     Microsoft = 'MZ',
     Local = 'AL',
-    Yggdrasil = 'YG',
+    Yggdrasil = 'YG'
 }
 
 export interface Account {
@@ -13,4 +13,5 @@ export interface Account {
     uuid: string;
     accessToken: string;
     xuid: string; // Microsoft
+    skin: string; // Base64 encoded skin
 }

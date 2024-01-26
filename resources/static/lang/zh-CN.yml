@@ -158,6 +158,7 @@ options:
 
 account:
   select-account: 选择一个帐户
+  local-host: 本地
 
 launchpad:
   profiles:

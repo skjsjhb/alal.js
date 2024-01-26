@@ -164,6 +164,7 @@ options:
 
 account:
   select-account: Select an Account
+  local-host: Local
 
 launchpad:
   profiles:

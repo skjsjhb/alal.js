@@ -15,7 +15,7 @@ import fetch from 'node-fetch';
 const accountTableId = 'accounts';
 
 /**
- * Refresh the account using existing refresh token.
+ * Refresh the account using existing refresh token. Account is NOT saved automatically.
  *
  * An exception is thrown if the account is outdated.
  */
@@ -42,8 +42,9 @@ export function createLocalAccount(name: string): Account {
         email: '',
         playerName: name,
         xuid: '',
-        host: 'localhost',
-        type: AccountType.Local
+        host: '',
+        type: AccountType.Local,
+        skin: ''
     };
 }
 
@@ -128,6 +129,8 @@ export function authMicrosoft(code: string, role: 'code' | 'refresh'): Task<Acco
             task.success();
 
             console.log('Done with Microsoft login. Welcome, ' + playerName + '!');
+            console.log('Resolving skin.');
+
             // Assemble
             task.resolve({
                 uuid,
@@ -137,8 +140,11 @@ export function authMicrosoft(code: string, role: 'code' | 'refresh'): Task<Acco
                 email: '',
                 playerName,
                 refreshToken: msRefreshToken,
-                host: 'https://api.minecraftservices.com' // Only a placeholder
+                host: 'Microsoft', // Only a placeholder,
+                skin: await fetchSkin(uuid)
             });
+
+            console.log('Account saved with UUID ' + uuid);
         } catch (e) {
             task.reject(e);
         }
@@ -154,9 +160,34 @@ interface YggdrasilProfile {
 }
 
 /**
+ * Fetch the play skin using UUID.
+ * @param uuid Account UUID.
+ * @param host Optional host to override Mojang API location.
+ */
+export async function fetchSkin(uuid: string, host = 'https://sessionserver.mojang.com'): Promise<string> {
+    try {
+        const skinAPI = host + '/session/minecraft/profile/' + uuid;
+        const { properties } = await fetchJSON(skinAPI);
+        const {
+            textures: {
+                SKIN: { url }
+            }
+        } = JSON.parse(Buffer.from(properties[0].value, 'base64').toString());
+        const response = await fetch(url);
+        if (!response.ok) {
+            return '';
+        }
+        const data = await response.arrayBuffer();
+        return Buffer.from(data).toString('base64');
+    } catch {
+        return ''; // Silence errors
+    }
+}
+
+/**
  * Refresh specified Yggdrasil account.
  */
-export async function refreshYggdrasil(a: Account) {
+export async function refreshYggdrasil(a: Account): Promise<Account> {
     const authAPI = a.host + '/authserver/refresh';
     const {
         accessToken,
@@ -175,7 +206,8 @@ export async function refreshYggdrasil(a: Account) {
         email: a.email,
         playerName: selectedProfile.name,
         refreshToken: '',
-        host: a.host
+        host: a.host,
+        skin: await fetchSkin(selectedProfile.id, a.host + '/sessionserver')
     };
 }
 
@@ -221,7 +253,8 @@ export function authYggdrasil(rawHost: string, user: string, pwd: string): Task<
                 playerName: selectedProfile.name,
                 email: user,
                 type: AccountType.Yggdrasil,
-                refreshToken: ''
+                refreshToken: '',
+                skin: await fetchSkin(selectedProfile.id, host + '/sessionserver')
             });
             console.log('Yggdrasil login complete for ' + selectedProfile.name);
         } catch (e) {

@@ -1,6 +1,6 @@
 {
   "minecraft-libraries": {
-    "test": "https://piston-data.mojang.com/v1/objects/5c292ff7d3161977041116698e295083fd5ec8f5/client.txt",
+    "test": "https://libraries.minecraft.net/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar",
     "overrides": {
       "https://launchermeta.mojang.com": null,
       "https://piston-meta.mojang.com": null,
@@ -10,8 +10,28 @@
       "https://libraries.minecraft.net": null
     }
   },
+  "bmclapi": {
+    "test": "https://bmclapi2.bangbang93.com/maven/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar",
+    "overrides": {
+      "https://launchermeta.mojang.com": "https://bmclapi2.bangbang93.com",
+      "https://piston-meta.mojang.com": "https://bmclapi2.bangbang93.com",
+      "https://piston-data.mojang.com": "https://bmclapi2.bangbang93.com",
+      "https://launcher.mojang.com": "https://bmclapi2.bangbang93.com",
+      "https://resources.download.minecraft.net": "https://bmclapi2.bangbang93.com/assets",
+      "https://libraries.minecraft.net": "https://bmclapi2.bangbang93.com/maven",
+      "https://maven.fabricmc.net": "https://bmclapi2.bangbang93.com/maven",
+      "https://meta.fabricmc.net": "https://bmclapi2.bangbang93.com/fabric-meta",
+      "https://maven.minecraftforge.net": "https://bmclapi2.bangbang93.com/maven",
+      "https://files.minecraftforge.net/maven": "https://bmclapi2.bangbang93.com/maven",
+      "https://maven.neoforged.net/releases/net/neoforged/forge": "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge",
+      "https://maven.neoforged.net/releases/net/neoforged/neoforge": "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge",
+      "https://maven.quiltmc.org/repository/release": "https://bmclapi2.bangbang93.com/maven",
+      "https://meta.quiltmc.org": "https://bmclapi2.bangbang93.com/quilt-meta",
+      "https://authlib-injector.yushi.moe": "https://bmclapi2.bangbang93.com/mirrors/authlib-injector"
+    }
+  },
   "mcbbs": {
-    "test": "https://download.mcbbs.net/v1/objects/5c292ff7d3161977041116698e295083fd5ec8f5/client.txt",
+    "test": "https://download.mcbbs.net/maven/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar",
     "overrides": {
       "https://launchermeta.mojang.com": "https://download.mcbbs.net",
       "https://piston-meta.mojang.com": "https://download.mcbbs.net",
